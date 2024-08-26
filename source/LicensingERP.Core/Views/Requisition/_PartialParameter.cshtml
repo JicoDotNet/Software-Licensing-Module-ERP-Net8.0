@@ -1,0 +1,50 @@
+﻿@model List<ParameterOfLicence>
+
+<div class="row" id="dynamic">
+    @foreach (ParameterOfLicence param in Model)
+    {
+        if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.String)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="License Type">@param.FieldName</label>
+                    <input type="text" maxlength="@param.Fieldlength" class="form-control"
+                           name="@param.Id" placeholder="@param.FieldName"
+                           @if (param.IsRequired) { <text> required </text> } />
+                </div>
+            </div>
+        }
+        if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.Int)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="License Type">@param.FieldName</label>
+                    <input type="number" maxlength="@param.Fieldlength" class="form-control"
+                           onblur="this.value = parseFloat(this.value);"
+                           name="@param.Id" placeholder="@param.FieldName"
+                           @if (param.IsRequired) { <text> required </text> } />
+                </div>
+            </div>
+        }
+        if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.Date)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="@param.Id">@param.FieldName</label>
+                    <input type="text" class="form-control" 
+                           name="@param.Id"
+                           data-inputmask-alias="datetime" 
+                           data-inputmask-inputformat="dd/mm/yyyy" 
+                           data-mask=""
+                            @if (param.IsRequired) { <text> required </text> }
+                           />
+                </div>
+            </div>
+        }
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-mask]').inputmask();
+    });
+</script>

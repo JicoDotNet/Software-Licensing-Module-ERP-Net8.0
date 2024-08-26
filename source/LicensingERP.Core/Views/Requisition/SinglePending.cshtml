@@ -1,0 +1,93 @@
+﻿@model Request
+@{
+    ViewData["Title"] = "SinglePending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Pending License Approval</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Pending", "Requisition", new { id = string.Empty })">All License Requisition</a></li>
+                    <li class="breadcrumb-item active">Pending License Requisition</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @await Html.PartialAsync("_PartialRequisitionView", Model)
+        </div>
+
+        <!-- Entry Data -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+
+
+                    @if (Model.byPassRequisition != null)
+                    {
+                        @using (Html.BeginForm("AdminProceed", "Requisition", new { id = Model.Id }, FormMethod.Post))
+                        {
+                            <input type="hidden" value="@Model.byPassRequisition.BUserId" name="BUserId" />
+
+                            <input type="hidden" value="@Model.byPassRequisition.BNextUserTypeId" name="BNextUserTypeId" />
+
+                            <button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Proceed </button>
+
+                        }
+                        @*<div class="card-body">
+                <a class="btn btn-warning" href="@Url.Action("Proceed", "Requisition", new { id = Model.Id })"><i class="fas fa-eye"></i> Proceed</a>
+            </div>*@
+                    }
+                    else
+                    {
+                        @if (Model.byPassRequisitionClaims != null && Model.byPassRequisitionClaims.Count > 0)
+                        {
+
+                        }
+                        else
+                        {
+                            @if (!Model.IsClaimed)
+                            {
+                                using (Html.BeginForm("Claim", "Requisition", new { id = Model.Id }, FormMethod.Post, null, new { autocomplete = "off" }))
+                                {
+                                    <div class="card-body">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="far fa-hand-paper"></i> Claim
+                                        </button>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="card-body">
+                                    <a class="btn btn-warning" href="@Url.Action("Proceed", "Requisition", new { id = Model.Id })"><i class="fas fa-eye"></i> Proceed</a>
+                                </div>
+                            }
+                        }
+
+
+
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    //function Proceedfun() {
+
+    //}
+</script>

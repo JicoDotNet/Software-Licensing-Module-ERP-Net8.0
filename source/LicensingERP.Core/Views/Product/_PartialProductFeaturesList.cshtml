@@ -1,0 +1,45 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@model List<ProductFeatures>
+
+
+<div class="card">
+    <div class="card-header bg-gradient-teal">
+        <h3 class="card-title">View Product Feature</h3>
+    </div>
+    <div class="card-body">
+        <table id="feature_list" class="table table-bordered dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>Feature Name</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (ProductFeatures PF in Model)
+                {
+                    <tr>
+                        <td>@PF.FeaturesName</td>
+                        <td>@PF.FeaturesDetails</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+@section BodyScript{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#feature_list').dataTable({
+                "bPaginate": true,
+                "bLengthChange": true,
+                "bFilter": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": true
+            });
+        });
+    </script>
+}

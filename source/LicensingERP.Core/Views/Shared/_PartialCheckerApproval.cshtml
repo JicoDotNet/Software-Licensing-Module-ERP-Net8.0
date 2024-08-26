@@ -1,0 +1,107 @@
+﻿@model List<DataOnHold<object>>
+
+<span class="dropdown-header">@Model.Count Approvals Remain</span>
+<div class="dropdown-divider"></div>
+@{ 
+    List<DataOnHold<object>> modeldata = Model.Take(5).ToList();
+}
+@foreach (DataOnHold<object> dataOnHold in modeldata)
+{
+    <a href="@Url.Action("Index", "Checker", new { area = string.Empty })" class="dropdown-item">
+        @{
+            #region Settings
+            string icon = "";
+            string color = "";
+            string text = "";
+            //int val = 0;
+            //string txt = "";
+            //TimeSpan timeSpan = GenericLogic.IstNow - dataOnHold.TransactionDate;
+            //if (timeSpan.TotalMinutes < 60)
+            //{
+            //    val = (int)timeSpan.TotalMinutes;
+            //    txt = "mins";
+            //}
+            //else if (timeSpan.TotalMinutes > 60 && timeSpan.TotalHours < 24)
+            //{
+            //    val = (int)timeSpan.TotalHours;
+            //    txt = "hrs";
+            //}
+            //else if (timeSpan.TotalHours > 24)
+            //{
+            //    val = (int)timeSpan.TotalDays;
+            //    txt = "days";
+            //}
+            if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+            {
+                color = "#3d9970";
+                text = "Added";
+            }
+            else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+            {
+                color = "#ffc107";
+                text = "Updated";
+            }
+            else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+            {
+                color = "#dc3545";
+                text = "Deactivated";
+            }
+            switch (dataOnHold.eCaseType)
+            {
+                case eDataOnHoldCaseType.UserGroup:
+                    {
+                        icon = "fa-user-plus";
+                    }
+                    break;
+                case eDataOnHoldCaseType.User:
+                    {
+                        icon = "fa-user";
+                    }
+                    break;
+                case eDataOnHoldCaseType.ClientCategory:
+                    {
+                        icon = "fa-user-tag";
+                    }
+                    break;
+                case eDataOnHoldCaseType.Client:
+                    {
+                        icon = "fa-user-tie";
+                    }
+                    break;
+                case eDataOnHoldCaseType.LicenseType:
+                    {
+                        icon = "fa-id-card";
+                    }
+                    break;
+                case eDataOnHoldCaseType.Product:
+                    {
+                        icon = "fa-box";
+                    }
+                    break;
+                case eDataOnHoldCaseType.Parameter:
+                    {
+                        icon = "fa-hands-helping";
+                    }
+                    break;
+                case eDataOnHoldCaseType.WFProcess:
+                    {
+                        icon = "fa-hourglass";
+                    }
+                    break;
+                case eDataOnHoldCaseType.ProductFeatures:
+                    {
+                        icon = "fa-th-list";
+                    }
+                    break;
+            }
+            #endregion
+                    }
+
+        <i class="fas @icon mr-2" style="color:@color"></i> @dataOnHold.eCaseType.ToString() @text
+        <span class="float-right text-muted text-sm">
+            @((GenericLogic.IstNow - dataOnHold.TransactionDate).ShortDuration()) ago
+        </span>
+    </a>
+    <div class="dropdown-divider"></div>
+}
+<a href="@Url.Action("Index", "Checker", new { area = string.Empty })" class="dropdown-item dropdown-footer">Show All</a>

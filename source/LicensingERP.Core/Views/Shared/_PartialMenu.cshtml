@@ -1,0 +1,105 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@using LicensingERP.StateManagement;
+@{
+    List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => !a.IsReport).ToList();
+    List<MenuGroup> menuListsForReport = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => a.IsReport).ToList();
+    //MenuGroup menuGroup = SessionManagement.GetSession<MenuGroup>(HttpContextAccessor.HttpContext.Session, "ActiveMenu");
+    //menuGroup = (menuGroup != null) ? menuGroup : new MenuGroup();
+}
+
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item has-treeview">
+            <a href="@Url.Action("Index", "Home", new { area = string.Empty })" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    Dashboard
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+            <a href="@Url.Action("Index", "Checker", new { area = string.Empty })" class="nav-link">
+                <i class="nav-icon fas fa-check"></i>
+                <p>
+                    Authorization
+                </p>
+            </a>
+        </li>
+        @if (menuLists != null)
+        {
+            foreach (MenuGroup MG in menuLists)
+            {
+                @if (MG.menuLists != null && MG.menuLists.Count > 0)
+                {
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon @MG.Icon"></i>
+                            <p>
+                                @MG.DisplayText
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @foreach (MenuList menuList in MG.menuLists)
+                            {
+                                if (menuList.IsDisplayable)
+                                {
+                                    <li class="nav-item has-treeview menu-open">
+                                        @*<a href="@Url.Action(menuList.ActionResult, menuList.Controller, new { area = (menuList.IsReport) ? "Area" : "" })" class="nav-link">
+                                            <i class="nav-icon @menuList.Icon"></i>
+                                            <p>
+                                                @menuList.DisplayText
+                                            </p>
+                                        </a>*@
+                                        <a asp-area="@((menuList.IsReport) ? "Report" : "")" asp-controller="@menuList.Controller" asp-action="@menuList.ActionResult" asp-route-id="" class="nav-link">
+                                            <i class="nav-icon @menuList.Icon"></i>
+                                            <p>
+                                                @menuList.DisplayText
+                                            </p>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    if (MG.IsDisplayable)
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action(MG.ActionResult,MG.Controller, new { area = (MG.IsReport) ? "Report" : ""})" class="nav-link">
+                                <i class="nav-icon @MG.Icon"></i>
+                                <p>
+                                    @MG.DisplayText
+                                </p>
+                            </a>
+                        </li>
+                    }
+                }
+            }
+        }
+    </ul>
+</nav>
+
+<script type="text/javascript">
+    var currentHref = location.pathname;
+    var matches = currentHref.match(/\d+/g);
+    if (matches != null) {
+        mstring = currentHref.replace(/\d+/g, '');
+        current = mstring.replace(/\/$/, '');
+        if (current.includes("Index")) {
+            currentH = current.replace("Index", "");
+            currentHref = currentH.replace(/\/$/, '');
+        }
+        else {
+            currentHref = mstring.replace(/\/$/, '');
+            
+        }
+    }
+    $('nav a[href="' + currentHref + '"]').addClass('active');
+    $('nav a[href="' + currentHref + '"]').parent('li').parent('ul').parent('li').children('a').addClass('active');
+    $('nav a[href="' + currentHref + '"]').parent('li').parent('ul').css("display", 'block');
+    $('nav a[href="' + currentHref + '"]').parent('li').parent('ul').parent('li').addClass('menu-open');
+</script>

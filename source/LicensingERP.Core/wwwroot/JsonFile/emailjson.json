@@ -1,0 +1,15 @@
+[
+  
+  {
+    "Id": 1,
+    "Domain": "@domain.com",
+    "IsActive": true
+  },
+  {
+    "Id": 2,
+    "Domain": "@sub.domain.com",
+    "IsActive": true
+  }
+]
+
+

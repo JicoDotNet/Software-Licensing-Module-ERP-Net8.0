@@ -1,0 +1,185 @@
+﻿@model List<UserType>
+@{
+    ViewData["Title"] = "UserReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">User</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item">MIS Report</li>
+                    <li class="breadcrumb-item active">User</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header border-transparent bg-cyan">
+                        <h3 class="card-title">Report Type</h3>
+                    </div>
+
+                    <form id="form_user_report" action="#">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="UserGroup">Search By:</label>
+                                        <select class="form-control" name="searchby" style="width:100%;">
+                                            <option value="select">--Select--</option>
+                                            <option value="FullName">Full Name</option>
+                                            <option value="UserName">User Name</option>
+                                            <option value="Email">Email</option>
+                                            <option value="Mobile">Mobile</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Search">Search Value</label>
+                                        <input type="text" name="searchval" class="form-control" placeholder="Search" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="UserGroup">Search By Group:</label>
+                                        <select class="form-control select2" name="searchbygroup" style="width:100%;" id="group">
+                                            <option value="0">--Select--</option>
+                                            @foreach (UserType userType in Model)
+                                            {
+                                                <option value="@userType.Id">@userType.UserTypeName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="IsActive">Activity Status</label>
+                                        <select class="form-control select2" name="isactive" style="width:100%;">
+                                            <option value="select">All</option>
+                                            <option value="1">Yes</option>
+                                            <option value="">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" onclick="submit_fun(); return false;" class="btn btn-info"><i class="fas fa-search"></i> Search</button>
+                            @*<button type="reset"  class="btn btn-info"><i class="fas fa-search"></i> Reset</button>*@
+                            <button type="button" onclick="clear_fun();" class="btn btn-info"><i class="fas fa-redo-alt"></i> Reset</button>
+                            @*<input type="button" onclick="clear_fun()" value="Reset" class="btn btn-info">*@
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" style="display:block">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View User</h3>
+                    </div>
+                    <div class="card-body" id="usertable">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section BodyScript{
+    <script type="text/javascript">
+        $('#form_user_report').submit(function (e) {
+            e.preventDefault();
+            var search_by = $('select[name="searchby"]').val();
+            var search = $('[name="searchval"]').val();
+            var search_by_group = $('select[name="searchbygroup"]').val();
+            var active = $('select[name="isactive"]').val();
+
+            /*if (search_by == 'select') {
+                val = '{"UserTypeId":'+ '"' + search_by_group +'"}' ;
+            }
+            else if (search_by_group == "select") {
+                val = '{"' + search_by + '":"' + search + '"}';
+            }
+            else {
+                val = '{"UserTypeId":"' + search_by_group + '","' + search_by + '":"' + search + '"}';
+            }*/
+
+            if (search_by == 'select' && search_by_group == '0' && active == 'select') {
+                errorAlert("User Report", "Select Atleast 1 Options", null);
+            }
+            else if (search_by == 'select' && search_by_group == '0' && active != 'select') {
+                errorAlert("User Report", "Select Search By or Any Group", null);
+            }
+            else if (search_by == 'select' && search_by_group != '0' && active != 'select') {
+                val = '{"UserTypeId":' + '"' + search_by_group + '","IsActive":"' + Boolean(active) + '"}';
+            }
+            else if (search_by == 'select' && search_by_group != '0' && active == 'select') {
+                val = '{"UserTypeId":' + '"' + search_by_group + '","IsActive":"' + Boolean(active) + '"}';
+            }
+            else if (search_by != 'select' && search_by_group != '0' && active == 'select') {
+                val = '{"UserTypeId":"' + search_by_group + '","' + search_by + '":"' + search + '"}';
+            }
+            else if (search_by != 'select' && search_by_group != '0' && active != 'select') {
+                val = '{"UserTypeId":"' + search_by_group + '","' + search_by + '":"' + search + '","IsActive":"' + Boolean(active) + '"}';
+            }
+            else if (search_by != 'select' && search_by_group == '0' && active != 'select') {
+                val = '{"' + search_by + '":"' + search + '","IsActive":"' + Boolean(active) + '"}';
+            }
+            else if (search_by != 'select' && search_by_group == '0' && active == 'select') {
+                val = '{"' + search_by + '":"' + search + '"}';
+            }
+            else {
+                errorAlert("User Report", "Please Note It and inform developer", null);
+            }
+
+            //alert(val);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetUsersList", "MISUser", new { area = "Report" })',
+                data: val,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data) {
+                    $('#usertable').html(data);
+                    setDefaultButton();
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });            
+            return false;
+        });
+
+        function clear_fun() {
+
+            $('select[name="searchby"]').val("select");
+            $('[name="searchval"]').val("");
+
+            $('select[name="searchbygroup"]').val("0");
+            $('select[name="searchbygroup"]').select2("val", "0");
+
+            $('select[name="isactive"]').val("select");
+            $('select[name="isactive"]').select2("val", "select");
+
+            $('#usertable').html("");
+
+        }
+    </script>
+}

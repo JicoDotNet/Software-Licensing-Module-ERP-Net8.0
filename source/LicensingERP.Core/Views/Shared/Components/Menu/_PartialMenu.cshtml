@@ -1,0 +1,186 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@using LicensingERP.Logic.DTO.Class;
+@using LicensingERP.StateManagement;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model List<MenuGroup>
+@{
+    List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu");
+}
+
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item has-treeview menu-open">
+            <a href="@Url.Action("Index", "Home")" class="nav-link active">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    Dashboard
+                </p>
+            </a>
+        </li>
+        @if (Model != null)
+        {
+            foreach (MenuGroup MG in Model)
+            {
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon @MG.Icon"></i>
+                        <p>
+                            @MG.DisplayText
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @foreach (MenuList menuList in MG.menuLists)
+                        {
+                            <li class="nav-item has-treeview menu-open">
+                                <a href="@Url.Action(menuList.ActionResult,menuList.Controller)" class="nav-link active">
+                                    <i class="nav-icon @menuList.Icon"></i>
+                                    <p>
+                                        @menuList.DisplayText
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+
+
+        }
+        @*
+            <li class="nav-item has-treeview menu-open">
+                <a href="@Url.Action("Index","Home")" class="nav-link active">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Dashboard
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="@Url.Action("Index","Master")" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Master
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Requisition
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fa fa-id-card"></i>
+                    <p>
+                        Licence Authoring
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file"></i>
+                    <p>
+                        MIS Reports
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-file"></i>
+                    <p>
+                        Document
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","Document")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Document List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Submit","Document")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Submited Document</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-header">MISCELLANEOUS</li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-hourglass"></i>
+                    <p>
+                        Workflow Authoring
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index","Workflow")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Process</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Assign","Workflow")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Assign</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Menu Management
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Group","Menu")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Menu Group</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("List","Menu")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Menu List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Assign","Menu")" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Menu Assign</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-exclamation-triangle"></i>
+                    <p>
+                        Alert Authoring
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-cog"></i>
+                    <p>
+                        Settings
+                    </p>
+                </a>
+            </li>
+        *@
+    </ul>
+</nav>

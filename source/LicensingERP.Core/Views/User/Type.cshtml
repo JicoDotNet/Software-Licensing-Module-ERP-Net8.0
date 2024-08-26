@@ -1,0 +1,138 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@model _UserTypes
+@{
+    ViewBag.Title = "Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>User Group</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("index","User")">User</a></li>
+                    <li class="breadcrumb-item active"><a href="@Url.Action("Type","User")">Group</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">
+                            @if (Model.UserType != null)
+                            {
+                                <text> Update </text>
+                            }
+                            else
+                            {
+                                <text> Add </text>
+                            }
+                            User group
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("Type", "User", new { id = ((Model.UserType != null) ? Model.UserType.Id.ToString() : "") }, FormMethod.Post, null, new { autocomplete = "off" }))
+                    {
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="UserTypeName">User Group Name <span style="color:red">&#42;</span></label>
+                                        <input type="text" name="UserTypeName" class="form-control"
+                                               @if (Model.UserType != null) { <text> value="@Model.UserType.UserTypeName" </text> }
+                                               placeholder="Enter User Group Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="UserTypeDetails">User Group Details <span style="color:red">&#42;</span></label>
+                                        <textarea name="UserTypeDetails" class="form-control" placeholder="Enter User Group Details" required style="height:38px;">@if (Model.UserType != null) { <text> @Model.UserType.UserTypeDetails </text>  }</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            @if (Model.UserType != null)
+                            {
+                                <button type="submit" class="btn btn-warning"> <i class="fas fa-edit"></i> Update </button>                                
+                                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Type","User", new { id = string.Empty })'"><i></i> Cancel</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> Save 
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View Type</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example1" class="table table-striped table-bordered dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Edit/Deactivate</th>
+                                    <th>User Group Name</th>
+                                    <th>User Group Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (UserType UType in Model.UserTypes)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="@Url.Action("Type", "User", new { id = UType.Id })">
+                                                <i class="fas fa-pen pull-right"></i> Edit
+                                            </a> /
+                                            <button onclick="UsertypeDeactivate(@UType.Id)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt pull-right"></i> Deactivate
+                                            </button>
+                                        </td>
+                                        <td>@UType.UserTypeName</td>
+                                        <td>@UType.UserTypeDetails</td>
+                                        <td>
+                                            @if (UType.IsActive)
+                                            {
+                                                <span class="right badge badge-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="right badge badge-danger">Inactive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="div_opn"></div>
+@section BodyScript{
+    <script type="text/javascript">
+        function UsertypeDeactivate(id) {
+            $("#div_opn").load("@Url.Action("TypeDeactivate", "User")/" + id);
+        }
+    </script>
+}
+
+
+

@@ -1,0 +1,268 @@
+﻿@model Request
+
+<div class="col-md-12">
+    @if (Model.byPassRequisitionClaims != null && Model.byPassRequisitionClaims.Count > 0)
+    {
+        int i = 0;
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">Requisition Bypass Info</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("AdminProceed", "Requisition", new { id = Model.Id }, FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="License Type">Request Number</label>
+                                <p>@Model.RequestNo.ToString()</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="ClientName">Current UserGroup</label>
+                                @foreach (ByPassRequisitionClaim byPass in Model.byPassRequisitionClaims)
+                                {
+                                    i++;
+                                    if (i == 1)
+                                    {
+                                        <input type="text" value="@byPass.BUserGroupName" class="form-control" name="BUserGroupName" readonly>
+                                        <input type="hidden" value="@byPass.BNextUserTypeId" name="BNextUserTypeId" />
+                                    }
+
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="License Type"> User List</label>
+                            <select class="form-control" name="BUserId" style="width:100%;">
+                                @foreach (ByPassRequisitionClaim byPassB in Model.byPassRequisitionClaims)
+                                {<text>
+                                        <option value="@byPassB.BUserId"> @byPassB.BUserName</option>
+                                </text>
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Claim </button>
+                }
+
+            </div>
+        </div>
+    }
+
+    @if (Model.byPassRequisition != null)
+    {
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">Requisition Bypass Info</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="License Type">Request Number</label>
+                                <p>@Model.RequestNo.ToString()</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="ClientName">Current Claim UserGroup</label> 
+                                <p>@Model.byPassRequisition.BUserGroupName</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="License Type"> Current Claim User</label>
+                            <p>@Model.byPassRequisition.BUserName</p>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    }
+    <div class="card">
+        <div class="card-header bg-cyan">
+            <h3 class="card-title">Requisition</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="ClientName">Request By</label>
+                        <p> @Model.FullName <br />of <i>@Model.UserTypeName Group</i></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="License Type">Request Date</label>
+                        <p>@Model.RequestDate.ToString("MMMM-dd-yyyy, ddd")</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="License Type">Request Number</label>
+                        <p>@Model.RequestNo.ToString()</p>
+                    </div>
+                </div>
+                @*<div class="col-md-4" style="margin-top: 30px;">
+                        <div class="form-group">
+                            <button class="btn btn-success">Clone From</button>
+                            <button class="btn btn-success">Compare Previous</button>
+                        </div>
+                    </div>*@
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="ClientName">Client Name</label>
+                        <p> @Model.ClientName</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="LicenseType">License Type</label>
+                        <p> @Model.TypeName</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="NumberOfLicense">Number Of License</label>
+                        <p> @Model.LicenceNo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-cyan">
+            <h3 class="card-title">Requisition Restrict</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Restrict To</th>
+                        <th>Restrict Val</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (RequestRestrict rR in Model.RequestRestricts)
+                    {
+                        <tr>
+                            <td>@rR.RestrictTo</td>
+                            <td>@rR.RestrictVal</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-cyan">
+            <h3 class="card-title">License Parameter</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach (RequestParameter requestParameter in Model.RequestParameters)
+                {
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="@requestParameter.FieldName">@requestParameter.FieldName</label>
+                            <p>@requestParameter.ParamValue</p>
+                        </div>
+                    </div>
+                }
+
+                @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label for="License Type">College</label>
+                            <p>College Name</p>
+                        </div>
+                    </div>*@
+                @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label for="ClientName">School</label>
+                            <p> School</p>
+                        </div>
+                    </div>*@
+                @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label for="LicenseType">Parameter 1</label>
+                            <p> @GenericLogic.IstNow.ToString("dd-MMMM-yyyy")</p>
+                        </div>
+                    </div>*@
+                @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label for="NumberOfLicense">Parameter 2</label>
+                            <p> Parameter 2</p>
+                        </div>
+                    </div>*@
+            </div>
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-cyan">
+            <h3 class="card-title">Product</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ProductName">Product Name</label>
+                        <p>@Model.ProductName</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ProductName">Feature</label>
+                        <ul class="todo-list">
+                            @foreach (RequestFeature requestFeature in Model.RequestFeatures)
+                            {
+                                <li>
+                                    @requestFeature.FeaturesName
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

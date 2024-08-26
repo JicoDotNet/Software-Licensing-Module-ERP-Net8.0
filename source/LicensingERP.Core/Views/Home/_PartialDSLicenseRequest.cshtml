@@ -1,0 +1,67 @@
+﻿@model List<RequestWiseLicense>
+
+<div class="card card-danger">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-chart-pie"></i>
+            License Wise Request
+        </h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <canvas id="pieChart" style="height:220px; min-height:220px"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+    @{
+        string labels = "";
+        string data = "";
+
+        for (int i = 0; i < Model.Count; i++)
+        {
+            labels += "\"" + Model[i].TypeName + "\",";
+            data +=  Model[i].LicenseCount + ",";
+        }
+        data = "[" + data.Substring(0, data.Length - 1) + "]";
+        labels = "[" + labels.Substring(0, labels.Length - 1) + "]";
+    }
+    var _labels = "@labels";
+    var _data = @data;
+
+    _labels = _labels.replace(/&quot;/g, "\"");
+    _labels = JSON.parse(_labels);
+
+    var backgroundColor = [];
+    for (var i = 0; i < _labels.length; i++) {
+        backgroundColor.push('#' + GraphColour[i].Colour);
+    }
+
+    var donutData = {
+        labels: _labels,
+        datasets: [
+            {
+                data: _data,
+                backgroundColor: backgroundColor,
+            }
+        ]
+    };
+
+        var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+        var pieData = donutData;
+        var pieOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+        var pieChart = new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: pieData,
+        options: pieOptions
+    })
+</script>

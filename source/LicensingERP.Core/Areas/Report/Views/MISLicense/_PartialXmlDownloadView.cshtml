@@ -1,0 +1,58 @@
+﻿@model List<ReportOfXmlDownload>
+@if (Model.Count != 0)
+{
+
+    <table id="XMLD_View" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Request No</th>
+                <th>User</th>
+                <th>User Type</th>
+                <th>Download Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReportOfXmlDownload reportOfXmlDownload in Model)
+            {
+                <tr>
+                    <td>@reportOfXmlDownload.RequestNo</td>
+                    <td>@reportOfXmlDownload.FullName</td>
+                    <td>@reportOfXmlDownload.UserTypeName</td>
+                    <td>@reportOfXmlDownload.TransactionDate.ToDisplayDateString()</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <script type="text/javascript">
+        toastr.error('No data Found');
+    </script>
+
+}
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#Request_View').dataTable({
+    //        "bPaginate": true,
+    //        "bLengthChange": true,
+    //        "bFilter": true,
+    //        "bInfo": false,
+    //        "bAutoWidth": false,
+    //        "searching": true
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#XMLD_View').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "responsive": true,
+        });
+    });
+
+    $('.toast').toast('show');
+</script>

@@ -1,0 +1,52 @@
+[
+  {
+    "Id": 0,
+    "Colour": "00a65a",    
+    "IsActive": true
+  },
+  {
+    "Id": 1,
+    "Colour": "ad2b18",
+    "IsActive": true
+  },
+  {
+    "Id": 2,
+    "Colour": "f39c12",
+    "IsActive": true
+  },
+  {
+    "Id": 3,
+    "Colour": "00c0ef",
+    "IsActive": true
+  },
+  {
+    "Id": 4,
+    "Colour": "3c8dbc",
+    "IsActive": true
+  },
+  {
+    "Id": 5,
+    "Colour": "d2d6de",
+    "IsActive": true
+  },
+  {
+    "Id": 6,
+    "Colour": "000FFF",
+    "IsActive": true
+  },
+  {
+    "Id": 7,
+    "Colour": "123ABC",
+    "IsActive": true
+  },
+  {
+    "Id": 8,
+    "Colour": "ABC321",
+    "IsActive": true
+  },
+  {
+    "Id": 9,
+    "Colour": "852159",
+    "IsActive": true
+  }
+]

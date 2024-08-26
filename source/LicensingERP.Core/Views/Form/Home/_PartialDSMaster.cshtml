@@ -1,0 +1,83 @@
+﻿@model Master
+   
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">User Group</span>
+                    <span class="info-box-number">
+                        @Model.UserType
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user-check"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">User</span>
+                    <span class="info-box-number">@Model.User</span>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix hidden-md-up"></div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-id-card"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Licence Type</span>
+                    <span class="info-box-number">@Model.LicenceType</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-list-alt"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Client Category</span>
+                    <span class="info-box-number">@Model.ClientCategory</span>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix hidden-md-up"></div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-pink elevation-1"><i class="fas fa-user-alt"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Client</span>
+                    <span class="info-box-number">
+                        @Model.Client
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-blue elevation-1"><i class="fas fa-box"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Product</span>
+                    <span class="info-box-number">@Model.Product</span>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix hidden-md-up"></div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-orange elevation-1"><i class="fas fa-tasks"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Parameter</span>
+                    <span class="info-box-number">@Model.FormManage</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+                <span class="info-box-icon bg-gradient-indigo elevation-1"><i class="fas fa-hourglass"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">WF Process</span>
+                    <span class="info-box-number">@Model.Process</span>
+                </div>
+            </div>
+        </div>
+    </div>

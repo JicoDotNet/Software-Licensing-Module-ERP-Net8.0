@@ -1,0 +1,69 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@model ProductFeatures
+<div class="card">
+    <div class="card-header bg-gradient-teal">
+        <h3 class="card-title">Add Product Feature</h3>
+    </div>
+    <form id="feature_form" action="#">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FeatureName">Feature Name<span style="color:red">&#42;</span></label>
+                        <input type="text" name="FeaturesName" class="form-control" placeholder="Enter Feature" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Details">Details<span style="color:red">&#42;</span></label>
+                        <textarea name="FeaturesDetails" class="form-control" placeholder="Feature Details" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="message_box"></div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success"> <i class="fas fa-save"></i> Submit</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $('#feature_form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Features", "Product", new { id = Model.ProductId })",
+            data: JSON.stringify({
+                FeaturesName: $('form#feature_form [name="FeaturesName"]').val(),
+                FeaturesDetails: $('form#feature_form [name="FeaturesDetails"]').val()
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data > 0) {
+                    document.getElementById("message_box").innerHTML = "<small class='text-success'><strong> Data Submitted. Waiting for approval !! </strong></small>";
+                    setTimeout(function () { $("#message_box").fadeOut(); }, 6000);
+                    setTimeout(function () { $("#myModal").modal("hide"); }, 2000);
+                }
+                else {
+                    $("#message_box").fadeIn();
+                    $("#message_box").html("<small class='text-warning'><strong> Error to Submit </strong></small>");
+                }
+            },
+            error: function (response) {
+
+                console.log(response.responseText);
+            }
+        });
+        return false;
+    });
+
+    $('form  input[type="text"] , form  textarea ').blur(function () {
+        var str = $(this).val().trim();
+        if (str === '') {
+            $(this).val(str);
+        }
+        return;
+    });
+</script>

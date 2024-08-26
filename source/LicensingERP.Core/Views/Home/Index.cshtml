@@ -1,0 +1,57 @@
+﻿@model List<Dashboard>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (Dashboard dashboard in Model)
+            {
+                <div id="DS-@dashboard.Id" class="@dashboard.DivCssClass">
+                    <div class="card" style="height:220px;">
+                        <div class="overlay text-center">
+                            <i class="fas fa-sync-alt fa-spin fa-2x"></i>
+                        </div>
+                    </div>                   
+                </div>
+            }
+        </div>
+
+    </div>
+</section>
+
+@section BodyScript{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+    <script type="text/javascript">
+        var GraphColour = [];
+        $.getJSON("/JsonFile/GraphColour.json", function (data) {
+            GraphColour = data;
+        });
+        @foreach(Dashboard dashboard in Model)
+        {
+            <text>
+                $("#DS-@dashboard.Id").load("@Url.Action(dashboard.PartialViewName, "Home")");
+            </text>
+        }
+    </script>
+}

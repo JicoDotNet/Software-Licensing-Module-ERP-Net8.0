@@ -1,0 +1,64 @@
+﻿@model List<ReportOfRequest>
+@if (Model.Count != 0)
+{
+
+    <table id="Request_View" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Request No</th>
+                <th>User</th>
+                <th>Client</th>
+                <th>License Type</th>
+                <th>Product Name</th>
+                <th>Request Date</th>
+                <th>Expiry Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReportOfRequest request in Model)
+            {
+            <tr>
+                <td>@request.RequestNo</td>
+                <td>@request.FullName</td>
+                <td>@request.ClientName</td>
+                <td>@request.TypeName</td>
+                <td>@request.ProductName</td>
+                <td>@request.TransactionDate.ToDisplayDateString()</td>
+                <td>@Convert.ToDateTime(request.ExpiryDate).ToDisplayDateString()</td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <script type="text/javascript">
+        toastr.error('No data Found');
+    </script>
+
+}
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#Request_View').dataTable({
+    //        "bPaginate": true,
+    //        "bLengthChange": true,
+    //        "bFilter": true,
+    //        "bInfo": false,
+    //        "bAutoWidth": false,
+    //        "searching": true
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#Request_View').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "responsive": true,
+        });
+    });
+
+    $('.toast').toast('show');
+</script>

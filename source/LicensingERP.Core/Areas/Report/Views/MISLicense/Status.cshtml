@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewData["Title"] = "Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>License Status Reports</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item">License</li>
+                    <li class="breadcrumb-item active">Status</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">
+                            Status Reports
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="State">Status</label>
+                                    <select class="form-control" name="status" style="width:100%">
+                                        <option value="select" selected>-- Please Select--</option>
+                                        <option value="1">Approved</option>
+                                        <option value="0">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="LicenseNumber">Request Number</label>
+                                    <input type="text" name="RequestNumber" class="form-control" placeholder="Enter License Number">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="FormDate">From Date </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        @*<input type="text" name="from_date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>*@
+                                        <input type="text" name="from_date" class="form-control" id="datep" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ToDate">To Date </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        @*<input type="text" name="to_date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>*@
+                                        <input type="text" name="to_date" class="form-control" id="datep1" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" onclick="status_submit()" class="btn btn-info"> <i class="fas fa-search"></i> Search </button>
+                        <button type="button" onclick="clear_fun();" class="btn btn-info"><i class="fas fa-redo-alt"></i> Reset</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View Report</h3>
+                    </div>
+                    <div class="card-body" id="statustable">
+                        @*<table id="example1" class="table table-striped table-bordered dt-responsive nowrap">
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section BodyScript{
+
+    <script type="text/javascript">
+
+         //Date picker
+        $('#datep').datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+        $('#datep1').datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+
+        function status_submit() {
+            var status = $('select[name="status"]').val();
+            var RequestNumber = $('[name="RequestNumber"]').val();
+            var from_date = $('[name="from_date"]').val();
+            var to_date = $('[name="to_date"]').val();
+
+            var val = '{';
+
+            if (status == 'select' && RequestNumber == '' && from_date == '' && to_date == '') {
+                errorAlert("Status Report", "Select Atleast 1 Options", null);
+            }
+            else if ((from_date == "" && to_date != "") || (from_date != "" && to_date == "")) {
+                errorAlert("Status Report", "Select Date Range Properly", null);
+            }
+            else {
+                if (status != 'select')
+                    val = val + '"IsApproved":"' + Boolean(status==1) + '",';
+                if (RequestNumber != '')
+                    val = val + '"RequestNo":' + '"' + RequestNumber + '",';
+                if (from_date != '') {
+                    from_date = from_date.split('/');
+                    val = val + '"FromDay":' + parseInt(from_date[0]) + ',"FromMonth": ' + parseInt(from_date[1]) + ',"FromYear":' + parseInt(from_date[2]) + ',';
+                }
+                if (to_date != '') {
+                    to_date = to_date.split('/');
+                    val = val + '"ToDay":' + parseInt(to_date[0]) + ',"ToMonth": ' + parseInt(to_date[1]) + ',"ToYear":' + parseInt(to_date[2]) + ',';
+                }
+                val = val.substring(0, val.length - 1) + "}";
+
+                //alert(val); exit;   
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetStatusReportInfo", "MISUser", new { area = "Report" })',
+                    data: val,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (data) {
+                        $('#statustable').html(data);
+                        setDefaultButton();
+                    },
+                    error: function (response) {
+                        console.log(response.responseText);
+                    }
+                });
+            }
+        }
+
+        function clear_fun() {
+
+            $('[name="RequestNumber"]').val("");
+
+            $('select[name="status"]').val("select");
+            //$('select[name="status"]').select2("val", "select");
+
+            $('[name="from_date"]').val("");
+            $('[name="to_date"]').val("");
+
+            $('#statustable').html("");
+
+        }
+
+    </script>
+}
+

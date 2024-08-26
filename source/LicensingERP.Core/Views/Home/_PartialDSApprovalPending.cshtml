@@ -1,0 +1,135 @@
+﻿@model List<ProductWiseLicense>
+<!-- BAR CHART -->
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Approval Pending</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="chart">
+            <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+<script>
+
+    @{
+        string labels = "";
+        string datasets = string.Empty;
+
+
+        List<ProductWiseLicense> userTypeLists = new List<ProductWiseLicense>();
+        userTypeLists = Model.GroupBy(a => a.UserTypeName).Select(b1=> new ProductWiseLicense { UserTypeName = b1.First().UserTypeName }).ToList() ;
+
+        List<ProductWiseLicense> objlabels = new List<ProductWiseLicense>();
+        objlabels = Model.GroupBy(a => a.ProductName).Select(b1=> new ProductWiseLicense { ProductName = b1.First().ProductName }).ToList() ;
+
+
+        // Lables
+        for (int i = 0; i < objlabels.Count; i++)
+        {
+            labels += "\"" + objlabels[i].ProductName + "\",";
+        }
+        labels = "[" + labels.Substring(0, labels.Length - 1) + "]";
+
+        //Dataset
+        for (int i = 0; i < userTypeLists.Count; i++)
+        {
+            string data = string.Empty;
+
+            datasets += "{'label':'" + userTypeLists[i].UserTypeName + "',";
+
+            for (int j=0; j< objlabels.Count;j++)
+            {
+
+                if (Model.Where(a=>a.UserTypeName == userTypeLists[i].UserTypeName && a.ProductName == objlabels[j].ProductName).FirstOrDefault() != null)
+                {
+                    data += Model.Where(a => a.UserTypeName == userTypeLists[i].UserTypeName && a.ProductName == objlabels[j].ProductName).FirstOrDefault().LicenceCount + ",";
+                }
+                else
+                {
+                    data += "0,";
+                }
+            }
+
+            data = "[" + data.Substring(0, data.Length - 1) + "]";
+            datasets += "'data':" + data + "},";
+
+        }
+
+        datasets = "[" + datasets.Substring(0, datasets.Length - 1) + "]";
+    }
+
+    //debugger;
+    var _labels = "@labels";
+    var _datasets = "@datasets";
+
+    _labels = _labels.replace(/&quot;/g, "\"");
+    _labels = JSON.parse(_labels);
+
+    _datasets = _datasets.replace(/&#x27;/g, "\"");
+    _datasets = _datasets.replace(/&quot;/g, "\"");
+    _datasets = JSON.parse(_datasets);
+
+    
+
+    var backgroundColor = [];
+    for (var i = 0; i < _datasets.length; i++) {
+        _datasets[i].backgroundColor = '#' + GraphColour[i].Colour;
+    }
+
+    var areaChartData = {
+        labels: _labels,
+        datasets: _datasets
+    };
+
+    var areaChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+            display: false
+        },
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    display: false,
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: false,
+                }
+            }]
+        }
+    }
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChart2Canvas = $('#barChart2').get(0).getContext('2d');
+    var barChart2Data = jQuery.extend(true, {}, areaChartData);
+    var temp0 = areaChartData.datasets[0];
+    var temp1 = areaChartData.datasets[1];
+    barChart2Data.datasets[0] = temp1;
+    barChart2Data.datasets[1] = temp0;
+
+    var barChart2Options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false
+    };
+
+    var barChart2 = new Chart(barChart2Canvas, {
+
+        type: 'bar',
+        data: barChart2Data,
+        options: barChart2Options
+    });

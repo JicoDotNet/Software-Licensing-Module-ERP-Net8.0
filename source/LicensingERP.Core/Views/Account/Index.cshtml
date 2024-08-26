@@ -1,0 +1,196 @@
+﻿@using LicensingERP.Logic.Model.Class
+@using LicensingERP.StateManagement
+
+@{
+    Layout = null;
+    SessionManagement.RemoveSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "ReturnMessage");
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account</title>
+    <!--===============================================================================================-->
+    <!-- Favicon -->
+    <link rel="icon" href="~/Theme/dist/img/favicon.ico">
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/animate/animate.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/animsition/css/animsition.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/select2/select2.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/vendor/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Theme/loginForm/css/util.css" rel="stylesheet" />
+    <link href="~/Theme/loginForm/css/main.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+</head>
+<body>
+    @{
+        ReturnObject returnObject = TempData.Get<ReturnObject>("ReturnMessage");
+    }
+    
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <div class="login100-form-title" style="background-image: url(../../Theme/loginForm/images/bg-01.jpg);">
+                    <span class="login100-form-title-1">
+                        Sign In
+                    </span>
+                </div>
+
+                @using (Html.BeginForm("Index", "Account", FormMethod.Post, new { autocomplete = "off", @class = "login100-form validate-form" }))
+                {
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                        <span class="label-input100">Username</span>
+                        <input class="input100" type="text" autofocus name="UserName" placeholder="Enter username">
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                        <span class="label-input100">Password</span>
+                        <input class="input100" type="password"  name="PasswordText" placeholder="Enter password">
+                        <div id="message"></div>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="flex-sb-m p-b-10">
+                        <div class="contact100-form-checkbox">
+                            <a href="@Url.Action("ForgotPassword","Account")" class="txt1">
+                                Forgot Password?
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-b-10">
+                        @if (returnObject != null)
+                        {
+
+                            if (returnObject.Status)
+                            {
+                                <span><small class='text-success'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
+                            }
+                            else
+                            {
+                                <span><small class='text-danger'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
+                            }
+                        }
+
+                    </div>
+                    
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn">
+                            Login
+                        </button>
+                        
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+@*<body>
+        @if (TempData["ReturnMessage"] != null)
+        {
+            if (((ReturnObject)TempData["ReturnMessage"]).Status)
+            {
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4>&#128522;</h4>
+                    <p>
+                        @Html.Raw(((ReturnObject)TempData["ReturnMessage"]).Message)
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4>&#128524;</h4>
+                    <p>
+                        @Html.Raw(((ReturnObject)TempData["ReturnMessage"]).Message)
+                    </p>
+                </div>
+            }
+        }
+        <div class="limiter">
+            <div class="container-login100" style="background-image: url('../../Theme/loginForm/images/bg-01.jpg');">
+                <div class="wrap-login100">
+                    @using (Html.BeginForm("Index",
+                        "Account",
+                        FormMethod.Post,
+                        new {
+                            autocomplete = "off",
+                            @class = "login100-form validate-form"
+                        }))
+                    {
+                        <span class="login100-form-logo">
+                            <i class="zmdi zmdi-landscape"></i>
+                        </span>
+
+                        <span class="login100-form-title p-b-34 p-t-27">
+                            Log in
+                        </span>
+
+                        <div class="wrap-input100 validate-input" data-validate="Enter username">
+                            <input class="input100" type="text" name="UserName" placeholder="Username">
+                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        </div>
+
+                        <div class="wrap-input100 validate-input" data-validate="Enter password">
+                            <input class="input100" type="password" name="PasswordText" placeholder="Password">
+                            <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                        </div>
+
+                        <div class="container-login100-form-btn">
+                            <button type="submit" class="login100-form-btn">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="text-center p-t-30">
+                            <a class="txt1" href="#">
+                                Forgot Password?
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div id="dropDownSelect1"></div>
+
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/bootstrap/js/popper.js"></script>
+        <script src="~/Theme/loginForm/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/select2/select2.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/daterangepicker/moment.min.js"></script>
+        <script src="~/Theme/loginForm/vendor/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/vendor/countdowntime/countdowntime.js"></script>
+        <!--===============================================================================================-->
+        <script src="~/Theme/loginForm/js/main.js"></script>
+
+    </body>*@
+</html>
+
+

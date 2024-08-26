@@ -1,0 +1,393 @@
+﻿@model List<DataOnHold<object>>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Pending Approval</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Checker")">Home</a></li>
+                    <li class="breadcrumb-item active">Pending Approval</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header bg-cyan">
+            <h3 class="card-title">Approve</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-striped table-bordered nowrap">
+                <thead>
+                    <tr>
+                        <th>
+                            Type of data
+                        </th>
+                        <th>
+                            Request By
+                        </th>
+                        <th>
+                            Effected Data
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Activity
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataOnHold<object> dataOnHold in Model)
+                    {
+
+                        <tr>
+                            @{
+                                #region Settings
+                                string icon = "";
+                                string color = "";
+
+                                if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                                {
+                                    color = "#067334";
+
+                                }
+                                else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                                {
+                                    color = "#ffd700";
+
+                                }
+                                else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                                {
+                                    color = "#dc3545";
+
+                                }
+                                switch (dataOnHold.eCaseType)
+                                {
+                                    case eDataOnHoldCaseType.UserGroup:
+                                        {
+                                            icon = "fa-user-plus";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.User:
+                                        {
+                                            icon = "fa-user";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.ClientCategory:
+                                        {
+                                            icon = "fa-user-tag";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.UserMenuPermission:
+                                        {
+                                            icon = "fa-user";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.UserDashboardPermission:
+                                        {
+                                            icon = "fa-user";
+                                        }
+                                        break;
+
+                                    case eDataOnHoldCaseType.Client:
+                                        {
+                                            icon = "fa-user-tie";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.LicenseType:
+                                        {
+                                            icon = "fa-id-card";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.Product:
+                                        {
+                                            icon = "fa-box";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.LicenseParameterLink:
+                                        {
+                                            icon = "fa-id-card";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.Parameter:
+                                        {
+                                            icon = "fa-hands-helping";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.WFProcess:
+                                        {
+                                            icon = "fa-hourglass";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.WFAssign:
+                                        {
+                                            icon = "fa-hourglass";
+                                        }
+                                        break;
+                                    case eDataOnHoldCaseType.ProductFeatures:
+                                        {
+                                            icon = "fa-th-list";
+                                        }
+                                        break;
+                                }
+                                #endregion
+                            }
+                            <td>
+                                <i class="fas @icon mr-2" style="color:@color"></i>
+                                <span style="color:@color">
+                                    @dataOnHold.ePurpose.ToString() for @dataOnHold.eCaseType.ToString()
+                                </span>
+                                <br />
+                                <small>
+                                    Requested on @dataOnHold.TransactionDate.ToDisplayDateString()
+                                </small>
+                            </td>
+                            <td>
+                                @dataOnHold.CreatedUserFullName
+                            </td>
+                            <td class="project_progress">
+                                <a class="btn btn-default btn-sm" style="cursor:pointer;" onclick="ShowData(this);"
+                                   data-bind="@dataOnHold.EffectedDataDisplay">
+                                    <i class="fas fa-eye"></i>  View Data
+                                </a>
+                                @if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                                {
+                                    <br />
+                                    <a class="card-link text-sm text-danger" style="cursor:pointer;" onclick="ShowData(this);"
+                                       data-bind="@dataOnHold.OldDataDisplay">
+                                        <i class="far fa-eye-slash"></i>  Old Data
+                                    </a>
+                                }
+                            </td>
+                            <td class="project-state">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td class="project-actions text-right">
+                                @*<a class="btn btn-primary btn-sm" style="cursor:pointer;"
+                                       data-bind="@dataOnHold.EffectedData">
+                                        <i class="fas fa-folder">
+                                        </i>
+                                        Compare
+                                    </a>*@
+                                <a class="btn btn-info btn-sm" style="cursor:pointer; color:#fff;" onclick="ApproveData(this, @dataOnHold.Id);"
+                                   data-bind="@dataOnHold.EffectedDataDisplay">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Approve
+                                </a>
+                                <a class="btn btn-danger btn-sm" style="cursor:pointer; color:#fff;" onclick="DeclineData(this, @dataOnHold.Id);"
+                                   data-bind="@dataOnHold.EffectedDataDisplay">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Decline
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Data Model</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="approve">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Data Model to Approve</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Approve", "Checker", new { id = string.Empty },
+               FormMethod.Post, null, new { autocomplete = "off", }))
+            {
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="tableJasonData">
+                            <p>One fine body…</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="Remarks">Remarks</label>
+                                <input type="text" name="ApproveRejectRemarks" class="form-control"
+                                       placeholder="Remarks" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="Your Password">Your Password</label>
+                                <input type="password" name="Password" class="form-control"
+                                       placeholder="Put Your Password to Change" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="sub" class="btn btn-success pull-right">
+                        Approve
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="decline">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Data Model To Decline</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Decline", "Checker", new { id = string.Empty },
+              FormMethod.Post, null, new { autocomplete = "off", }))
+            {
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="tableJasonData">
+                            <p>One fine body…</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="Mobile">Remarks</label>
+                                <input type="text" name="ApproveRejectRemarks"  class="form-control"
+                                       placeholder="Remarks" required>
+                            </div>
+                            <p id="emailvalida"></p>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="Mobile">Your Password</label>
+                                <input type="password" name="Password" class="form-control"
+                                       placeholder="Put Your Password to Change" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning pull-right">
+                        Decline
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section BodyScript{
+    <script type="text/javascript">
+        function ShowData(e) {
+            $('#modal .modal-body').html(ModelBindWithJson($(e).data('bind')));
+            $("#modal").modal({ backdrop: 'static', keyboard: false });
+        }
+        function ApproveData(e, Id) {
+
+            $('#approve #tableJasonData').html(ModelBindWithJson($(e).data('bind')));
+            $('#approve form').attr('action', ($('#approve form').attr('action') + '/' + Id));
+            $("#approve").modal({ backdrop: 'static', keyboard: false });
+        }
+        function DeclineData(e, Id) {
+            $('#decline #tableJasonData').html(ModelBindWithJson($(e).data('bind')));
+            $('#decline form').attr('action', ($('#decline form').attr('action') + '/' + Id));
+            $("#decline").modal({ backdrop: 'static', keyboard: false });
+        }
+
+        function ModelBindWithJson(myObj) {
+            var txt = '';
+            var i = 0;
+            txt += "<table style='width: 100%;'><tr><th>Name</th><th>Value</th></tr>"
+            
+            for (x in myObj) {
+                i++;
+                if (x == 'TransactionDate' || x == 'WFProcessId' || x == 'StateId' || x == 'FormUserTypeId' || x == 'ToUserTypeId' || x == 'ActivityStartDate' || x == 'ActivityEndDate'  || x == 'CreatedBy' || x == 'SessionId' || x == 'ProductId' || x == 'IsActive' || x == 'Id' || x == 'Password' || x == 'UserTypeId' || x == 'CategoryId' || x == 'NumberOfLicence' || x == 'IsScalingEligible' || x == 'LicenceTypeId') { console.log('Not Showing!'); }
+                else
+                    if (x == 'Id' && myObj[x] == 0) { console.log('Not Showing!'); }
+                    else
+                        if (Array.isArray(myObj)) {
+                            if ("Menu" in myObj[x]) {
+                                //console.log(myObj[x]);
+                                if (i == 1) {
+                                    txt += "<tr><td>User Group Name</td><td>" + myObj[x].Usertype + "</td></tr>";
+                                    txt += "<tr><td>Menu  Name</td><td>" + myObj[x].Menu + "</td></tr>";
+                                }
+                                else {
+                                    txt += "<tr><td></td><td>" + myObj[x].Menu + "</td></tr>";
+                                }
+                            }
+                            if ("DashboardName" in myObj[x]) {
+                                if (i == 1) {
+                                    txt += "<tr><td> User Group Name</td><td>" + myObj[x].DashboardUserType + "</td></tr>";
+                                    txt += "<tr><td>Dashboard </td><td>" + myObj[x].DashboardName + "</td></tr>";
+                                }
+                                else {
+                                    txt += "<tr><td></td><td>" + myObj[x].DashboardName + "</td></tr>";
+                                }
+                            }
+                            if ("FieldName" in myObj[x]) {
+                                if (i == 1) {
+                                   
+                                    txt += "<tr><td>Licence Type Name</td><td>" + myObj[x].TypeName + "</td></tr>";
+                                    txt += "<tr><td>Parameter  Name</td><td>" + myObj[x].FieldName + "</td></tr>";
+
+                                }
+                                else {
+                                    txt += "<tr><td></td><td>" + myObj[x].FieldName + "</td></tr>";
+
+                                }
+                            }
+                            
+                           
+                        }
+                        else {
+                            if (myObj[x] != null)
+                                txt += "<tr><td>" + x + "</td><td>" + myObj[x] + "</td></tr>";
+                        }
+                            
+            }
+            txt += "</table>";
+            return txt;
+        }
+            
+    </script>
+}
