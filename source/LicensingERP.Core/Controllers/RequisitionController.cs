@@ -475,7 +475,7 @@ namespace LicensingERP.Core.Controllers
                 BinaryReader bm = new BinaryReader(sm);
                 byte[] byteimage = bm.ReadBytes((Int32)sm.Length);
                 requestAcknowledgement.FileData = byteimage;
-                requestAcknowledgement.Description = "Globsyn";
+                requestAcknowledgement.Description = "LicensingERP";
             }
 
            
