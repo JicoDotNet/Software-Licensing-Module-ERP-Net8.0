@@ -1,0 +1,346 @@
+﻿@model CompareLList
+@{
+    ViewData["Title"] = "DisplayCompareLicence";
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <!-- Favicon -->
+    <link rel="icon" href="~/Theme/dist/img/favicon.ico">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <!-- Bootstrap datatable -->
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <!-- Bootstrap4 Duallistbox -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-duallistbox/4.0.1/bootstrap-duallistbox.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/Theme/dist/css/adminlte.min.css" rel="stylesheet" />
+    <!-- bootstrap datepicker -->
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+     
+
+      
+            <section class="content">
+                <div class="container-fluid">
+                    <form id="myform">
+                        <div class="row">
+                            <!-- Left col -->
+
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-cyan">
+                                        <h3 class="card-title">Requisition</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="ClientName">Requisition Number </label>
+
+                                                    <input type="text" class="form-control"
+                                                           @if (Model.licenceCompare != null) { <text> value="@Model.licenceCompare.RequestNo" </text> }
+                                                           readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="ClientName">Client Name </label>
+
+                                                    <input type="text" class="form-control"
+                                                          @if(Model.licenceCompare != null)
+                                                          { <text> value="@Model.licenceCompare.ClientName" </text>  }
+                                                           readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="LicenseType">License Type </label>
+                                                    <input type="text" class="form-control"
+                                                           @if (Model.licenceCompare != null) { <text> value="@Model.licenceCompare.TypeName" </text> }
+                                                           readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="NumberOfLicense">Number Of License </label>
+                                                    <input type="text" class="form-control"
+                                                           @if (Model.licenceCompare != null) {<text> value="@Model.licenceCompare.LicenceNo" </text> }
+                                                           readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header bg-cyan">
+                                        <h3 class="card-title">Requisition Restrict</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Restrict To</th>
+                                                    <th>Restrict Val</th>
+                                                    @*<th>
+                                                        <button type="button" onclick="add_row()" class="btn btn-danger">
+                                                            <span class="fas fa-plus">Add</span>
+                                                        </button>
+                                                    </th>*@
+                                                    @*<th >
+                                                <a href="#" class="btn btn-success">
+                                                    <span class="fas fa-minus"></span>
+                                                </a>
+                                            </th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody id="u">
+                                                @if(Model.requestRestricts.Count > 0)
+                                                {
+                                                    foreach(RequestRestrict restrict in Model.requestRestricts)
+                                                    {
+                                                        <tr>
+                                                            <td>@restrict.RestrictTo</td>
+                                                            <td>@restrict.RestrictVal</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header bg-cyan">
+                                        <h3 class="card-title">License Parameter</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="LicenseParameter">
+                                        <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><label for="ParamName"> Parameter Name</label></th>
+                                            <th> <label for="ParamName"> Parameter Type</label></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.requestParameters.Count > 0)
+                                        {
+                                            foreach (RequestParameter parameter in Model.requestParameters)
+                                            {
+                                                <tr>
+
+                                                    <td>
+                                                       @parameter.FieldName
+                                                    </td>
+                                                    <td>
+                                                        @parameter.ParamValue
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header bg-cyan">
+                                        <h3 class="card-title">Product</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="ProductName">Product Name</label>
+                                                    <input type="text" class="form-control"
+                                                           @if (Model.licenceCompare != null) { <text> value="@Model.licenceCompare.ProductName" </text> }
+                                                           readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">
+                                                            <i class="ion ion-clipboard mr-1"></i>
+                                                            Features
+                                                        </h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <ul class="todo-list" data-widget="" id="features_list">
+                                                            @if (Model.requestFeatures.Count > 0)
+                                                            {
+                                                                foreach (RequestFeature feature in Model.requestFeatures)
+                                                                {
+                                                            <li>
+                                                                <input type="checkbox" class="checkBoxClass1" checked disabled />
+                                                                <span class="text">@feature.FeaturesName</span>
+                                                            </li>
+                                                                }
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                    @*<div class="card-footer">
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
+                                                        <label class="form-check-label">Select All</label>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer" id="button">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        <footer class="main-footer" style="height:55px;">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.3.0
+            </div>
+        </footer>
+
+        <aside class="control-sidebar control-sidebar-light">
+            <div class="row mr-0">
+                <div class="col-md-12">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle" src="~/Theme/dist/img/user-128x128.png" alt="User profile picture">
+                        </div>
+                        <ul class="list-group list-group-unbordered mb-2">
+                            <li class="list-group-item">
+                                <h4 class="profile-username text-center" style="color:#000000">
+                                    @(((LicensingERP.Logic.Model.Class.LoginCredentials)ViewBag.SessionPerson).FullName)
+                                </h4>
+                                <p class="text-muted text-center" style="color:#000000">
+                                    @(((LicensingERP.Logic.Model.Class.LoginCredentials)ViewBag.SessionPerson).UserName)
+                                </p>
+                            </li>
+                        </ul>
+                        <ul class="nav flex-column mb-3">
+                            <li class="nav-item" style="text-transform: uppercase; font-size: 0.8rem;color: #6c757d;font-weight: bold;padding: 0.5rem 1rem;">Activity</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Password", "Profile", new { area = string.Empty })" class="nav-link">
+                                    Change Password
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="float-left">
+                                    <a href="@Url.Action("Index", "Profile", new { area = string.Empty })" class="btn btn-info">Profile</a>
+                                </div>
+                                <div class="float-right">
+                                    <a href="@Url.Action("Logout", "Account", new { area = string.Empty })" class="btn btn-danger">Sign out</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- Bootstrap 4.1.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2  4.0.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-duallistbox/4.0.1/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@4.0.9/dist/jquery.inputmask.bundle.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Bootstrap Datatable -->
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- AdminLTE App 3.0.0 -->
+    @*<script src="~/js/email.js"></script>*@
+    <script src="~/Theme/dist/js/adminlte.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example1').dataTable({
+                "bPaginate": true,
+                "bLengthChange": true,
+                "bFilter": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": true,
+                "scrollX": true
+            });
+        });
+        // initialize and show Bootstrap 4 toast
+        $('.toast').toast('show');
+    </script>
+    
+</body>
+</html>
+

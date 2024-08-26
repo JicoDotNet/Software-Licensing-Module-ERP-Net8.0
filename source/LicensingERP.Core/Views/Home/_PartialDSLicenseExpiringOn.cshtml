@@ -1,0 +1,194 @@
+﻿@model List<RequestWiseLicense>
+<!-- BAR CHART -->
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="far fa-chart-bar"></i>
+            License Expiring On
+        </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="chart">
+            <canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+<script type="text/javascript">
+
+    @{
+        string datasets = string.Empty;
+
+
+        List<RequestWiseLicense> ULT = new List<RequestWiseLicense>();
+        ULT = Model.GroupBy(a => a.TypeName).Select(b1=> new RequestWiseLicense { TypeName = b1.First().TypeName }).ToList() ;
+
+        //Dataset
+        for (int i = 0; i < ULT.Count; i++)
+        {
+            datasets += "{'label':'" + ULT[i].TypeName + "',";
+            string data = string.Empty;
+
+            //license under 10 days
+            List<RequestWiseLicense> licenseU10 = new List<RequestWiseLicense>();
+            licenseU10 = Model.Where(a => a.RemainingDays <= 10).ToList().GroupBy(a => a.TypeName).Select(cl => new RequestWiseLicense
+            {
+                TypeName = cl.First().TypeName,
+                LicenseCount = cl.Sum(a => a.LicenseCount)
+            }).ToList();
+
+            if (licenseU10.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault() != null)
+            {
+                data += licenseU10.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault().LicenseCount + ",";
+            }
+            else
+            {
+                data += "0,";
+            }
+
+            //license under 20 days
+            List<RequestWiseLicense> licenseU20 = new List<RequestWiseLicense>();
+            licenseU20 = Model.Where(a => a.RemainingDays > 10 && a.RemainingDays <= 20).ToList().GroupBy(a => a.TypeName).Select(cl => new RequestWiseLicense
+            {
+                TypeName = cl.First().TypeName,
+                LicenseCount = cl.Sum(a => a.LicenseCount)
+            }).ToList();
+
+            if (licenseU20.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault() != null)
+            {
+                data += licenseU20.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault().LicenseCount + ",";
+            }
+            else
+            {
+                data += "0,";
+            }
+
+            //license under 30 days
+            List<RequestWiseLicense> licenseU30 = new List<RequestWiseLicense>();
+            licenseU30 = Model.Where(a => a.RemainingDays > 20 && a.RemainingDays <= 30).ToList().GroupBy(a => a.TypeName).Select(cl => new RequestWiseLicense
+            {
+                TypeName = cl.First().TypeName,
+                LicenseCount = cl.Sum(a => a.LicenseCount)
+            }).ToList();
+
+            if (licenseU30.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault() != null)
+            {
+                data += licenseU30.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault().LicenseCount + ",";
+            }
+            else
+            {
+                data += "0,";
+            }
+
+            //license under 45 days
+            List<RequestWiseLicense> licenseU45 = new List<RequestWiseLicense>();
+            licenseU45 = Model.Where(a => a.RemainingDays > 30 && a.RemainingDays <= 45).ToList().GroupBy(a => a.TypeName).Select(cl => new RequestWiseLicense
+            {
+                TypeName = cl.First().TypeName,
+                LicenseCount = cl.Sum(a => a.LicenseCount)
+            }).ToList();
+
+            if (licenseU45.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault() != null)
+            {
+                data += licenseU45.Where(a => a.TypeName == ULT[i].TypeName).FirstOrDefault().LicenseCount + ",";
+            }
+            else
+            {
+                data += "0,";
+            }
+
+            data = "[" + data.Substring(0, data.Length - 1) + "]";
+            datasets += "'data':" + data + "},";
+
+        }
+
+        datasets = "[" + datasets.Substring(0, datasets.Length - 1) + "]";
+    }
+
+    var _datasets = "@datasets";
+
+    _datasets = _datasets.replace(/&#x27;/g, "\"");
+    _datasets = _datasets.replace(/&quot;/g, "\"");
+    _datasets = JSON.parse(_datasets);
+
+    var backgroundColor = [];
+    for (var i = 0; i < _datasets.length; i++) {
+        _datasets[i].backgroundColor = '#' + GraphColour[i].Colour;
+    }
+
+
+        var areaChartData = {
+        labels: ['10 Days', '20 Days', '30 Days', '45 Days'],
+        datasets: _datasets
+        };
+
+        //var areaChartData = {
+        //    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        //    datasets: [
+        //        {
+        //            label: 'Digital Goods',
+        //            backgroundColor: 'rgba(60,141,188,0.9)',
+        //            data: [28, 48, 40, 19, 86, 27, 90]
+        //        },
+        //        {
+        //            label: 'Electronics',
+        //            backgroundColor: 'rgba(210, 214, 222, 1)',
+        //            data: [65, 59, 80, 81, 56, 55, 40]
+        //        },
+        //    ]
+        //}
+
+
+        var areaChartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+        display: false
+        },
+        scales: {
+        xAxes: [{
+            gridLines: {
+                display: false,
+                }
+            }],
+            yAxes: [{
+            gridLines: {
+                display: false,
+                }
+            }]
+        }
+    }
+
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChart1Canvas = $('#barChart1').get(0).getContext('2d');
+        var barChart1Data = jQuery.extend(true, {}, areaChartData);
+        var temp0 = areaChartData.datasets[0];
+        var temp1 = areaChartData.datasets[1];
+        barChart1Data.datasets[0] = temp1;
+        barChart1Data.datasets[1] = temp0;
+
+        var barChart1Options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false
+    };
+
+        var barChart1 = new Chart(barChart1Canvas, {
+
+            type: 'bar',
+            data: barChart1Data,
+            options: barChart1Options
+    });
+
+</script>

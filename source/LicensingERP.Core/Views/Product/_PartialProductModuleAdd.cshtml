@@ -1,0 +1,61 @@
+﻿@using LicensingERP.Logic.DTO.Class
+@model ProductModule
+<div class="card">
+    <div class="card-header bg-gradient-teal">
+        <h3 class="card-title">Add Product Module</h3>
+    </div>
+    <form id="feature_form" action="#">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ModuleName">Module Name</label>
+                        <input type="text" name="ModuleName" class="form-control" placeholder="Enter Module" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Details">Details</label>
+                        <textarea name="ModuleDetails" class="form-control" placeholder="Module Details" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="message_box"></div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $('#feature_form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Module", "Product", new { id = Model.ProductId })",
+            data: JSON.stringify({
+                ModuleName: $('form#feature_form [name="ModuleName"]').val(),
+                ModuleDetails: $('form#feature_form [name="ModuleDetails"]').val()
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data > 0) {
+                    document.getElementById("message_box").innerHTML = "<small class='text-success'><strong> Data Submited </strong></small>";
+                    setTimeout(function () { $("#message_box").fadeOut(); }, 6000);
+                    setTimeout(function () { $("#myModal").modal("hide"); }, 2000);
+                }
+                else {
+                    $("#message_box").fadeIn();
+                    $("#message_box").html("<small class='text-warning'><strong> Error to Submit </strong></small>");
+                }
+            },
+            error: function (response) {
+
+                console.log(response.responseText);
+            }
+        });
+        return false;
+    });
+</script>

@@ -1,0 +1,123 @@
+﻿@model RequestAndParameters
+@{
+    ViewBag.Title = "LicenseRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">License Requests</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Requisition")">Requisition</a></li>
+                    <li class="breadcrumb-item active">License Requests</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header border-transparent bg-cyan">
+                        <h3 class="card-title">License Request</h3>
+                    </div>
+                    
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="License Type">License Type</label>
+                                        <p>@Model.Request.TypeName</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ClientName">Client Name</label>
+                                        <p>@Model.Request.ClientName</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ProductName">Product Name</label>
+                                        <p>@Model.Request.ProductName</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="FeaturesName">Features Name</label>
+                                        <p>@Model.Request.Features</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
+
+                        </div>
+                </div>
+                <div class="card">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View Product</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (Parameter param in Model.Parameters)
+                            {
+                                if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.String)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="License Type">@param.FieldName</label>
+                                            <input type="text" maxlength="@param.Fieldlength" class="form-control"
+                                                   name="@param.FieldName" placeholder="@param.FieldName"
+                                                   @if (param.IsRequired) { <text> required </text> } />
+                                        </div>
+                                    </div>
+                                }
+                                if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.Int)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="FieldName">@param.FieldName</label>
+                                            <input type="number" maxlength="@param.Fieldlength" class="form-control"
+                                                   name="@param.FieldName" placeholder="@param.FieldName"
+                                                   @if (param.IsRequired) { <text> required </text> } />
+                                        </div>
+                                    </div>
+                                }
+                                if ((eDataType)(Convert.ToInt32(param.DataType)) == eDataType.Date)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="FieldName">@param.FieldName</label>
+                                            <input type="date"  class="form-control" placeholder="@param.FieldName"
+                                                   name="@param.FieldName"
+                                                   @if (param.IsRequired) { <text> required </text> } />
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,103 @@
+﻿@model ClientCategory
+
+<div class="modal fade" id="UserDelete" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Client Category Deactive</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @if (Model == null)
+            {
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <blockquote>
+                                <p>You can not deactivate yourself</p>
+                                <small>Contact Administrator : <cite title="Source Title"> admin </cite></small>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            }
+            else
+            {
+                <form id="passform" action="#">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Category Name</label>
+                                    @Model.CategoryName
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Details</label>
+                                        @Model.CategoryDetails
+                                    </div>
+                                </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Your Password <small class="text-warning"> Put your password to deactive this Category</small></label>
+                                    <input type="password" class="form-control" name="Context" placeholder="Enter Your Password" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="message_box"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger"> <i class="fa fa-save"></i> Deactivate</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UserDelete').modal({ backdrop: 'static', keyboard: false });
+    });
+
+    $('#passform').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CategoryDeactivate", "Client", new { id = (Model != null) ? Model.Id : 0 })" + "?Context=" + $('form#passform [name="Context"]').val(),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data > 0) {
+                    document.getElementById("passform").innerHTML = '<div class="row"><div class="col-md-12"><div class="alert alert-success alert-dismissible"><h5><i class="icon fas fa-check"></i> Success!</h5> Client Category Delete Request successfully Submited!!</div></div></div>';
+                    setTimeout(function () { $("#message_box").fadeOut(); }, 6000);
+                    setTimeout(function () { $("#UserDelete").modal("hide"); }, 2000);
+                    setTimeout(function () { location.reload(true); }, 2000);
+
+                }
+                else if (data == 0) {
+                    $("#message_box").fadeIn();
+                    $("#message_box").html("<small class='text-warning'><strong> You can't proceed for this data untill previous approval move on!! </strong></small>");
+                }
+                else if (data < 0) {
+                    $("#message_box").fadeIn();
+                    $("#message_box").html("<small class='text-warning'><strong> Wrong Credentials!! </strong></small>");
+                }
+                else {
+                    $("#message_box").fadeIn();
+                    $("#message_box").html("<small class='text-warning'><strong> Error to Submit!! </strong></small>");
+                }
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+        return false;
+    });
+</script>

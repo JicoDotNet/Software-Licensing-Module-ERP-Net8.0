@@ -1,0 +1,128 @@
+﻿
+@using LicensingERP.Logic.DTO.Class
+@model List<MenuGroup>
+@{
+    ViewBag.Title = "Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Menu Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Menu Group Management Form</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-warning">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">Menu Group Management</h3>
+            </div>
+            <!-- /.card-header -->
+            @using (Html.BeginForm("Group", "Menu", FormMethod.Post, new { autocomplete = "off" }))
+            {
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Menu Group Icon</label>
+                                <input type="text" class="form-control" placeholder="" name="Icon" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Menu Display text</label>
+                                <input type="text" class="form-control" placeholder="" name="DisplayText" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select class="form-control" name="IsActive" required>
+                                    <option selected>---Please Select--</option>
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Displayable?</label>
+                                <select class="form-control" style="width: 100%;" name="IsDisplayable" required>
+                                    <option selected="selected">-- Please Select--</option>
+                                    <option value="true">YES</option>
+                                    <option value="false">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
+        <!-- /.row -->
+        <div class="card card-warning">
+            <div class="card-header warning">
+                <h3 class="card-title">View User</h3>
+            </div>
+            <div class="card-body">
+                <table id="example1" class="table table-striped table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>Display Text</th>
+                            <th>Icon</th>
+                            <th>Status</th>
+                            <th>Is Displayable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (MenuGroup MG in Model)
+                        {
+                            <tr>
+                                <td>@MG.DisplayText</td>
+                                <td>@MG.Icon</td>
+
+                                <td>
+                                    @if (MG.IsActive)
+                                    {
+                                        <span class="right badge badge-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="right badge badge-danger">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (MG.IsDisplayable)
+                                    {
+                                        <span class="right badge badge-success">Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="right badge badge-danger">No</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->

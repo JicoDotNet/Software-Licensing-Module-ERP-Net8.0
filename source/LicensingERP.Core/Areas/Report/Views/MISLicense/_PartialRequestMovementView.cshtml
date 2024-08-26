@@ -1,0 +1,62 @@
+﻿@model List<ReportOfRequestMovement>
+@if (Model.Count != 0)
+{
+
+    <table id="ReqMov_View" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Request No</th>
+                <th>User</th>
+                <th>User Group</th>
+                <th>Remark</th>
+                <th>Activity</th>
+                <th>Request Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReportOfRequestMovement reqMov in Model)
+            {
+                <tr>
+                    <td>@reqMov.RequestNo</td>
+                    <td>@reqMov.FullName</td>
+                    <td>@reqMov.UserTypeName</td>
+                    <td>@reqMov.Remarks</td>
+                    <td>@reqMov.Name</td>
+                    <td>@reqMov.TransactionDate.ToDisplayDateString()</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <script type="text/javascript">
+        toastr.error('No data Found');
+    </script>
+
+}
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#Request_View').dataTable({
+    //        "bPaginate": true,
+    //        "bLengthChange": true,
+    //        "bFilter": true,
+    //        "bInfo": false,
+    //        "bAutoWidth": false,
+    //        "searching": true
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#ReqMov_View').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "responsive": true,
+        });
+    });
+
+    $('.toast').toast('show');
+</script>

@@ -1,0 +1,149 @@
+﻿@model LicencetypeParameter
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HeadCss{
+    <style type="text/css">
+        select[multiple] {
+            height: 170px !important;
+        }
+    </style>
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">License Type-Parameter Mapping </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active">License Type-Parameter Mapping</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="License Type">License Type <span style="color:red">&#42;</span></label>
+                            <select class="form-control select2" style="width: 100%;" onchange="Licencetypeonchange()" name="LicenseType" required>
+                                <option selected="selected" value="">-- Please Select--</option>
+                                @foreach (LicenceType Lp in Model.licenceTypes)
+                                {
+                                    if (Model.licenceType != null && Lp.Id == Model.licenceType.Id)
+                                    {
+                                        <option value="@Lp.Id" selected>@Lp.TypeName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Lp.Id">@Lp.TypeName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-danger">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">Parameter List</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <select class="form-control duallistbox" multiple="multiple" name="ParameterId" id="SelectMenu">
+                                @foreach (Parameter p in Model.parameters)
+                                {
+                                    if (Model.parameterOfLicence != null && Model.parameterOfLicence.Where(a => a.ParameterId == p.Id).ToList().Count > 0)
+                                    {
+                                        <option value="@p.Id" selected>@p.FieldName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@p.Id">@p.FieldName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" id="btn_ch" onclick="javascript: onSubmit(); return false;" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    function onSubmit()
+    {
+        $("#btn_ch").prop('disabled', true); 
+        var parameter = [];
+        var FP;
+        var licencetype = $('select[name="LicenseType"]').val();
+
+        $('select[name="ParameterId"] option:selected').each(function () {
+            if (this.value != null) {
+                FP = 1;
+            }
+            else {
+                FP = 0;
+            }
+            var Lp = {
+                LicenseTypeId: parseInt(licencetype),
+                ParameterId: parseInt(this.value)
+            };
+            parameter.push(Lp);
+        });
+        // alert(JSON.stringify(parameter));
+        if (FP == 1)
+        {
+              $.ajax({
+                type: "POST",
+                url: "@Url.Action("Parameter", "License", new { id = string.Empty })" + "/" + licencetype,
+                data: JSON.stringify(parameter),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {                   
+                   // toastr.success('"Data Submitted. Waiting for approval !!"');
+                        setTimeout(function () { location.href = data; }, 2000);
+                },
+                error: function (response) {
+                    debugger;
+                    console.log(response.responseText);
+                }
+            });
+        }
+
+    }
+    function Licencetypeonchange() {
+        var licencetypeid = $("select[name='LicenseType']").val();
+        location.href = '@Url.Action("Parameter", "License", new { id = string.Empty })' + "/" + licencetypeid;
+    }
+</script>
+@section BodyScript{
+    <script>
+        $('.duallistbox').bootstrapDualListbox({
+            moveOnSelect: false
+        })
+    </script>
+
+}

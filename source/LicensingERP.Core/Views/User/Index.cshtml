@@ -1,0 +1,401 @@
+﻿@model UserTypeUserModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/password.js"></script>
+<script src="~/js/pswchecking.js"></script>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>User</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="@Url.Action("Index","User")">User</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">
+                            @if (Model.user == null)
+                            {
+                                <text> Add </text>
+                            }
+                            else
+                            {
+                                <text> Update </text>
+                            }
+                            User
+                        </h3>
+                    </div>
+                    @using (Html.BeginForm("Index", "User", FormMethod.Post, new { autocomplete = "off" }))
+                    {
+                        ReturnObject returnObject = TempData.Get<ReturnObject>("ReturnMessage");
+                        <div class="card-body tooltip-icon">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="UserTypeId">User Group <span style="color:red">&#42;</span></label>
+                                        <select class="form-control select2"
+                                                name="UserTypeId" style="width:100%;" required>
+                                            <option value="">--Select--</option>
+                                            @foreach (UserType UserType in Model.UserTypes)
+                                            {
+                                                if (Model.user == null)
+                                                {
+                                                    <option value="@UserType.Id"> @UserType.UserTypeName </option>
+                                                }
+                                                else
+                                                {
+                                                    if (Model.user.UserTypeId == UserType.Id)
+                                                    {
+                                                        <option value="@UserType.Id" selected> @UserType.UserTypeName </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@UserType.Id"> @UserType.UserTypeName </option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Full Name">Full Name <span style="color:red">&#42;</span></label>
+                                        <input type="text" name="FullName" class="form-control"
+                                               @if (Model.user != null) { <text> value="@Model.user.FullName" </text> }
+                                               placeholder="Full Name" required>
+                                    </div>
+                                </div>
+                                @*<div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="UserName">
+                                                Login Id
+                                            </label>
+                                            <input type="text" name="UserName" id="username"
+                                                   @if (Model.user != null) { <text> value="@Model.user.UserName" disabled </text> }
+                                                   class="form-control"  placeholder="Enter Username" title="Alphanumeric and dot(.) applicable only" data-toggle="tooltip" required>
+                                        </div>
+                                        <div id="message_data">
+                                        </div>
+                                    </div>*@
+                                @*<div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Designation">Designation</label>
+                                            <input type="text" name="Designation"
+                                                    @if (Model.user != null) { <text> value="@Model.user.Designation" </text> }
+                                                   class="form-control" placeholder="Enter Designation" required>
+                                        </div>
+                                    </div>*@
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Email">Email <span style="color:red">&#42;</span></label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" name="Email" pattern="^(?=.{2,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$" title="@@ is not Allowed & Minimum two character !"
+                                                   @if (Model.user != null) { string b = Model.user.Email.ToString(); int a = b.IndexOf('@'); string c = b.Substring(0, a); <text> value="@c" readonly </text> }
+                                                   class="form-control" id="email" placeholder="Enter Email" required>
+                                            <div class="input-group-append">
+                                                <select class="form-control" name="UserName" style="width:100%;@if (Model.user != null) { <text> pointer-events: none; </text> } " required>
+
+                                                    @if (Model.user != null)
+                                                    {
+                                                        string b = Model.user.Email.ToString();
+                                                        int a = b.IndexOf('@');
+                                                        string c = b.Substring(a);
+                                                        <text>
+                                                            <option value="@c">@c</option> </text>
+                                                    }
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <p id="emailvalida"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Mobile">Mobile <span style="color:red">&#42;</span></label>
+                                        <input type="text" name="Mobile" title="Only phone Number "
+                                               @if (Model.user != null) { <text> value="@Model.user.Mobile" </text> }
+                                               class="form-control"  pattern="[0-9]{1}[0-9]{9}" placeholder="Enter Mobile" maxlength="10" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Password">Default Password <span style="color:red">&#42;</span></label>
+                                        <input type="password" name="Password"
+                                               @if (Model.user != null) { <text> disabled </text>  } else { <text> required </text> }
+                                               id="" class="form-control" placeholder="Enter Password">
+                                        @if (Model.user == null)
+                                        {
+                                            <div class="text-info" style="font-size:small" id="pswsms">
+                                                <strong id="message"></strong>
+                                               
+                                                <ol>
+                                                    <li>Spaces not allowed in Password</li>
+                                                    <li>User needs to Change the Password on His/Her First Login</li>
+                                                </ol>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Address">Address <span style="color:red">&#42;</span></label>
+                                        <textarea name="Address" cols="80" rows="4" class="form-control" placeholder="Enter Address" required>
+                                                @if (Model.user != null) { <text> @Model.user.Address </text> }
+                                            </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            @if (Model.user != null)
+                            {
+                                <button type="submit" class="btn btn-warning"> <i class="fas fa-edit"></i> Update </button>
+                                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Index","User", new { id = string.Empty })'"><i></i> Cancel</button>
+                            }
+                            else
+                            {
+                                <button type="submit" id="sub" class="btn btn-success"> <i class="fas fa-save"></i> Save </button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View User</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example1" class="table table-striped table-bordered dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (User U in Model.Users)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="@Url.Action("Index", "User", new { id = U.Id })">
+                                                <i class="fas fa-pen pull-right"></i>Edit
+                                            </a> /
+                                            <button onclick="UserDeactivate(@U.Id)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt pull-right"></i> Deactivate
+                                            </button>
+                                        </td>
+                                        <td>@U.FullName</td>
+                                        <td>@U.Email</td>
+                                        <td>@U.Mobile</td>
+                                        <td>@U.Address</td>
+                                        <td>
+                                            @if (U.IsActive)
+                                            {
+                                                <span class="right badge badge-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="right badge badge-danger">Inactive</span>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="div_opn"></div>
+@section BodyScript{
+    <script type="text/javascript">
+        var IsUserNameAvailable = false;
+        var IsUserNameOk = false;
+        var IsPswOk = false;
+        function Submit_validation() {
+            if (IsUserNameOk && IsUserNameAvailable && IsPswOk) {
+                return true;
+
+            }
+            return false;
+        }
+
+        $(document).ready(function () {
+            $("#txtPassword").blur(function () {
+                if (pswchecker()) {
+                    $("#pswsms").hide();
+                    IsPswOk = true;
+                    IsUserNameOk = true;
+                    IsUserNameAvailable = true;
+                }
+            });
+        });
+        function username_validation() {
+            //alert("working");
+            var username = document.getElementById("username").value;
+            username = username.toLowerCase();
+            document.getElementById("username").value = username;
+            var patt = /^[a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*$/
+            $("#message_data").fadeIn();
+            // var patt = /^[a-z0-9](?:_?[a-z0-9\.]+)(?!.*?\.\.)*[a-z0-9]$/;
+            if (Number(username.length) > 5) {
+
+                if (username.match(patt)) {
+                    IsUserNameOk = true;
+                    document.getElementById("message_data").innerHTML = ' ';
+                    return true;
+                }
+                else {
+                    IsUserNameOk = false;
+                    $("#username").addClass('is-invalid');
+                    document.getElementById("message_data").innerHTML = '<small class="text-warning"><strong>Username Contain only  Alphanumeric  </strong></small>';
+                    return false;
+
+                }
+            }
+            else {
+                document.getElementById("message_data").innerHTML = "<small class='text-warning'><strong>Username minmum 6 Charater </strong></small>";
+                IsUserNameOk = false;
+                return false;
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        function UserDeactivate(id) {
+            $("#div_opn").load("@Url.Action("Deactivate", "User")/" + id);
+        }
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                content: function () {
+                    return $('#primary-popover-content').html();
+                }
+            });
+   @if (Model.user == null)
+   {
+       <text>
+            $("select[name = 'UserName']").change(function () {
+                $("#emailvalida").fadeIn();
+                var username = $("select[name = 'UserName']").val();
+                var email = $("input[name = 'Email']").val();
+                var uemail = email + username;
+                if (email != "" && username != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: '/User/UserNameCheck/',
+                        data: JSON.stringify({ UserName: uemail }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            //alert(true);
+                            if (data == true) {
+                                $("#emailvalida").html('<small class="text-success"><strong> Username available </strong></small>');
+                                setTimeout(function () { $("#emailvalida").fadeOut(); }, 3000);
+                                $("#sub").prop('disabled', false);
+                            }
+                            else {
+                                $("#emailvalida").html('<small class="text-warning"><strong> Username already exists </strong></small>');
+                                //  setTimeout(function () { $("#emailvalida").fadeOut(); }, 3000);
+                                // event.preventDefault();
+                                $("#sub").prop('disabled', true);
+                            }
+                        },
+                        error: function (response) {
+
+                            console.log(response.responseText);
+                        }
+                    });
+                }
+                else {
+                    $("#emailvalida").html('<small class="text-danger"><strong>Email field is empty</strong></small>');
+
+                }
+            });
+            </text>
+   }
+
+
+
+
+            $("form").bind("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    return false;
+                }
+            });
+
+        });
+    </script>
+    @if (Model.user == null)
+    {
+        <text>
+    <script>
+        $(document).ready(function () {
+            //$('input[name="Email"]').blur(function () {
+                var mhtml = "";
+                mhtml += '<option value =""> Select Email Address </option>';
+                $.getJSON("/JsonFile/emailjson.json", function (data) {
+
+                    $.each(data, function (index, value) {
+                        //  debugger;
+                        mhtml += '<option value ="' + value.Domain + '">' + value.Domain + '</option>';
+                        console.log(value.Domain);
+                        //console.log(index);
+                    });
+                    //alert(html);
+                    //RestrictOptionList = html;
+                    $('select[name="UserName"]').html(mhtml);
+                  //  document.getElementById('e' + row_val).innerHTML = html;
+
+                });
+           // });
+        });
+
+         @*@if (Model.user != null)
+         {
+             <text>
+        function hidedropdown() {
+            $('select[name="UserName"]').attr("style", "pointer-events: none;");
+        }
+        hidedropdown();
+              </text>
+         }*@
+
+    </script>
+    
+    
+        </text>
+    }
+  
+}

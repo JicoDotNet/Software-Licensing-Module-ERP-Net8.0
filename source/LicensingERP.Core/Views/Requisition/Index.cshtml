@@ -1,0 +1,844 @@
+﻿@model _LicencetypeClientProduct
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section HeadCss{
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Requisition</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active">Requisition</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <form id="myform">
+            <div class="row">
+                <!-- Left col -->
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-cyan">
+                            <h3 class="card-title">Requisition</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Request By">Request By</label>
+                                        <input type="text" class="form-control" name="UserName" value="@Model.users.UserName" placeholder="Enter Request Date" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Request Date">Request Date</label>
+                                        <input type="text" disabled
+                                               value="@GenericLogic.IstNow.ToString("dd-MMMM-yyyy")" class="form-control" name="RequestDate" placeholder="Enter Request Date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 30px;">
+                                    <div class="form-group">
+                                        <button class="btn btn-success" onclick="Compare_fun();">Clone From</button>
+                                        <button class="btn btn-success" onclick="Compare_fun();">Compare Previous</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ClientName">Client Name <span style="color:red">&#42;</span></label>
+                                        <select class="form-control select2" name="ClientId" style="width:100%;" required>
+                                            <option value="">-- Please Select--</option>
+                                            @if (Model.compareLList != null)
+                                            {
+                                                if (Model.compareLList.licenceCompare != null)
+                                                {
+                                                    foreach (Client clientdata in Model.client)
+                                                    {
+                                                        if (Model.compareLList.licenceCompare.ClientId == clientdata.Id)
+                                                        {
+                                                            <option value="@Model.compareLList.licenceCompare.ClientId" selected> @Model.compareLList.licenceCompare.ClientName </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@clientdata.Id"> @clientdata.ClientName</option>
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (Client clientdata in Model.client)
+                                                {
+                                                    <option value="@clientdata.Id"> @clientdata.ClientName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="LicenseType">License Type <span style="color:red">&#42;</span></label>
+                                        <select class="form-control select2" onchange="LicenseTypeOnChange()" name="LicenseTypeId" style="width:100%;" required>
+                                            <option value="">-- Please Select--</option>
+                                            @if (Model.compareLList != null)
+                                            {
+                                                if (Model.compareLList.licenceCompare != null)
+                                                {
+                                                    @foreach (LicenceType types in Model.licenceType)
+                                                    {
+                                                        if (Model.compareLList.licenceCompare.LicenceTypeId == types.Id)
+                                                        {
+                                                            <option value="@types.Id" selected> @types.TypeName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@types.Id"> @types.TypeName</option>
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @foreach (LicenceType types in Model.licenceType)
+                                                {
+                                                    <option value="@types.Id"> @types.TypeName</option>
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="NumberOfLicense">Number Of License <span style="color:red">&#42;</span></label>
+                                        <input type="number" class="form-control" oninput="Numberinput()"
+                                               @if (Model.compareLList != null) { if (Model.compareLList.licenceCompare != null) { <text> value="@Model.compareLList.licenceCompare.LicenceNo" </text>  }  }
+                                               name="LicenceNo" placeholder="Enter License Number" required>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ToDate">Expiry Date </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                            </div>
+                                            @*<input type="text" name="ToDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" required>*@
+                                            <input type="text" name="ExpiryDate" class="form-control" id="datep1" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-cyan">
+                            <h3 class="card-title">Requisition Restrict</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Restrict To</th>
+                                        <th>Restrict Val</th>
+                                        <th>
+                                            <button type="button" onclick="add_row()" class="btn btn-danger">
+                                                <span class="fas fa-plus">Add</span>
+                                            </button>
+                                        </th>
+                                        @*<th >
+                                                <a href="#" class="btn btn-success">
+                                                    <span class="fas fa-minus"></span>
+                                                </a>
+                                            </th>*@
+                                    </tr>
+                                </thead>
+                                <tbody id="u">
+                                    @if (Model.compareLList != null)
+                                    {
+                                        int i = 1; int lic = Convert.ToInt32(Model.compareLList.licenceCompare.LicenceNo);
+                                        if (Model.compareLList.requestRestricts.Count > 0)
+                                        {
+                                           
+                                            foreach (RequestRestrict restrict in Model.compareLList.requestRestricts)
+                                            {
+                                                
+                                                if (i <= lic)
+                                                {
+                                                    <tr id="@i">
+                                                        <td>
+                                                            <select class="form-control" id=e@(i) name=selectdta@(i) required>
+                                                                <option value="">--Please Select--</option>
+                                                                @if (restrict.RestrictTo == "CPU SERIAL NUMBER")
+                                                                {
+                                                                    <option value="CPU SERIAL NUMBER" selected>CPU SERIAL NUMBER</option>
+                                                                    <option value="NO OF CORES">NO OF CORES</option>
+                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
+                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
+                                                                    <option value="MAC ID">MAC ID</option>
+                                                                }
+
+                                                                @if (restrict.RestrictTo == "NO OF CORES")
+                                                                {
+                                                                    <option value="NO OF CORES" selected>NO OF CORES</option>
+                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
+                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
+                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
+                                                                    <option value="MAC ID">MAC ID</option>
+                                                                }
+
+                                                                @if (restrict.RestrictTo == "NO OF SOCKET")
+                                                                {
+                                                                    <option value="NO OF SOCKET" selected>NO OF SOCKET</option>
+                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
+                                                                    <option value="NO OF CORES">NO OF CORES</option>
+                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
+                                                                    <option value="MAC ID">MAC ID</option>
+                                                                }
+                                                                @if (restrict.RestrictTo == "HDD SERIAL NUMBER")
+                                                                {
+                                                                    <option value="HDD SERIAL NUMBER" selected>HDD SERIAL NUMBER</option>
+                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
+                                                                    <option value="NO OF CORES">NO OF CORES</option>
+                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
+                                                                    <option value="MAC ID">MAC ID</option>
+                                                                }
+                                                                @if (restrict.RestrictTo == "MAC ID")
+                                                                {
+                                                                    <option value="MAC ID" selected>MAC ID</option>
+                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
+                                                                    <option value="NO OF CORES">NO OF CORES</option>
+                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
+                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
+                                                                }
+                                                                
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="textdata@(i)"
+                                                                   value="@restrict.RestrictVal"
+                                                                   class="form-control" required>
+                                                        </td>
+                                                        <td>
+                                                            <a onclick="del_row(@i)" class="btn btn-success">
+                                                                <i class="fas fa-minus"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                                i++;
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-cyan">
+                            <h3 class="card-title">License Parameter</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="LicenseParameter">
+                            <div class="row" id="dynamic">
+                                @if (Model.compareLList != null)
+                                {
+                                    if (Model.compareLList.requestParameters.Count > 0)
+                                    {
+                                        foreach (RequestParameter parameter in Model.compareLList.requestParameters)
+                                        {
+                                            if ((eDataType)(Convert.ToInt32(parameter.DataType)) == eDataType.String)
+                                            {
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="License Type">@parameter.FieldName</label>
+                                                        <input type="text" maxlength="@parameter.Fieldlength" class="form-control"
+                                                               name="@parameter.Id" placeholder="@parameter.FieldName"
+                                                               @if (parameter.IsRequired) { <text> required </text> }
+                                                               value="@parameter.ParamValue" />
+                                                    </div>
+                                                </div>
+                                            }
+                                            if ((eDataType)(Convert.ToInt32(parameter.DataType)) == eDataType.Int)
+                                            {
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="License Type">@parameter.FieldName</label>
+                                                        <input type="number" maxlength="@parameter.Fieldlength" class="form-control"
+                                                               onblur="this.value = parseFloat(this.value);"
+                                                               name="@parameter.Id" placeholder="@parameter.FieldName"
+                                                               @if (parameter.IsRequired) { <text> required </text> } value="@parameter.ParamValue" />
+                                                    </div>
+                                                </div>
+                                            }
+                                            if ((eDataType)(Convert.ToInt32(parameter.DataType)) == eDataType.Date)
+                                            {
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="@parameter.Id">@parameter.FieldName</label>
+                                                        <input type="text" class="form-control"
+                                                               name="@parameter.Id"
+                                                               data-inputmask-alias="datetime"
+                                                               data-inputmask-inputformat="dd/mm/yyyy"
+                                                               data-mask=""
+                                                               value="@parameter.ParamValue"
+                                                               @if (parameter.IsRequired) { <text> required </text> } />
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                }
+                            </div>
+                           
+
+                            
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-cyan">
+                            <h3 class="card-title">Product</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ProductName">Product Name</label>
+                                        <select class="form-control select2" onchange="Product_Change()" name="ProductId" style="width:100%;">
+                                            <option value="">-- Please Select--</option>
+                                            @if (Model.compareLList != null)
+                                            {
+                                                if (Model.compareLList.licenceCompare != null)
+                                                {
+                                                    foreach (Product prd in Model.product)
+                                                    {
+                                                        if (Model.compareLList.licenceCompare.ProductId == prd.Id)
+                                                        {
+                                                            <option value="@prd.Id" selected> @prd.ProductName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@prd.Id"> @prd.ProductName</option>
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (Product prd in Model.product)
+                                                {
+                                                    <option value="@prd.Id"> @prd.ProductName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                <i class="ion ion-clipboard mr-1"></i>
+                                                Features
+                                            </h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <ul class="todo-list" data-widget="" id="features_list">
+                                                @if (Model.compareLList != null)
+                                                {
+                                                    if (Model.compareLList.requestFeatures.Count > 0)
+                                                    {
+                                                        foreach (RequestFeature feature in Model.compareLList.requestFeatures)
+                                                        {
+                                                            <li>
+                                                                <div class="d-inline ml-2">
+                                                                    <input type="checkbox" class="checkBoxClass1" value="@feature.Id" name="features" id="@feature.Id" checked>
+                                                                </div>
+                                                                <span class="text">@feature.FeaturesName</span>
+                                                            </li>
+                                                        }
+                                                    }
+                                                }
+
+                                            </ul>
+                                        </div>
+                                        @*<div class="card-footer">
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
+                                                        <label class="form-check-label">Select All</label>
+                                                    </div>
+                                                </div>
+                                            </div>*@@*<div class="card-footer">
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
+                                                    <label class="form-check-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer" id="button">
+                            @*@if (Model.compareLList != null)
+                            {
+                                <button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
+                            }*@
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<div id="e">
+
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body" id="div_opn">
+                <div class="row" style="height:100px;">
+                    <div class="col-md-12 text-center">
+                        <div class="overlay light" id="successMessage">
+                            <i class="fas fa-2x fa-sync-alt fa-spin" style="margin-top:25px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.content -->
+@section BodyScript{
+    <!-- Content Header (Page header) -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script type="text/html" id="templateOfNumberOfLicense">
+        <tr id="{{RowId}}">
+            <td>
+                <select class="form-control select2" id="e{{RowId}}" name="selectdta{{RowId}}" required>
+                    @*<option value="">--Please Select--</option>
+                        <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
+                        <option value="NO OF CORES">NO OF CORES</option>
+                        <option value="NO OF SOCKET">NO OF SOCKET</option>
+                        <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
+                        <option value="MAC ID">MAC ID</option>*@
+                    <option value=""></option>
+                    <option value="CPU SERIAL NUMBER"></option>
+                    <option value="NO OF CORES"></option>
+                    <option value="NO OF SOCKET"></option>
+                    <option value="HDD SERIAL NUMBER"></option>
+                    <option value="MAC ID"></option>
+                </select>
+            </td>
+            <td>
+                <input type="text" name="textdata{{RowId}}" class="form-control" required>
+            </td>
+            <td>
+                <a onclick="del_row({{ RowId }})" class="btn btn-success">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </td>
+        </tr>
+    </script>
+    <script type="text/javascript">
+        $('#datep1').datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+        function Product_Change() {
+            var productId = $('select[name ="ProductId"]').val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetProductFeature", "Requisition", new { id = string.Empty })" + "/" + productId,
+                success: function (data) {
+                    var htmlF = '';
+                    for (var i = 0; i < data.features.length; i++) {
+                        htmlF += '<li>'+
+                            '<div class="d-inline ml-2">'+
+                            '<input type="checkbox" class="checkBoxClass1" value = "' + data.features[i].id + '" name = "features" id = "' + data.features[i].id + '" >'+
+                            '</div>'+
+                            '<span class="text">' + data.features[i].featuresName + '</span>'+
+                            '</li >';
+                    }
+                    $('#features_list').html(htmlF);
+                },
+                error: function (response) {
+                    //debugger;
+                    console.log(response.responseText);
+                }
+            });
+        }
+
+        function PrepareRestrictDDL(row_val) {
+            var html = "";
+            $.getJSON("/JsonFile/restrictjson.json", function (data) {
+
+                $.each(data, function (index, value) {
+                    //  debugger;
+                    if (index == 0) {
+                        html += '<option value ="">' + value.Name + '</option>';
+                    }
+                    else {
+                        html += '<option value ="' + value.Name + '">' + value.Name + '</option>';
+                    }
+
+                    console.log(value.Name);
+                    //console.log(index);
+                });
+                //alert(html);
+                //RestrictOptionList = html;
+                document.getElementById('e' + row_val).innerHTML = html;
+
+            });
+        }
+
+        function Numberinput() {
+            //debugger;
+            var licenceno = parseInt($('input[name="LicenceNo"]').val());
+            var tbl_tr = "";
+            if (licenceno > 0) {
+                //debugger;
+                for (var i = 1; i <= licenceno; i++) {
+                    //debugger;
+                    var single_tr = $('#templateOfNumberOfLicense').html();
+                    //var op = PrepareRestrictDDL();
+                   // single_tr = $('select').html(RestrictOptionList);
+
+                    //debugger;
+                    single_tr = single_tr.replace(/{{RowId}}/g, i);
+                    //debugger;
+                    PrepareRestrictDDL(i);
+
+                    tbl_tr += single_tr;
+                }
+            }
+           $("#u").html(tbl_tr);
+        }
+        function del_row(data) {
+            var text_value = parseInt($('input[name="LicenceNo"]').val());
+            $('input[name="LicenceNo"]').val(text_value - 1);
+            $("#" + data).remove();
+        }
+        function add_row() {
+            //debugger;
+            //var node = "<tr><td>hrll</td><td>hhckcyhc</td></tr>";
+            //var a = document.getElementById("u").append(node); alert(a);
+            var text_value = parseInt($('input[name="LicenceNo"]').val());
+            text_value = isNaN(text_value) ? 0 : text_value;
+            $('input[name="LicenceNo"]').val(parseInt(text_value + 1));
+            var newid = parseInt($('input[name="LicenceNo"]').val());
+            var htmlda = '<tr id = '+newid+'>' +
+                            '<td> <select class="form-control select2" id="e' + newid + '" name="selectdta' + newid + '" required>' +
+                            '<option value="">--Please Select--</option>< option value = "CPU SERIAL NUMBER" > CPU SERIAL NUMBER</option><option value="NO OF CORES">NO OF CORES</option><option value="NO OF SOCKET">NO OF SOCKET</option><option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option><option value="MAC ID">MAC ID</option>' +
+                            '</select>' +
+                            '</td>' +
+                            '<td><input type="text" name="textdata' + newid + '" class="form-control" required></td>' +
+                            '<td><a onclick="del_row(' + newid + ')" class="btn btn-success"><i class="fas fa-minus"></i></a></td>' +
+                '</tr>';
+            tableBody = $("table tbody");
+            tableBody.append(htmlda);
+            // var single_tr = $('#templateOfNumberOfLicense').html();
+           // //alert(single_tr);
+           // single_tr = single_tr.replace(/{{RowId}}/g, parseInt(text_value + 1));
+           // PrepareRestrictDDL(parseInt(text_value + 1));
+           // var row_data = document.getElementById("u").innerHTML;
+           // row_data += single_tr;
+           //$("#u").html(row_data);
+        }
+        function LicenseTypeOnChange() {
+            if ($('select[name="LicenseTypeId"]').val() != null) {
+                var LicenseTypeId = $('select[name="LicenseTypeId"]').val();
+                if (LicenseTypeId == "" || LicenseTypeId == undefined || LicenseTypeId == null)
+                    LicenseTypeId = 0;
+
+                change_fun(LicenseTypeId);
+
+                $('#button').html('<div class="overlay text-center"><i class="fas fa-sync-alt fa-spin fa-2x"></i></div>');
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetWFStatus", "Requisition", new { id = string.Empty })" + "/" + LicenseTypeId,
+                    success: function (data) {
+                        if (data == null) {
+                            $('#button').html('<div class="card bg-danger"><div class="card-body">Work Flow in not defined for this License and/or your Group</div></div>');
+                        }
+                        else if (data.isPositive) {
+                            $('#button').html('<button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>');
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response.responseText);
+                    }
+                });
+            }
+        }
+
+        function change_fun(_LicenseTypeId){
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetParameter", "Requisition")",
+                data: JSON.stringify({
+                    LicenseTypeId: _LicenseTypeId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    //debugger;
+                    $('#LicenseParameter').html(data);
+                },
+                error: function (response) {
+                    //debugger;
+                    console.log(response.responseText);
+                }
+            });
+        }
+
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+        var form = $("#myform");
+        form.validate();
+
+        var featuresChecked = false;
+        $("#myform").submit(function () {
+            $('input[name="features"]:checked').each(function () {
+                featuresChecked = true;
+            });
+            if (form.valid() && featuresChecked) {
+                RequestDataSubmit();
+            }
+            else {
+                toastr.error('Form cannot be submited without filling all the requied data!!');
+                setDefaultButton();
+                $("#btn_chang").prop("disabled", false);
+            }
+        });
+
+        function RequestDataSubmit() {
+            var ClientId = parseInt($('select[name="ClientId"]').val());
+            var LicenseTypeId = parseInt($('select[name="LicenseTypeId"]').val());
+            var LicenceNo = parseInt($('input[name="LicenceNo"]').val());
+            var ProductId = parseInt($('select[name="ProductId"]').val());
+            let ExpiryDate = $('input[name="ExpiryDate"]').val(); //alert(ExpiryDate);
+            if (ExpiryDate != '') {
+                ExpiryDate = ExpiryDate.split('/');
+                //val = val + '"FromDay":' + parseInt(ExpiryDate[0]) + ',"FromMonth": ' + parseInt(ExpiryDate[1]) + ',"FromYear":' + parseInt(ExpiryDate[2]) + ',';
+                var ExpDay = parseInt(ExpiryDate[0]);
+                var ExpMonth = parseInt(ExpiryDate[1]);
+                var ExpYear = parseInt(ExpiryDate[2]);
+            }
+            var restricdata = [];
+            var featuredata = [];
+            var parameter = [];
+            for ( i = 1; i <= LicenceNo; i++)
+            {
+                var selctval = $('select[name="selectdta' + i + '"]').val();
+                var textvail = $('input[name="textdata' + i + '"]').val();
+                if (selctval != null && textvail != null) {
+                    var Rt = {
+                        RestrictTo: selctval,
+                        RestrictVal: textvail
+                    };
+                    restricdata.push(Rt);
+                }
+            }
+
+            $('input[name="features"]:checked').each(function () {
+                var PF = {
+                    ProductId: parseInt($('select[name ="ProductId"]').val()),
+                    FeaturesId: parseInt(this.value)
+                };
+                featuredata.push(PF);
+            });
+            $('#dynamic  input').each(function () {
+                var dynamic = {
+                    ParamValue: $(this).val(),
+                    ParamId: parseInt($(this).attr("name"))
+                };
+                parameter.push(dynamic);
+            });
+            if (restricdata.length < 1 || featuredata.length < 1 || parameter.length < 1) {
+                $("#btn_chang").prop("disabled", false);
+                toastr.error('Either Restrict Value or Product\'s Features or License Parameter does not contain any value!!');
+                setDefaultButton();
+                return;
+            }
+            else {
+                //console.log(JSON.stringify({
+                //    ClientId: ClientId,
+                //    LicenceTypeId: LicenseTypeId,
+                //    LicenceNo: LicenceNo,
+                //    //ExpiryDate: ExpiryDate,
+                //    ProductId: ProductId,
+                //    RequestRestricts: restricdata,
+                //    RequestFeatures: featuredata,
+                //    RequestParameters: parameter
+                //}));
+                 $.ajax({
+                type: "POST",
+                url: "@Url.Action("SubmitRequest", "Requisition")",
+                data: JSON.stringify({
+                    ClientId: ClientId,
+                    LicenceTypeId: LicenseTypeId,
+                    LicenceNo: LicenceNo,
+                    ExpDay: ExpDay,
+                    ExpMonth: ExpMonth,
+                    ExpYear: ExpYear,
+                    ProductId: ProductId,
+                    RequestRestricts: restricdata,
+                    RequestFeatures: featuredata,
+                    RequestParameters: parameter
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    toastr.success('Data saved!!');
+                    window.location.href = '@Url.Action("Status", "Requisition")';
+                }
+            });
+           }
+        }
+
+
+
+    </script>
+}
+<script>
+    function Compare_fun()
+    {
+            var ClientId = parseInt($('select[name="ClientId"]').val());
+        var LicenseTypeId = parseInt($('select[name="LicenseTypeId"]').val()); //alert(ClientId); alert(LicenseTypeId);
+        event.preventDefault();
+        debugger;
+        if (isNaN(ClientId) === false && isNaN(LicenseTypeId) === false) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetCompareList", "Requisition")",
+                data: JSON.stringify({
+                    ClientId: ClientId,
+                    LicenceTypeId: LicenseTypeId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    if (data != null) {
+                        $("#myModal").modal("show");
+                        document.getElementById("div_opn").innerHTML = data;
+                        $('#myModal').modal({ backdrop: 'static', keyboard: false });
+                    }
+                    else {
+                        toastr.error('Either Client  or License Type  does not contain any value!!');
+                        setDefaultButton();
+                    }
+
+                }
+            });
+        }
+        else {
+            toastr.error('Either Client  or License Type  does not contain any value!!');
+            setDefaultButton();
+        }
+
+        }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('[data-mask]').inputmask();
+    });
+</script>
+
+@if(Model.compareLList != null)
+{
+    <text>
+        <script>
+       function LicenseTypeOnChange()
+        {
+            if ($('select[name="LicenseTypeId"]').val() != null)
+            {
+                var LicenseTypeId = $('select[name="LicenseTypeId"]').val();
+                if (LicenseTypeId == "" || LicenseTypeId == undefined || LicenseTypeId == null)
+                    LicenseTypeId = 0;
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetWFStatus", "Requisition", new { id = string.Empty })" + "/" + LicenseTypeId,
+                    success: function (data) {
+                        if (data == null) {
+                            $('#button').html('<div class="card bg-danger"><div class="card-body">Work Flow in not defined for this License and/or your Group</div></div>');
+                        }
+                        else if (data.isPositive) {
+                            $('#button').html('<button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>');
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response.responseText);
+                    }
+                });
+            }
+        }
+            LicenseTypeOnChange();
+        </script>
+
+    </text>
+}

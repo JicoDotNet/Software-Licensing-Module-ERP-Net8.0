@@ -1,0 +1,198 @@
+﻿@model UserClientLicenceProduct
+@{
+    ViewData["Title"] = "Pending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Pending Requests</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item">License</li>
+                    <li class="breadcrumb-item active">Pending</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">
+                            Request Pending
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="RequestNumber">Request Number</label>
+                                <input type="text" name="request_number" class="form-control" placeholder="Enter Request Number" required>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="User">User</label>
+                                    <select class="form-control select2" name="user" style="width:100%;">
+                                        <option value="select">Select</option>
+                                        @foreach (User user in Model.user)
+                                        {
+                                            <option value="@user.Id">@user.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="FormDate">From Date </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" name="from_date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ToDate">To Date </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" name="to_date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ClientName">Client Name</label>
+                                    <select class="form-control select2" name="client_name" style="width:100%;">
+                                        <option value="select">Select</option>
+                                        @foreach (Client client in Model.client)
+                                        {
+                                            <option value="@client.Id">@client.ClientName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="LicenseType">License Type</label>
+                                    <select class="form-control select2" name="license_type" style="width:100%;">
+                                        <option value="select">Select</option>
+                                        @foreach (LicenceType licenceType in Model.licenceType)
+                                        {
+                                            <option value="@licenceType.Id">@licenceType.TypeName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ProductName">Product Name</label>
+                                    <select class="form-control select2" name="product_name" style="width:100%;">
+                                        <option value="select">Select</option>
+                                        @foreach (Product product in Model.product)
+                                        {
+                                            <option value="@product.Id">@product.ProductName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-info" onclick="pendingSubmit()"> <i class="fas fa-search"></i> Search </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header bg-cyan">
+                        <h3 class="card-title">View Report</h3>
+                    </div>
+                    <div class="card-body" id="pendingtable">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section BodyScript{
+    <script type="text/javascript">
+        function pendingSubmit() {
+            var user = $('select[name="user"]').val();
+            var client_name = $('select[name="client_name"]').val();
+            var license_type = $('select[name="license_type"]').val();
+            var product_name = $('select[name="product_name"]').val();
+
+            var request_number = $('[name="request_number"]').val();
+            var from_date = $('[name="from_date"]').val();
+            var to_date = $('[name="to_date"]').val();
+
+            var val = '{';
+
+            if (user == 'select' && client_name == 'select' && license_type == 'select' && product_name == 'select' && request_number == '' && from_date == '' && to_date == '') {
+                errorAlert("Pending Request", "Select Atleast 1 Options", null);
+            }
+            else if ((from_date == "" && to_date != "") || (from_date != "" && to_date == "")) {
+                errorAlert("Pending Request", "Select Date Range Properly", null);
+            }
+            else {
+
+                if (user != 'select')
+                    val = val + '"UserTypeId":' + '"' + user + '",';
+                if (client_name != 'select')
+                    val = val + '"ClientId":' + '"' + client_name + '",';
+                if (license_type != 'select')
+                    val = val + '"LicenceTypeId":' + '"' + license_type + '",';
+                if (product_name != 'select')
+                    val = val + '"ProductId":' + '"' + product_name + '",';
+                if (request_number != '')
+                    val = val + '"RequestNo":' + '"' + request_number + '",';
+                if (from_date != '') {
+                    from_date = from_date.split('/');
+                    val = val + '"FromDay":' + parseInt(from_date[0]) + ',"FromMonth": ' + parseInt(from_date[1]) + ',"FromYear":' + parseInt(from_date[2]) + ',';
+                }
+                if (to_date != '') {
+                    to_date = to_date.split('/');
+                    val = val + '"ToDay":' + parseInt(to_date[0]) + ',"ToMonth": ' + parseInt(to_date[1]) + ',"ToYear":' + parseInt(to_date[2]) + ',';
+                }
+                val = val.substring(0, val.length - 1) + "}";
+
+                //alert(val); exit;
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetLicensePendingInfo", "MISLicense", new { area = "Report" })',
+                    data: val,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (data) {
+                        $('#pendingtable').html(data);
+                        setDefaultButton();
+                    },
+                    error: function (response) {
+                        console.log(response.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}

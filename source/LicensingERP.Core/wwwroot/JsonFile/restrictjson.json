@@ -1,0 +1,32 @@
+[
+  {
+    "Id": 0,
+    "Name": "--Please Select--",
+    "IsActive": true
+  },
+  {
+    "Id": 1,
+    "Name": "CPU SERIAL NUMBER",
+    "IsActive": true
+  },
+  {
+    "Id": 2,
+    "Name": "NO OF CORES",
+    "IsActive": true
+  },
+  {
+    "Id": 3,
+    "Name": "NO OF SOCKET",
+    "IsActive": true
+  },
+  {
+    "Id": 4,
+    "Name": "HDD SERIAL NUMBER",
+    "IsActive": true
+  },
+  {
+    "Id": 5,
+    "Name": "MAC ID",
+    "IsActive": true
+  }
+]

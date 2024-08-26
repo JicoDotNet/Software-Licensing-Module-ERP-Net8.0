@@ -1,0 +1,282 @@
+﻿@model UserMenuViewModel
+
+@{
+    ViewData["Title"] = "Permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section HeadCss{
+    <style type="text/css">
+        @@media screen and (min-width: 800px) {
+            select[multiple] {
+                height: 300px !important;
+            }
+        }
+    </style>
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Permission Assign</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","User")">User</a></li>
+                    <li class="breadcrumb-item active">Permission</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-primary card-outline">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">
+                    <i class="fas fa-lock"></i>
+                    Set Permission
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="User Type">User Type</label>
+                            <select class="form-control select2" onchange="UserTypeOnchange(this);" style="width: 100%;" name="UserType" required>
+                                <option selected="selected" value="">-- Please Select--</option>
+                                @foreach (UserType Lp in Model.UserTypes)
+                                {
+                                    if (Model.UserMenus != null && Lp.Id == Model.userType.Id)
+                                    {
+                                        <option value="@Lp.Id" selected>@Lp.UserTypeName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Lp.Id">@Lp.UserTypeName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill" href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Access Permission</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">Dashboard Permission</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="custom-content-below-tabContent">
+                    <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                        <section class="content">
+                            <div class="container-fluid">
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <select class="form-control duallistbox" multiple="multiple" name="Menu" id="SelectMenu" required>
+                                                    @foreach (MenuList p in Model.MenuLists)
+                                                    {
+                                                        if (Model.UserMenus != null && Model.UserMenus.Where(a => a.MenuId == p.Id).ToList().Count > 0)
+                                                        {
+                                                            <option value="@p.Id" selected>@p.DisplayText - @p.Description</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@p.Id">@p.DisplayText - @p.Description</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" id="btn_user" class="btn btn-success" onclick="UserMenu();" name="UserMenu"><i class="fas fa-save"></i> Set Access</button>
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+                    <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
+                        <section class="content">
+                            <div class="container-fluid">
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <select class="form-control duallistbox" multiple="multiple" name="DashboardId" id="SelectMenu" required>
+                                                    @foreach (Dashboard Dashb in Model.dashboards)
+                                                    {
+                                                        if (Model.userDashboards != null && Model.userDashboards.Where(a => a.DashboardId == Dashb.Id).ToList().Count > 0)
+                                                        {
+                                                            <option value="@Dashb.Id" selected>@Dashb.PartialViewName - @Dashb.Description</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@Dashb.Id">@Dashb.PartialViewName - @Dashb.Description</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" id="btn_ch" class="btn btn-success" onclick="UserDashboard()" name="UserDashboard"><i class="fas fa-save"></i> Set Dashboard</button>
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</section>
+@section BodyScript{
+    <!-- Content Header (Page header) -->
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script type="text/javascript">
+    function UserTypeOnchange(e) {
+        var UserId = $(e).val();
+        location.href = '@Url.Action("Permission", "User", new { id = string.Empty })' + "/" + UserId;
+    }
+
+        //jQuery.validator.setDefaults({
+        //    debug: true,
+        //    success: "valid"
+        //});
+
+        //$("button[name='UserDashboard']").click(function () {
+
+        //    //var UserDashboardform = $("#dashboardform");
+
+        //    //UserDashboardform.validate();
+
+        //    //if (UserDashboardform.valid()) {
+        //    //    alert("hello UserDashboard");
+        //    //   // UserDashboard();
+        //    //}
+        //    //else {
+        //    //    // alert("Invalid Request Form");
+        //    //    toastr.error('Invalid data');
+        //    //}
+
+        //    //if()
+
+        //});
+
+
+        //$("button[name='UserMenu']").click(function () {
+        //    var UserMenuform = $("#myform");
+        //    UserMenuform.validate();
+        //    if (UserMenuform.valid()) {
+        //        alert(UserMenuform.valid());
+        //        UserMenu();
+        //    }
+        //    else {
+        //        // alert("Invalid Request Form");
+        //        toastr.error('Invalid data');
+        //    }
+
+        //});
+        //UserDashboard access the User Group
+        function UserDashboard()
+        {
+            $("#btn_ch").prop('disabled', true);
+            var dashb = [];
+            var UserType = $('select[name="UserType"]').val();
+            var DashboardId = $('select[name="DashboardId"]').val();
+            if (UserType != "") {
+                $('select[name="DashboardId"] option:selected').each(function () {
+                    var Db = {
+                        UsertypeId: parseInt(UserType),
+                        DashboardId: parseInt(this.value)
+                    };
+                    dashb.push(Db);
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("DashboardPermission", "User", new { id = string.Empty })" + "/" + UserType,
+                    data: JSON.stringify(dashb),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data > 0) {
+                            successAlert("Data Saved Waiting for Approval!!", null);
+                        }
+                        if (data == 0) {
+
+                            successAlert("You can't proceed for this data untill previous approval move on !!", null);
+                        }
+                    },
+                    error: function (response) {
+                        debugger;
+                        console.log(response.responseText);
+                    }
+                });
+            }
+            else {
+                errorAlert("User Dashboard Permission", "Invalid User Dashboard Data", null);
+            }
+
+        }
+       //UserMenu access the User Group
+        function UserMenu() {
+            $("#btn_user").prop('disabled', true);
+            
+        var datas = [];
+        var UserType = $('select[name="UserType"]').val();
+        if (UserType != "" ) {
+            $('select[name="Menu"] option:selected').each(function () {
+                var Lp = {
+                    UserTypeId: parseInt(UserType),
+                    MenuId: parseInt(this.value)
+                };
+                datas.push(Lp);
+            });
+            //alert(JSON.stringify(datas));
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Permission", "User", new { id = string.Empty })" + "/" + UserType,
+                data: JSON.stringify(datas),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    //successAlert('User Access Permission', 'User Group Access Data is Saved', null);
+                    if (data > 0) {
+                        successAlert("Data Saved Waiting for Approval!!", null);
+                    }
+                    if (data == 0) {
+                       
+                        successAlert("You can't proceed for this data untill previous approval move on !!", null);
+                    }
+                },
+                error: function (response) {
+                    debugger;
+                    console.log(response.responseText);
+                }
+            });
+        }
+        else {
+            errorAlert("User Access Permission", "Invalid User Access Data", null);
+        }
+    }
+    </script>
+    <script>
+        $('.duallistbox').bootstrapDualListbox({
+            moveOnSelect: false
+        })
+    </script>
+
+}

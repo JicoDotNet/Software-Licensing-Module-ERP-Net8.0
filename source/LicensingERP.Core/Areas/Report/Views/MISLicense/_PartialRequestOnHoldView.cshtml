@@ -1,0 +1,60 @@
+﻿@model List<ReportOfRequestOnHold>
+@if (Model.Count != 0)
+{
+
+    <table id="DataOnHoldView" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Request No</th>
+                <th>Request Date</th>
+                <th>User Group</th>
+                <th>User</th>
+                <th>License Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReportOfRequestOnHold reportOfRequestOnHold in Model)
+            {
+                <tr>
+                    <td>@reportOfRequestOnHold.RequestNo</td>
+                    <td>@reportOfRequestOnHold.RequestDate.ToDisplayDateString()</td>
+                    <td>@reportOfRequestOnHold.UserTypeName</td>
+                    <td>@reportOfRequestOnHold.FullName</td>
+                    <td>@reportOfRequestOnHold.TypeName</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <script type="text/javascript">
+        toastr.error('No data Found');
+    </script>
+
+}
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('#Request_View').dataTable({
+    //        "bPaginate": true,
+    //        "bLengthChange": true,
+    //        "bFilter": true,
+    //        "bInfo": false,
+    //        "bAutoWidth": false,
+    //        "searching": true
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#DataOnHoldView').DataTable({
+            dom: 'lBfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "responsive": true,
+        });
+    });
+
+    $('.toast').toast('show');
+</script>

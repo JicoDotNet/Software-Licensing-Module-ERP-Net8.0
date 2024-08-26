@@ -1,0 +1,30 @@
+﻿using LicensingERP.Logic.Common;
+using LicensingERP.Logic.DTO.Class;
+using LicensingERP.Logic.DTO.ReportClass;
+using LicensingERP.Logic.DTO.SP;
+using DataAccess.MySQL.Net;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+
+namespace LicensingERP.Logic.BLL
+{
+    public class NotificationLogic : ConnectionString
+    {
+        public NotificationLogic(sCommonDto CommonObj) : base(CommonObj) { }
+
+        public List<ReportOfRequest> GetLicenseExpiry(int Duration)
+        {
+            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+
+            nameValuePairs nameValuePairs = new nameValuePairs
+            {
+                new nameValuePair("p_Duration", Duration),
+                new nameValuePair("p_QueryType","All")
+            };
+
+            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceExpiry, nameValuePairs).ToList<ReportOfRequest>();
+        }
+    }
+}
