@@ -16,16 +16,16 @@ namespace LicensingERP.Logic.BLL
         {
             foreach (RequestRestrict requestRestrict in requestRestricts)
             {
-                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
                 {
-                    nameValuePairs nvp = new nameValuePairs
+                    NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_RequestId", RequestId),
-                        new nameValuePair("p_RequestNo", RequestNo),
-                        new nameValuePair("p_RestrictTo", requestRestrict.RestrictTo),
-                        new nameValuePair("p_RestrictVal", requestRestrict.RestrictVal),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "INSERT")
+                        new NameValuePair("p_RequestId", RequestId),
+                        new NameValuePair("p_RequestNo", RequestNo),
+                        new NameValuePair("p_RestrictTo", requestRestrict.RestrictTo),
+                        new NameValuePair("p_RestrictVal", requestRestrict.RestrictVal),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "INSERT")
                     };
 
                     try

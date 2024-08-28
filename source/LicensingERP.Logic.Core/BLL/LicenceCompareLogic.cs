@@ -17,46 +17,46 @@ namespace LicensingERP.Logic.BLL
 
         public List<LicenceCompare> CompareLicenceGet(int ClientId , int LicenceTypeId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", 0),
-                new nameValuePair("p_ClientId", ClientId),
-                new nameValuePair("p_LicenceTypeId", LicenceTypeId),
-                new nameValuePair("p_QueryType", "AllREQUEST")
+                new NameValuePair("p_RequestNo", 0),
+                new NameValuePair("p_ClientId", ClientId),
+                new NameValuePair("p_LicenceTypeId", LicenceTypeId),
+                new NameValuePair("p_QueryType", "AllREQUEST")
             };
             return mySqlDBAccess.GetData(StoreProcedure.GetlicenceCompare, nvp).ToList<LicenceCompare>();
         }
         public CompareLList CompareLicenceDisplay(string RequisitionId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", RequisitionId),
-                new nameValuePair("p_ClientId", 0),
-                new nameValuePair("p_LicenceTypeId", 0),
-                new nameValuePair("p_QueryType", "ONEREQUEST")
+                new NameValuePair("p_RequestNo", RequisitionId),
+                new NameValuePair("p_ClientId", 0),
+                new NameValuePair("p_LicenceTypeId", 0),
+                new NameValuePair("p_QueryType", "ONEREQUEST")
             };
-            nameValuePairs rest = new nameValuePairs
+            NameValuePairs rest = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", RequisitionId),
-                new nameValuePair("p_ClientId", 0),
-                new nameValuePair("p_LicenceTypeId", 0),
-                new nameValuePair("p_QueryType", "ONLRESTRICT")
+                new NameValuePair("p_RequestNo", RequisitionId),
+                new NameValuePair("p_ClientId", 0),
+                new NameValuePair("p_LicenceTypeId", 0),
+                new NameValuePair("p_QueryType", "ONLRESTRICT")
             };
-            nameValuePairs feature = new nameValuePairs
+            NameValuePairs feature = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", RequisitionId),
-                new nameValuePair("p_ClientId", 0),
-                new nameValuePair("p_LicenceTypeId", 0),
-                new nameValuePair("p_QueryType", "ONLFEATURE")
+                new NameValuePair("p_RequestNo", RequisitionId),
+                new NameValuePair("p_ClientId", 0),
+                new NameValuePair("p_LicenceTypeId", 0),
+                new NameValuePair("p_QueryType", "ONLFEATURE")
             };
-            nameValuePairs parameter = new nameValuePairs
+            NameValuePairs parameter = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", RequisitionId),
-                new nameValuePair("p_ClientId", 0),
-                new nameValuePair("p_LicenceTypeId", 0),
-                new nameValuePair("p_QueryType", "ONLPARAMETER")
+                new NameValuePair("p_RequestNo", RequisitionId),
+                new NameValuePair("p_ClientId", 0),
+                new NameValuePair("p_LicenceTypeId", 0),
+                new NameValuePair("p_QueryType", "ONLPARAMETER")
             };
             CompareLList compareLList = new CompareLList();
             compareLList.licenceCompare =  mySqlDBAccess.GetData(StoreProcedure.GetlicenceCompare, nvp).ToList<LicenceCompare>().FirstOrDefault();

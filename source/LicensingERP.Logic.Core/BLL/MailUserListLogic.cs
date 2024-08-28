@@ -16,14 +16,14 @@ namespace LicensingERP.Logic.BLL
         public List<User> MailUserRequisition(int UserType)
         {
             
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserType",UserType ),
-                new nameValuePair("p_QueryString", "MAIL")
+                new NameValuePair("p_UserType",UserType ),
+                new NameValuePair("p_QueryString", "MAIL")
             };
 
-            List<User> users =  mySqlDBAccess.GetData(StoreProcedure.GetUserMailList, nameValuePairs).ToList<User>();
+            List<User> users =  mySqlDBAccess.GetData(StoreProcedure.GetUserMailList, NameValuePairs).ToList<User>();
 
 
 

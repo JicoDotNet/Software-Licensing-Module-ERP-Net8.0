@@ -15,14 +15,14 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<RequestStatus> Calculate(string RequestNo)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestNo", RequestNo)
+                new NameValuePair("p_RequestNo", RequestNo)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpTurnAroundTime, nameValuePairs).ToList<RequestStatus>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpTurnAroundTime, NameValuePairs).ToList<RequestStatus>();
         }
     }
 }

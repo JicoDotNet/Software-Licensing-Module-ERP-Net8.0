@@ -17,16 +17,16 @@ namespace LicensingERP.Logic.BLL
         {
             foreach(RequestFeature requestFeature in requestFeatures)
             {
-                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
                 {
-                    nameValuePairs nvp = new nameValuePairs
+                    NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_RequestId", RequestId),
-                        new nameValuePair("p_RequestNo", RequestNo),
-                        new nameValuePair("p_FeaturesId", requestFeature.FeaturesId),
-                        new nameValuePair("p_ProductId", requestFeature.ProductId),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "INSERT")
+                        new NameValuePair("p_RequestId", RequestId),
+                        new NameValuePair("p_RequestNo", RequestNo),
+                        new NameValuePair("p_FeaturesId", requestFeature.FeaturesId),
+                        new NameValuePair("p_ProductId", requestFeature.ProductId),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "INSERT")
                     };
 
                     try

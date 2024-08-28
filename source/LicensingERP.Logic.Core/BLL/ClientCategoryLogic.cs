@@ -17,44 +17,44 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(ClientCategory clientcategory)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs();
-            nvp.Add(new nameValuePair("p_Id", 0));
-            nvp.Add(new nameValuePair("p_CategoryName", clientcategory.CategoryName));
-            nvp.Add(new nameValuePair("p_CategoryDetails", clientcategory.CategoryDetails));
-            nvp.Add(new nameValuePair("p_IsActive", true));
-            nvp.Add(new nameValuePair("p_SessionId", CommonObj.SessionId));
-            nvp.Add(new nameValuePair("p_QueryType", "INSERT"));
+            NameValuePairs nvp = new NameValuePairs();
+            nvp.Add(new NameValuePair("p_Id", 0));
+            nvp.Add(new NameValuePair("p_CategoryName", clientcategory.CategoryName));
+            nvp.Add(new NameValuePair("p_CategoryDetails", clientcategory.CategoryDetails));
+            nvp.Add(new NameValuePair("p_IsActive", true));
+            nvp.Add(new NameValuePair("p_SessionId", CommonObj.SessionId));
+            nvp.Add(new NameValuePair("p_QueryType", "INSERT"));
 
          return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));
         }
 
         public List<ClientCategory> GetClientCategory()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("p_CategoryId", 0));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
+            NameValuePairs.Add(new NameValuePair("p_CategoryId", 0));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ALL"));
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetClientCategory, nameValuePairs).ToList<ClientCategory>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetClientCategory, NameValuePairs).ToList<ClientCategory>();
         }
 
         public int Update(ClientCategory clientcategory)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", clientcategory.Id),
-                new nameValuePair("p_CategoryName", clientcategory.CategoryName),
-                new nameValuePair("p_CategoryDetails", clientcategory.CategoryDetails),
+                new NameValuePair("p_Id", clientcategory.Id),
+                new NameValuePair("p_CategoryName", clientcategory.CategoryName),
+                new NameValuePair("p_CategoryDetails", clientcategory.CategoryDetails),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "UPDATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "UPDATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));
@@ -62,28 +62,28 @@ namespace LicensingERP.Logic.BLL
 
         public ClientCategory GetClientCategory(int ClientCategoryId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_CategoryId", ClientCategoryId),
-                new nameValuePair("p_QueryType", "CLIENTCATEGORY")
+                new NameValuePair("p_CategoryId", ClientCategoryId),
+                new NameValuePair("p_QueryType", "CLIENTCATEGORY")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetClientCategory, nameValuePairs).ToList<ClientCategory>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetClientCategory, NameValuePairs).ToList<ClientCategory>().FirstOrDefault();
         }
         public int Deactivate(int CategoryId)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", CategoryId),
-                new nameValuePair("p_CategoryName", null),
-                new nameValuePair("p_CategoryDetails", null),
+                new NameValuePair("p_Id", CategoryId),
+                new NameValuePair("p_CategoryName", null),
+                new NameValuePair("p_CategoryDetails", null),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "DEACTIVATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "DEACTIVATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));

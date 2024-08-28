@@ -16,26 +16,26 @@ namespace LicensingERP.Logic.BLL
         public int Insert(RequestAcknowledgement acknowledgement)
         {
             try {
-                mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+                mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-                nameValuePairs nvp = new nameValuePairs
+                NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", acknowledgement.RequestId),
-                new nameValuePair("p_RequestNo", acknowledgement.RequestNo),
-                new nameValuePair("p_UserId", acknowledgement.UserId),
-                new nameValuePair("p_UserTypeId", acknowledgement.UserTypeId),
-                new nameValuePair("p_Remarks", acknowledgement.Remarks),
-                new nameValuePair("p_StateId", acknowledgement.StateId),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_RequestId", acknowledgement.RequestId),
+                new NameValuePair("p_RequestNo", acknowledgement.RequestNo),
+                new NameValuePair("p_UserId", acknowledgement.UserId),
+                new NameValuePair("p_UserTypeId", acknowledgement.UserTypeId),
+                new NameValuePair("p_Remarks", acknowledgement.Remarks),
+                new NameValuePair("p_StateId", acknowledgement.StateId),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
 
                 #region file upload
-                new nameValuePair("p_FileName", acknowledgement.FileName),
-                new nameValuePair("p_MimeType", acknowledgement.MimeType),
-                new nameValuePair("p_Description", acknowledgement.Description),
-                new nameValuePair("p_FileData", acknowledgement.FileData),
+                new NameValuePair("p_FileName", acknowledgement.FileName),
+                new NameValuePair("p_MimeType", acknowledgement.MimeType),
+                new NameValuePair("p_Description", acknowledgement.Description),
+                new NameValuePair("p_FileData", acknowledgement.FileData),
                 #endregion
 
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
                 return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetRequestAcknowledgement, nvp, "Out_Param"));
@@ -49,12 +49,12 @@ namespace LicensingERP.Logic.BLL
 
         public List<RequestAcknowledgement> GetDatas(int RequestId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", RequestId),
-                new nameValuePair("p_QueryType", "FORREQUEST")
+                new NameValuePair("p_RequestId", RequestId),
+                new NameValuePair("p_QueryType", "FORREQUEST")
             };
 
             return mySqlDBAccess.GetData(StoreProcedure.GetRequestAcknowledgement, nvp).ToList<RequestAcknowledgement>();

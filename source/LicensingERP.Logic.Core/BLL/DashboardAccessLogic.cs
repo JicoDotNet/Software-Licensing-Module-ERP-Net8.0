@@ -15,13 +15,13 @@ namespace LicensingERP.Logic.BLL
 
         public List<DTO.Class.Dashboard> GetAccessPermission(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "FORUSER"),
-                new nameValuePair("p_UserTypeId", UserTypeId)
+                new NameValuePair("p_QueryType", "FORUSER"),
+                new NameValuePair("p_UserTypeId", UserTypeId)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetDashboardForUser, nameValuePairs).ToList<DTO.Class.Dashboard>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetDashboardForUser, NameValuePairs).ToList<DTO.Class.Dashboard>();
         }
 
         public List<DTO.Class.Dashboard> DashboardList()
@@ -31,14 +31,14 @@ namespace LicensingERP.Logic.BLL
         }
         public DTO.Class.Dashboard DashboardList(int Id)
         {
-            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType","ONE"),
-                new nameValuePair("p_ClientId", 0),
-                new nameValuePair("p_Id",Id)
+                new NameValuePair("p_QueryType","ONE"),
+                new NameValuePair("p_ClientId", 0),
+                new NameValuePair("p_Id",Id)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetDashboard, nameValuePairs).ToList<DTO.Class.Dashboard>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetDashboard, NameValuePairs).ToList<DTO.Class.Dashboard>().FirstOrDefault();
         }
             
     }

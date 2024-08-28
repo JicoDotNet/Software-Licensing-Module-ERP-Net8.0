@@ -16,17 +16,17 @@ namespace LicensingERP.Logic.BLL
 
         public Request GetDownloadData(int UserId, int UserTypeId, int RequestId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", RequestId),
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_UserTypeId", UserTypeId),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "XML")
+                new NameValuePair("p_RequestId", RequestId),
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_UserTypeId", UserTypeId),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "XML")
             };
-            DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetXml, nameValuePairs);
+            DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetXml, NameValuePairs);
             Request request = dataSet.Tables[0].ToList<Request>().FirstOrDefault();
             request.RequestParameters = dataSet.Tables[1].ToList<RequestParameter>();
             request.RequestRestricts = dataSet.Tables[2].ToList<RequestRestrict>();

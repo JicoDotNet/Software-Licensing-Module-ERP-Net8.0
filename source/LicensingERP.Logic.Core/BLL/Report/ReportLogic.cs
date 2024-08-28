@@ -18,7 +18,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfUser> GetUsertype(ReportOfUser userdata)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             // to do here
             if(userdata.UserTypeId != 0)
@@ -80,18 +80,18 @@ namespace LicensingERP.Logic.BLL.Report
                 }
             }
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpUserList, nameValuePairs).ToList<ReportOfUser>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpUserList, NameValuePairs).ToList<ReportOfUser>();
         }
 
 
         public List<ReportOfRequest> GetLicenseInfo(ReportOfRequest request)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (request.UserTypeId != 0)
             {
@@ -122,17 +122,17 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpRequestList, nameValuePairs).ToList<ReportOfRequest>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpRequestList, NameValuePairs).ToList<ReportOfRequest>();
         }
 
         public List<ReportOfUserLogin> GetLoginInfo(ReportOfUserLogin userLogin)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (userLogin.UserName != null)
             {
@@ -147,31 +147,31 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpUserLoginList, nameValuePairs).ToList<ReportOfUserLogin>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpUserLoginList, NameValuePairs).ToList<ReportOfUserLogin>();
         }
 
         public List<ReportOfActivity> GetActivityInfo(ReportOfActivity reportOfActivity)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserVal",reportOfActivity.User),
-                new nameValuePair("p_FromDate", reportOfActivity.FromDate ),
-                new nameValuePair("p_ToDate",reportOfActivity.ToDate)
+                new NameValuePair("p_UserVal",reportOfActivity.User),
+                new NameValuePair("p_FromDate", reportOfActivity.FromDate ),
+                new NameValuePair("p_ToDate",reportOfActivity.ToDate)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpActivityList, nameValuePairs).ToList<ReportOfActivity>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpActivityList, NameValuePairs).ToList<ReportOfActivity>();
         }
 
         public List<ReportOfRequestMovement> GetRequestMovementInfo(ReportOfRequestMovement reqMov)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (reqMov.UserTypeId != 0)
             {
@@ -202,18 +202,18 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpRequestMovementList, nameValuePairs).ToList<ReportOfRequestMovement>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpRequestMovementList, NameValuePairs).ToList<ReportOfRequestMovement>();
         }
 
 
         public List<ReportOfMakerChecker> GetMakerCheckerInfo(ReportOfMakerChecker reportOfMakerChecker)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (reportOfMakerChecker.CaseType != null)
             {
@@ -242,17 +242,17 @@ namespace LicensingERP.Logic.BLL.Report
 
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpMakerCheckerList, nameValuePairs).ToList<ReportOfMakerChecker>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpMakerCheckerList, NameValuePairs).ToList<ReportOfMakerChecker>();
         }
 
         public List<ReportOfStatus> GetStatusInfo(ReportOfStatus reportOfStatus)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (reportOfStatus.IsApproved != null)
             {
@@ -272,17 +272,17 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpStatus, nameValuePairs).ToList<ReportOfStatus>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpStatus, NameValuePairs).ToList<ReportOfStatus>();
         }
 
         public List<ReportOfRequestOnHold> GetRequestOnHold(ReportOfRequestOnHold reportOfRequestOnHold)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (reportOfRequestOnHold.User != null)
             {
@@ -309,17 +309,17 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpRequestOnHold, nameValuePairs).ToList<ReportOfRequestOnHold>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpRequestOnHold, NameValuePairs).ToList<ReportOfRequestOnHold>();
         }
 
         public List<ReportOfXmlDownload> GetXmlDownloadInfo(ReportOfXmlDownload reportOfXmlDownload)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (reportOfXmlDownload.User != null)
             {
@@ -342,17 +342,17 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpXmlDownload, nameValuePairs).ToList<ReportOfXmlDownload>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpXmlDownload, NameValuePairs).ToList<ReportOfXmlDownload>();
         }
 
         public List<ReportOfRequest> GetPendingInfo(ReportOfRequest request)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (request.UserTypeId != 0)
             {
@@ -383,12 +383,12 @@ namespace LicensingERP.Logic.BLL.Report
             }
             str = str.Remove(str.Length - 4, 3);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_WhereClouse",str)
+                new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpRequestPendingList, nameValuePairs).ToList<ReportOfRequest>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpRequestPendingList, NameValuePairs).ToList<ReportOfRequest>();
         }
     }
 }

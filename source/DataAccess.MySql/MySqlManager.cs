@@ -4,38 +4,9 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccess.MySql
 {
-    public abstract class MySqlManager : IMySqlManager
+    public abstract class MySqlManager : IDisposable
     {
-        public MySqlConnection SqlConnectionObject { get; private set; }
-        public ConnectionState SqlConnectionState { get { return SqlConnectionObject.State; } }
-
-        private MySqlManager()
-        {
-            SqlConnectionObject = null;
-        }
-
-        //public MySQLManager(string ConnectionString)
-        //{
-        //    if (string.IsNullOrEmpty(ConnectionString))
-        //    {
-        //        throw new ArgumentNullException("ConnectionString", "Connection String can't be empty");
-        //    }
-        //    try
-        //    {
-        //        _conn = new MySqlConnection(ConnectionString);
-        //        GetConnection();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        GC.Collect();
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        _conn.Close();
-        //        _conn.Dispose();
-        //    }
-        //}
+        protected MySqlConnection MySqlConnectionObject { get; private set; }
 
         protected MySqlManager(string connectionString)
         {
@@ -45,106 +16,74 @@ namespace DataAccess.MySql
             }
             try
             {
-                SqlConnectionObject = new MySqlConnection(connectionString);
-                //GetConnection();
+                MySqlConnectionObject = new MySqlConnection(connectionString);
+                MySqlConnectionObject.Close();
             }
-            catch (Exception ex)
-            {
+            catch (Exception)
+            {                
+                if (MySqlConnectionObject != null)
+                {
+                    MySqlConnectionObject.Close();
+                    MySqlConnectionObject.Dispose();
+                }
                 GC.Collect();
-                if (SqlConnectionObject != null)
-                {
-                    SqlConnectionObject.Close();
-                    SqlConnectionObject.Dispose();
-                }
             }
         }
 
-        private void GetConnection()
+        protected void OpenConnection()
         {
             try
             {
-                if (SqlConnectionObject.State == ConnectionState.Open ||
-                    SqlConnectionObject.State == ConnectionState.Broken ||
-                    SqlConnectionObject.State == ConnectionState.Connecting)
+                if (MySqlConnectionObject.State == ConnectionState.Open ||
+                    MySqlConnectionObject.State == ConnectionState.Broken ||
+                    MySqlConnectionObject.State == ConnectionState.Connecting)
                 {
-                    SqlConnectionObject.Close();
-                    SqlConnectionObject.Open();
+                    MySqlConnectionObject.Close();
+                    MySqlConnectionObject.Open();
                 }
-                else if (SqlConnectionObject.State == ConnectionState.Closed)
+                else if (MySqlConnectionObject.State == ConnectionState.Closed)
                 {
-                    SqlConnectionObject.Open();
-                }
-                else
-                {
-                    SqlConnectionObject.Close();
-                    SqlConnectionObject.Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public void GetConnection(MySqlConnection connection)
-        {
-            try
-            {
-                if (connection.State == ConnectionState.Open ||
-                    connection.State == ConnectionState.Broken ||
-                    connection.State == ConnectionState.Connecting)
-                {
-                    connection.Close();
-                    connection.Open();
-                }
-                else if (connection.State == ConnectionState.Closed)
-                {
-                    connection.Open();
+                    MySqlConnectionObject.Open();
                 }
                 else
                 {
-                    connection.Close();
-                    connection.Open();
+                    MySqlConnectionObject.Close();
+                    MySqlConnectionObject.Open();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
         public void CloseConnection()
         {
-            if (SqlConnectionObject != null)
+            if (MySqlConnectionObject != null)
             {
-                SqlConnectionObject.Close();
-                SqlConnectionObject.Dispose();
-                SqlConnectionObject = null;
+                MySqlConnectionObject.Close();
             }
-        }
-
-        public void CloseConnection(MySqlConnection connection)
-        {
-            if (connection != null)
-            {
-                connection.Close();
-                connection.Dispose();
-            }            
-        }
-
-        public void DisposeConnection()
-        {
-            CloseConnection();
         }
 
         public void Dispose()
         {
-            CloseConnection();
+            if (MySqlConnectionObject != null)
+            {
+                MySqlConnectionObject.Close();
+                MySqlConnectionObject.Dispose();
+            }
+            MySqlConnectionObject = null;
+            GC.Collect();
         }
 
         ~MySqlManager()
         {
-            //CloseConnection();
+            if (MySqlConnectionObject != null)
+            {
+                MySqlConnectionObject.Close();
+                MySqlConnectionObject.Dispose();
+            }
+            MySqlConnectionObject = null;
             GC.Collect();
         }
     }

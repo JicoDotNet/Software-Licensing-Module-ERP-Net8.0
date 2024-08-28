@@ -14,12 +14,12 @@ namespace LicensingERP.Logic.BLL
 
         public Master Get()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs();
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "COUNT"));
+            NameValuePairs NameValuePairs = new NameValuePairs();
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "COUNT"));
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetMaster, nameValuePairs).ToList<Master>().FirstOrDefault() ;
+            return mySqlDBAccess.GetData(StoreProcedure.GetMaster, NameValuePairs).ToList<Master>().FirstOrDefault() ;
         }
     }
 }

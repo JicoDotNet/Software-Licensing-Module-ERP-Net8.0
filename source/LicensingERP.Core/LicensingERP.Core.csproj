@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\LicensingERP.Logic.Core\LicensingERP.Logic.Core.csproj" />
+	  <ProjectReference Include="..\LicensingERP.Logic.Core\LicensingERP.Logic.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

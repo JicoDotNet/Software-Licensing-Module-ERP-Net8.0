@@ -16,18 +16,18 @@ namespace LicensingERP.Logic.BLL
 
         public int InsertNewPassword(Password password, PasswordSecurity passwordSecurity)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserId", passwordSecurity.UserId),
-                new nameValuePair("p_QuestionEnumNo", passwordSecurity.QuestionEnumNo),
-                new nameValuePair("p_Question", passwordSecurity.Question),
-                new nameValuePair("p_Answer", passwordSecurity.Answer),
-                //new nameValuePair("p_Password", password.PasswordText),
+                new NameValuePair("p_UserId", passwordSecurity.UserId),
+                new NameValuePair("p_QuestionEnumNo", passwordSecurity.QuestionEnumNo),
+                new NameValuePair("p_Question", passwordSecurity.Question),
+                new NameValuePair("p_Answer", passwordSecurity.Answer),
+                //new NameValuePair("p_Password", password.PasswordText),
 
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             int Id = Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetePasswordSecurityQuestions, nvp, "Out_Param"));
@@ -45,19 +45,19 @@ namespace LicensingERP.Logic.BLL
             password.Encrypt();
             #endregion
 
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserId", password.UserId),
-                new nameValuePair("p_PasswordHash", password.PasswordHash),
-                new nameValuePair("p_ActivationDate", GenericLogic.IstNow),
-                new nameValuePair("p_PasswordSalt", password.PasswordSalt),
-                //new nameValuePair("p_PasswordText", password.PasswordText),
-                new nameValuePair("p_IsChangeable", IsChangeable),
+                new NameValuePair("p_UserId", password.UserId),
+                new NameValuePair("p_PasswordHash", password.PasswordHash),
+                new NameValuePair("p_ActivationDate", GenericLogic.IstNow),
+                new NameValuePair("p_PasswordSalt", password.PasswordSalt),
+                //new NameValuePair("p_PasswordText", password.PasswordText),
+                new NameValuePair("p_IsChangeable", IsChangeable),
 
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetPassword, nvp, "Out_Param"));
@@ -65,10 +65,10 @@ namespace LicensingERP.Logic.BLL
 
         public Password GetPassword(int UserId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserId", UserId)
+                new NameValuePair("p_UserId", UserId)
             };
             Password password = mySqlDBAccess.GetData("sp_Get_Password", nvp).ToList<Password>().FirstOrDefault();
 
@@ -88,27 +88,27 @@ namespace LicensingERP.Logic.BLL
 
         public PasswordSecurity GetePasswordSecurityQuestions(int UserId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_QueryType", "ACTIVE")
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_QueryType", "ACTIVE")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetePasswordSecurityQuestions, nameValuePairs).ToList<PasswordSecurity>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetePasswordSecurityQuestions, NameValuePairs).ToList<PasswordSecurity>().FirstOrDefault();
         }
 
         public int InsertPasswordResetRequest(string UserName)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserName", UserName),
+                new NameValuePair("p_UserName", UserName),
 
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetPasswordResetRequest, nvp, "Out_Param"));
@@ -116,14 +116,14 @@ namespace LicensingERP.Logic.BLL
 
         public List<PasswordResetRequest> GetResetRequests()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "ACTIVE")
+                new NameValuePair("p_QueryType", "ACTIVE")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetPasswordResetRequest, nameValuePairs).ToList<PasswordResetRequest>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetPasswordResetRequest, NameValuePairs).ToList<PasswordResetRequest>();
         }
     }
 }

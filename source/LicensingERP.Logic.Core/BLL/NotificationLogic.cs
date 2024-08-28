@@ -16,15 +16,15 @@ namespace LicensingERP.Logic.BLL
 
         public List<ReportOfRequest> GetLicenseExpiry(int Duration)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_Duration", Duration),
-                new nameValuePair("p_QueryType","All")
+                new NameValuePair("p_Duration", Duration),
+                new NameValuePair("p_QueryType","All")
             };
             return new List<ReportOfRequest>();
-            //return mySqlDBAccess.GetData(StoreProcedure.GetLicenceExpiry, nameValuePairs).ToList<ReportOfRequest>();
+            //return mySqlDBAccess.GetData(StoreProcedure.GetLicenceExpiry, NameValuePairs).ToList<ReportOfRequest>();
         }
     }
 }

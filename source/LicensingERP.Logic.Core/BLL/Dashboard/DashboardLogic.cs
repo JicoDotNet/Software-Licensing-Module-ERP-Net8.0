@@ -15,14 +15,14 @@ namespace LicensingERP.Logic.BLL.Dashboard
 
         protected DataSet GetDashboardValue(DashboardParam dashboardParam)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", dashboardParam.p_QueryType),
-                new nameValuePair("p_ClientId", dashboardParam.p_ClientId),
-                new nameValuePair("p_Id",0)
+                new NameValuePair("p_QueryType", dashboardParam.p_QueryType),
+                new NameValuePair("p_ClientId", dashboardParam.p_ClientId),
+                new NameValuePair("p_Id",0)
             };
-            return mySqlDBAccess.GetDataSet(StoreProcedure.GetDashboard, nameValuePairs);
+            return mySqlDBAccess.GetDataSet(StoreProcedure.GetDashboard, NameValuePairs);
         }
     }
 }

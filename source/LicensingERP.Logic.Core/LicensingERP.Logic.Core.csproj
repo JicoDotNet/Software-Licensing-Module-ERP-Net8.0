@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess.MySql.Core\DataAccess.MySql.Core.csproj" />
+    <ProjectReference Include="..\DataAccess.MySql\DataAccess.MySql.csproj" />
   </ItemGroup>
 
 </Project>

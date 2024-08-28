@@ -18,16 +18,16 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(WfProcessAssign wfProcessAssign)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_WFProcessId", wfProcessAssign.WFProcessId),
-                new nameValuePair("p_StateId", wfProcessAssign.StateId),
-                new nameValuePair("p_FromUserTypeId", wfProcessAssign.FormUserTypeId),
-                new nameValuePair("p_ToUserTypeId", wfProcessAssign.ToUserTypeId),
-                new nameValuePair("p_ActivityStartDate", GenericLogic.IstNow),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_WFProcessId", wfProcessAssign.WFProcessId),
+                new NameValuePair("p_StateId", wfProcessAssign.StateId),
+                new NameValuePair("p_FromUserTypeId", wfProcessAssign.FormUserTypeId),
+                new NameValuePair("p_ToUserTypeId", wfProcessAssign.ToUserTypeId),
+                new NameValuePair("p_ActivityStartDate", GenericLogic.IstNow),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetWFProcessAssign, nvp, "Out_Param"));
@@ -35,23 +35,23 @@ namespace LicensingERP.Logic.BLL
 
         public List<WfAssign> GetWfProcessAssigns()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "ALL"),
-                new nameValuePair("p_LicenceTypeId", 0)
+                new NameValuePair("p_QueryType", "ALL"),
+                new NameValuePair("p_LicenceTypeId", 0)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, nameValuePairs).ToList<WfAssign>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, NameValuePairs).ToList<WfAssign>();
         }
         public List<WfAssign> GetWfProcessAssigns(int LicenceTypeId)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "FORLICENSE"),
-                new nameValuePair("p_LicenceTypeId", LicenceTypeId)
+                new NameValuePair("p_QueryType", "FORLICENSE"),
+                new NameValuePair("p_LicenceTypeId", LicenceTypeId)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, nameValuePairs).ToList<WfAssign>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, NameValuePairs).ToList<WfAssign>();
         }
     }
 }

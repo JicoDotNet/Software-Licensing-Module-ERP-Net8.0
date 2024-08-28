@@ -18,42 +18,42 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(WfProcess wfProcess)
         {
-            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs();
-            nvp.Add(new nameValuePair("p_Id", 0));
-            nvp.Add(new nameValuePair("p_ProcessName", wfProcess.ProcessName));
-            nvp.Add(new nameValuePair("p_ProcessCode", wfProcess.ProcessCode));
-            nvp.Add(new nameValuePair("p_IsInitial", wfProcess.IsInitial));
-            nvp.Add(new nameValuePair("p_IsEnd", wfProcess.IsEnd));
-            nvp.Add(new nameValuePair("p_Description", wfProcess.Description));
-            nvp.Add(new nameValuePair("p_LicenceTypeId", wfProcess.LicenceTypeId));
-            nvp.Add(new nameValuePair("p_IsActive", true));
-            nvp.Add(new nameValuePair("p_SessionId", CommonObj.SessionId));
-            nvp.Add(new nameValuePair("p_QueryType", "INSERT"));
+            NameValuePairs nvp = new NameValuePairs();
+            nvp.Add(new NameValuePair("p_Id", 0));
+            nvp.Add(new NameValuePair("p_ProcessName", wfProcess.ProcessName));
+            nvp.Add(new NameValuePair("p_ProcessCode", wfProcess.ProcessCode));
+            nvp.Add(new NameValuePair("p_IsInitial", wfProcess.IsInitial));
+            nvp.Add(new NameValuePair("p_IsEnd", wfProcess.IsEnd));
+            nvp.Add(new NameValuePair("p_Description", wfProcess.Description));
+            nvp.Add(new NameValuePair("p_LicenceTypeId", wfProcess.LicenceTypeId));
+            nvp.Add(new NameValuePair("p_IsActive", true));
+            nvp.Add(new NameValuePair("p_SessionId", CommonObj.SessionId));
+            nvp.Add(new NameValuePair("p_QueryType", "INSERT"));
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetWFProcess, nvp, "Out_Param"));
         }
 
         public List<WfProcessLicence> GetWfProcess()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "ALL"),
-                new nameValuePair("p_Id", 0)
+                new NameValuePair("p_QueryType", "ALL"),
+                new NameValuePair("p_Id", 0)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcess, nameValuePairs).ToList<WfProcessLicence>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcess, NameValuePairs).ToList<WfProcessLicence>();
         }
         public WfProcess GetIdByWFProcess(int Id)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "ONE"),
-                 new nameValuePair("p_Id", Id)
+                new NameValuePair("p_QueryType", "ONE"),
+                 new NameValuePair("p_Id", Id)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcess, nameValuePairs).ToList<WfProcess>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcess, NameValuePairs).ToList<WfProcess>().FirstOrDefault();
         }
     }
 }

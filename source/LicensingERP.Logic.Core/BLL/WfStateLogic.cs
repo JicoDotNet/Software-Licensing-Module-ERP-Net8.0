@@ -17,26 +17,26 @@ namespace LicensingERP.Logic.BLL
 
         public List<WfState> GetWfState()
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", null),
-                new nameValuePair("p_LicenceTypeId", null),
-                new nameValuePair("p_OueryType", "ALL")
+                new NameValuePair("p_UserTypeId", null),
+                new NameValuePair("p_LicenceTypeId", null),
+                new NameValuePair("p_OueryType", "ALL")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWfState, nameValuePairs).ToList<WfState>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWfState, NameValuePairs).ToList<WfState>();
         }
 
         public List<WfState> GetWfState(int UserTypeId, int LicenceTypeId, bool ForFirstRequisition)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", UserTypeId),
-                new nameValuePair("p_LicenceTypeId", LicenceTypeId),
-                new nameValuePair("p_OueryType", ForFirstRequisition? "FORWFFIRST" : "FORWFNEXT")
+                new NameValuePair("p_UserTypeId", UserTypeId),
+                new NameValuePair("p_LicenceTypeId", LicenceTypeId),
+                new NameValuePair("p_OueryType", ForFirstRequisition? "FORWFFIRST" : "FORWFNEXT")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWfState, nameValuePairs).ToList<WfState>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetWfState, NameValuePairs).ToList<WfState>();
         }
     }
 }

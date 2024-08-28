@@ -19,13 +19,13 @@ namespace LicensingERP.Logic.BLL
 
         public LoginCredentials Authenticate(LoginCredentials loginCredentials)
         {
-            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserName", loginCredentials.UserName),
-                new nameValuePair("p_Password", loginCredentials.PasswordText),
-                new nameValuePair("p_SessionId", CommonObj.SessionId)
+                new NameValuePair("p_UserName", loginCredentials.UserName),
+                new NameValuePair("p_Password", loginCredentials.PasswordText),
+                new NameValuePair("p_SessionId", CommonObj.SessionId)
             };
 
             List<User> UsersObj = mySqlDBAccess.GetData(StoreProcedure.LoginAuthenticate, nvp).ToList<User>();
