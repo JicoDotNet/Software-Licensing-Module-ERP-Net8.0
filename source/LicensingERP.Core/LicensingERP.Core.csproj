@@ -22,9 +22,13 @@
 
 	<ItemGroup>
 		<Compile Remove="Areas\Report\Data\**" />
+		<Compile Remove="wwwroot\Theme\loginForm\**" />
 		<Content Remove="Areas\Report\Data\**" />
+		<Content Remove="wwwroot\Theme\loginForm\**" />
 		<EmbeddedResource Remove="Areas\Report\Data\**" />
+		<EmbeddedResource Remove="wwwroot\Theme\loginForm\**" />
 		<None Remove="Areas\Report\Data\**" />
+		<None Remove="wwwroot\Theme\loginForm\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,10 +64,6 @@
 		<Content Update="Views\Shared\_PartialMenu.cshtml">
 			<Pack>$(IncludeRazorContentInPack)</Pack>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\Theme\loginForm\images\" />
 	</ItemGroup>
 
 </Project>
