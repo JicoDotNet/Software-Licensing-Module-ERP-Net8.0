@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicensingERP.Logic.Core", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicensingERP.Core", "LicensingERP.Core\LicensingERP.Core.csproj", "{4D5AE42F-A487-4C63-8BFE-5F90E7BE596E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MySql.Core", "DataAccess.MySql.Core\DataAccess.MySql.Core.csproj", "{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MySql", "DataAccess.MySql\DataAccess.MySql.csproj", "{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
