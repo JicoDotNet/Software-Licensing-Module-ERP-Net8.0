@@ -1911,12 +1911,16 @@ $$
 --
 -- Create procedure `sp_Get_menu_list`
 --
-CREATE PROCEDURE sp_Get_menu_list(IN p_QueryType VARCHAR(20))
+CREATE PROCEDURE sp_Get_menu_list(IN p_QueryType VARCHAR(20), IN p_Id int)
 BEGIN
 IF p_QueryType ='ALL' THEN
 SELECT
   *
 FROM tbl_menu_list;
+
+ELSEIF p_QueryType = 'ONE' THEN
+SELECT  * FROM tbl_menu_list
+WHERE Id = p_Id;
 
 ELSEIF p_QueryType = 'ASSIGN' THEN
 SELECT
