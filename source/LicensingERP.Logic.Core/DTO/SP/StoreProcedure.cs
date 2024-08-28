@@ -94,7 +94,7 @@ namespace LicensingERP.Logic.DTO.SP
         public static string GetlicenceCompare { get { return "sp_Get_Compare"; } }
 
         /* -- Licence Alert -- */
-        public static string GetLicenceExpiry { get { return "sp_Get_LicenceExpiry"; } }
+        //public static string GetLicenceExpiry { get { return "sp_Get_LicenceExpiry"; } }
 
 
 

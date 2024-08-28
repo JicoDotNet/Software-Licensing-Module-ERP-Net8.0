@@ -1,10 +1,10 @@
 ﻿using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -14,17 +14,17 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(ProductModule productModule)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", 0),
-                new nameValuePair("p_ProductId", productModule.ProductId),
-                new nameValuePair("p_ModuleName", productModule.ModuleName),
-                new nameValuePair("p_ModuleDetails", productModule.ModuleDetails),
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_Id", 0),
+                new NameValuePair("p_ProductId", productModule.ProductId),
+                new NameValuePair("p_ModuleName", productModule.ModuleName),
+                new NameValuePair("p_ModuleDetails", productModule.ModuleDetails),
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetProductModule, nvp, "Out_Param"));
@@ -32,12 +32,12 @@ namespace LicensingERP.Logic.BLL
 
         public List<ProductModule> GetDatas(int ProductId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_ProductId", ProductId),
-                new nameValuePair("p_QueryType", "FORPRODUCT")
+                new NameValuePair("p_ProductId", ProductId),
+                new NameValuePair("p_QueryType", "FORPRODUCT")
             };
 
             return mySqlDBAccess.GetData(StoreProcedure.GetProductModule, nvp).ToList<ProductModule>();

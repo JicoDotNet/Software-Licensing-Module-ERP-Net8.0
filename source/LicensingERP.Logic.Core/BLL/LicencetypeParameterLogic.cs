@@ -1,11 +1,10 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -31,14 +30,14 @@ namespace LicensingERP.Logic.BLL
                     Deactivate(parameter.LicenseTypeId);
                 }
                 #endregion
-                using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
                 {
-                    nameValuePairs nvp = new nameValuePairs
+                    NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_ParameterId", parameter.ParameterId),
-                        new nameValuePair("p_LicenseTypeId", parameter.LicenseTypeId),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "INSERT")
+                        new NameValuePair("p_ParameterId", parameter.ParameterId),
+                        new NameValuePair("p_LicenseTypeId", parameter.LicenseTypeId),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "INSERT")
                     };
 
                     try
@@ -53,20 +52,19 @@ namespace LicensingERP.Logic.BLL
                     }
                 }
             }
-
             return 1;
         }
 
         public int Deactivate(int LicenseTypeId)
         {
-            using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+            using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
             {
-                nameValuePairs nvp = new nameValuePairs
+                NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_ParameterId", null),
-                        new nameValuePair("p_LicenseTypeId", LicenseTypeId),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "DEACTIVATE")
+                        new NameValuePair("p_ParameterId", null),
+                        new NameValuePair("p_LicenseTypeId", LicenseTypeId),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "DEACTIVATE")
                     };
 
                 try
@@ -82,25 +80,25 @@ namespace LicensingERP.Logic.BLL
 
         public List<ParameterOfLicence> GetLicenceofParameter()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("p_LicenseTypeId", 0));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
+            NameValuePairs.Add(new NameValuePair("p_LicenseTypeId", 0));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ALL"));
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceofParameter, nameValuePairs).ToList<ParameterOfLicence>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceofParameter, NameValuePairs).ToList<ParameterOfLicence>();
         }
         public List<ParameterOfLicence> GetLicenceofParameter(int LicenseTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("p_LicenseTypeId", LicenseTypeId));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ASSIGNED"));
+            NameValuePairs.Add(new NameValuePair("p_LicenseTypeId", LicenseTypeId));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ASSIGNED"));
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceofParameter, nameValuePairs).ToList<ParameterOfLicence>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceofParameter, NameValuePairs).ToList<ParameterOfLicence>();
         }
     }
 }

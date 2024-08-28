@@ -1,89 +1,92 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using LicensingERP.Logic.DTO.SP;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
     public class MenuLogic : ConnectionString
     {
-       public MenuLogic(sCommonDto CommonObj) : base(CommonObj) { }
+        public MenuLogic(sCommonDto CommonObj) : base(CommonObj) { }
 
         public void InsertMenuGroup(MenuGroup menuGroup, string SessionId)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("p_Id", 0));
-            nameValuePairs.Add(new nameValuePair("p_Icon", menuGroup.Icon));
-            nameValuePairs.Add(new nameValuePair("p_DisplayText", menuGroup.DisplayText));
-            nameValuePairs.Add(new nameValuePair("p_IsActive", menuGroup.IsActive));
-            nameValuePairs.Add(new nameValuePair("p_IsDisplayable", menuGroup.IsDisplayable));
-            nameValuePairs.Add(new nameValuePair("p_SessionId", SessionId));
-            nameValuePairs.Add(new nameValuePair("p_CreatedBy", "DEVELOPER"));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "INSERT"));
+            NameValuePairs.Add(new NameValuePair("p_Id", 0));
+            NameValuePairs.Add(new NameValuePair("p_Icon", menuGroup.Icon));
+            NameValuePairs.Add(new NameValuePair("p_DisplayText", menuGroup.DisplayText));
+            NameValuePairs.Add(new NameValuePair("p_IsActive", menuGroup.IsActive));
+            NameValuePairs.Add(new NameValuePair("p_IsDisplayable", menuGroup.IsDisplayable));
+            NameValuePairs.Add(new NameValuePair("p_SessionId", SessionId));
+            NameValuePairs.Add(new NameValuePair("p_CreatedBy", "DEVELOPER"));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "INSERT"));
 
-            mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_set_menu_group", nameValuePairs);
+            mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_set_menu_group", NameValuePairs);
         }
 
         public List<MenuGroup> GetMenuGroup()
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
-            
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
-            nameValuePairs.Add(new nameValuePair("p_Id", 0));
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            return mySqlDBAccess.GetData("sp_Get_menu_group", nameValuePairs).ToList<MenuGroup>();
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ALL"));
+            NameValuePairs.Add(new NameValuePair("p_Id", 0));
+
+            return mySqlDBAccess.GetData("sp_Get_menu_group", NameValuePairs).ToList<MenuGroup>();
         }
 
         public void InsertMenuList(MenuList menuList, string SessionId)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("P_Id", 0));
-            nameValuePairs.Add(new nameValuePair("p_MenuGroupId", menuList.MenuGroupId));
-            nameValuePairs.Add(new nameValuePair("p_Icon", menuList.Icon));
-            nameValuePairs.Add(new nameValuePair("p_DisplayText", menuList.DisplayText));
-            nameValuePairs.Add(new nameValuePair("p_Controller", menuList.Controller));
-            nameValuePairs.Add(new nameValuePair("p_ActionResult", menuList.ActionResult));
-            nameValuePairs.Add(new nameValuePair("p_RouteId", menuList.RouteId));
-            nameValuePairs.Add(new nameValuePair("p_QueryString", menuList.QueryString));
-            nameValuePairs.Add(new nameValuePair("p_HttpType", menuList.HttpType));
-            nameValuePairs.Add(new nameValuePair("p_IsActive", menuList.IsActive));
-            nameValuePairs.Add(new nameValuePair("p_IsDisplayable", menuList.IsDisplayable));
-            nameValuePairs.Add(new nameValuePair("p_IsForAdmin", menuList.IsForAdmin));
-            nameValuePairs.Add(new nameValuePair("p_Description", menuList.Description));
-            nameValuePairs.Add(new nameValuePair("p_SessionId", SessionId));
-            nameValuePairs.Add(new nameValuePair("p_IsForWorkflow", menuList.IsForWorkflow));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "INSERT"));
+            NameValuePairs.Add(new NameValuePair("P_Id", 0));
+            NameValuePairs.Add(new NameValuePair("p_MenuGroupId", menuList.MenuGroupId));
+            NameValuePairs.Add(new NameValuePair("p_Icon", menuList.Icon));
+            NameValuePairs.Add(new NameValuePair("p_DisplayText", menuList.DisplayText));
+            NameValuePairs.Add(new NameValuePair("p_Controller", menuList.Controller));
+            NameValuePairs.Add(new NameValuePair("p_ActionResult", menuList.ActionResult));
+            NameValuePairs.Add(new NameValuePair("p_RouteId", menuList.RouteId));
+            NameValuePairs.Add(new NameValuePair("p_QueryString", menuList.QueryString));
+            NameValuePairs.Add(new NameValuePair("p_HttpType", menuList.HttpType));
+            NameValuePairs.Add(new NameValuePair("p_IsActive", menuList.IsActive));
+            NameValuePairs.Add(new NameValuePair("p_IsDisplayable", menuList.IsDisplayable));
+            NameValuePairs.Add(new NameValuePair("p_IsForAdmin", menuList.IsForAdmin));
+            NameValuePairs.Add(new NameValuePair("p_Description", menuList.Description));
+            NameValuePairs.Add(new NameValuePair("p_SessionId", SessionId));
+            NameValuePairs.Add(new NameValuePair("p_IsForWorkflow", menuList.IsForWorkflow));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "INSERT"));
 
-            mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_set_menu_list", nameValuePairs);
+            mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_set_menu_list", NameValuePairs);
         }
 
         public List<MenuList> GetMenuList()
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs();
 
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
-            nameValuePairs.Add(new nameValuePair("p_Id", 0));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ALL"));
+            NameValuePairs.Add(new NameValuePair("p_Id", 0));
 
-            return mySqlDBAccess.GetData("sp_Get_menu_list", nameValuePairs).ToList<MenuList>();
+            return mySqlDBAccess.GetData("sp_Get_menu_list", NameValuePairs).ToList<MenuList>();
         }
         public MenuList GetMenuList(int id)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ONE"));
-            nameValuePairs.Add(new nameValuePair("p_Id", id));
-            return mySqlDBAccess.GetData("sp_Get_menu_list", nameValuePairs).ToList<MenuList>().FirstOrDefault();
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs()
+            {
+                new NameValuePair("p_QueryType", "ONE"),
+                new NameValuePair("p_Id", id)
+            };
+            return mySqlDBAccess.GetData("sp_Get_menu_list", NameValuePairs).ToList<MenuList>().FirstOrDefault();
         }
     }
 }

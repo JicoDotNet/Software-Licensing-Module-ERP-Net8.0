@@ -1,11 +1,11 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,16 +17,16 @@ namespace LicensingERP.Logic.BLL
         {
             foreach(RequestFeature requestFeature in requestFeatures)
             {
-                using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
                 {
-                    nameValuePairs nvp = new nameValuePairs
+                    NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_RequestId", RequestId),
-                        new nameValuePair("p_RequestNo", RequestNo),
-                        new nameValuePair("p_FeaturesId", requestFeature.FeaturesId),
-                        new nameValuePair("p_ProductId", requestFeature.ProductId),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "INSERT")
+                        new NameValuePair("p_RequestId", RequestId),
+                        new NameValuePair("p_RequestNo", RequestNo),
+                        new NameValuePair("p_FeaturesId", requestFeature.FeaturesId),
+                        new NameValuePair("p_ProductId", requestFeature.ProductId),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "INSERT")
                     };
 
                     try

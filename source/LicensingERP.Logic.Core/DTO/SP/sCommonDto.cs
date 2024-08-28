@@ -1,11 +1,7 @@
-﻿using LicensingERP.Logic.DTO.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using LicensingERP.Logic.DTO.Interface;
 
-namespace LicensingERP.Logic.DTO.Class
+namespace LicensingERP.Logic.DTO.SP
 {
     public class sCommonDto : ISession, IActivity, IStatus
     {
@@ -14,6 +10,6 @@ namespace LicensingERP.Logic.DTO.Class
         public string CreatedBy { get; set; }
         public bool IsActive { get; set; }
 
-        public object ConnectionString { get; set; }
+        public string ConnectionString { get; set; }
     }
 }

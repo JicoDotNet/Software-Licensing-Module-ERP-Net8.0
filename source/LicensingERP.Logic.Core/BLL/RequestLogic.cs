@@ -2,12 +2,12 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,23 +17,23 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(Request request)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", 0),
-                new nameValuePair("p_ClientId", request.ClientId),
-                new nameValuePair("p_LicenceTypeId", request.LicenceTypeId),
-                new nameValuePair("p_ProductId", request.ProductId),
-                new nameValuePair("p_LicenceNo", request.LicenceNo),
-                new nameValuePair("p_RequestNo", request.RequestNo),
-                new nameValuePair("p_RequestDate", GenericLogic.IstNow),
-                new nameValuePair("p_UserTypeId", request.UserTypeId),
-                new nameValuePair("p_UserId", request.UserId),
-                new nameValuePair("p_ExpiryDate", request.ExpiryDate),
+                new NameValuePair("p_Id", 0),
+                new NameValuePair("p_ClientId", request.ClientId),
+                new NameValuePair("p_LicenceTypeId", request.LicenceTypeId),
+                new NameValuePair("p_ProductId", request.ProductId),
+                new NameValuePair("p_LicenceNo", request.LicenceNo),
+                new NameValuePair("p_RequestNo", request.RequestNo),
+                new NameValuePair("p_RequestDate", GenericLogic.IstNow),
+                new NameValuePair("p_UserTypeId", request.UserTypeId),
+                new NameValuePair("p_UserId", request.UserId),
+                new NameValuePair("p_ExpiryDate", request.ExpiryDate),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             int RequestId = Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetRequest, nvp, "Out_Param"));
@@ -50,30 +50,30 @@ namespace LicensingERP.Logic.BLL
 
         public List<Request> GetRequests(int UserId, int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", 0),
-                new nameValuePair("p_UserTypeId", UserTypeId),
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_QueryType", "ALL")
+                new NameValuePair("p_RequestId", 0),
+                new NameValuePair("p_UserTypeId", UserTypeId),
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_QueryType", "ALL")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, nameValuePairs).ToList<Request>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, NameValuePairs).ToList<Request>();
         }
 
         public Request GetRequest(int RequestId, int UserId, int UserTypeId, bool idAdmin = false)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", RequestId),
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_UserTypeId", UserTypeId),
-                new nameValuePair("p_QueryType", "SINGLE")
+                new NameValuePair("p_RequestId", RequestId),
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_UserTypeId", UserTypeId),
+                new NameValuePair("p_QueryType", "SINGLE")
             };
-            DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetRequest, nameValuePairs);
+            DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetRequest, NameValuePairs);
             Request request = dataSet.Tables[0].ToList<Request>().FirstOrDefault();
             request.RequestParameters = dataSet.Tables[1].ToList<RequestParameter>();
             request.RequestRestricts = dataSet.Tables[2].ToList<RequestRestrict>();
@@ -84,21 +84,21 @@ namespace LicensingERP.Logic.BLL
                 //request.byPassRequisitionClaims
                 if(request.IsClaimed)
                 {
-                    nameValuePairs nameValuePairs1 = new nameValuePairs
+                    NameValuePairs NameValuePairs1 = new NameValuePairs
                         {
-                            new nameValuePair("p_RequestId",RequestId),
-                            new nameValuePair("p_QueryType", "CLAIMEDSTATUSLIST")
+                            new NameValuePair("p_RequestId",RequestId),
+                            new NameValuePair("p_QueryType", "CLAIMEDSTATUSLIST")
                         };
-                    request.byPassRequisition = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, nameValuePairs1).ToList<ByPassRequisitionClaim>().FirstOrDefault();
+                    request.byPassRequisition = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs1).ToList<ByPassRequisitionClaim>().FirstOrDefault();
                 }
                 else
                 {
-                    nameValuePairs nameValuePairs1 = new nameValuePairs
+                    NameValuePairs NameValuePairs1 = new NameValuePairs
                         {
-                            new nameValuePair("p_RequestId",RequestId),
-                            new nameValuePair("p_QueryType", "GETCLAIMLIST")
+                            new NameValuePair("p_RequestId",RequestId),
+                            new NameValuePair("p_QueryType", "GETCLAIMLIST")
                         };
-                    request.byPassRequisitionClaims = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, nameValuePairs1).ToList<ByPassRequisitionClaim>();
+                    request.byPassRequisitionClaims = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs1).ToList<ByPassRequisitionClaim>();
                 }
                 
             }
@@ -107,28 +107,28 @@ namespace LicensingERP.Logic.BLL
 
         public int Claim(int RequestId, int UserId, int UserTypeId,bool IsAdmin = false )
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
             if (IsAdmin) {
-                nameValuePairs nameValuePairs = new nameValuePairs
+                NameValuePairs NameValuePairs = new NameValuePairs
                 {
-                    new nameValuePair("p_RequestId", RequestId),
-                    new nameValuePair("p_UserId", UserId),
-                    new nameValuePair("p_UserTypeId", UserTypeId),
-                    new nameValuePair("p_QueryType", "CLAIMBYADMIN")
+                    new NameValuePair("p_RequestId", RequestId),
+                    new NameValuePair("p_UserId", UserId),
+                    new NameValuePair("p_UserTypeId", UserTypeId),
+                    new NameValuePair("p_QueryType", "CLAIMBYADMIN")
                 };
-                return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.ClaimbyAdmin, nameValuePairs, "Out_Param"));
+                return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.ClaimbyAdmin, NameValuePairs, "Out_Param"));
             }
             else
             {
-                nameValuePairs nameValuePairs = new nameValuePairs
+                NameValuePairs NameValuePairs = new NameValuePairs
                 {
-                    new nameValuePair("p_RequestId", RequestId),
-                    new nameValuePair("p_UserId", UserId),
-                    new nameValuePair("p_UserTypeId", UserTypeId),
-                    new nameValuePair("p_QueryType", "CLAIM")
+                    new NameValuePair("p_RequestId", RequestId),
+                    new NameValuePair("p_UserId", UserId),
+                    new NameValuePair("p_UserTypeId", UserTypeId),
+                    new NameValuePair("p_QueryType", "CLAIM")
                 };
-                return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetRequestClaim, nameValuePairs, "Out_Param"));
+                return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetRequestClaim, NameValuePairs, "Out_Param"));
             }
             
 
@@ -137,13 +137,13 @@ namespace LicensingERP.Logic.BLL
 
         public bool ClaimUserExits(int RequestId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs1 = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs1 = new NameValuePairs
                         {
-                            new nameValuePair("p_RequestId",RequestId),
-                            new nameValuePair("p_QueryType", "CLAIMUSEREXIST")
+                            new NameValuePair("p_RequestId",RequestId),
+                            new NameValuePair("p_QueryType", "CLAIMUSEREXIST")
                         };
-            RequisitionClaim byPassRequisition = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, nameValuePairs1).ToList<RequisitionClaim>().FirstOrDefault();
+            RequisitionClaim byPassRequisition = mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs1).ToList<RequisitionClaim>().FirstOrDefault();
 
             if(byPassRequisition.ClaimUserId == 0)
             {
@@ -157,64 +157,64 @@ namespace LicensingERP.Logic.BLL
 
         public List<RequestStatus> GetRequests(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestId", 0),
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_QueryType", "OWN")
+                new NameValuePair("p_RequestId", 0),
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_QueryType", "OWN")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, nameValuePairs).ToList<RequestStatus>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, NameValuePairs).ToList<RequestStatus>();
         }
 
         public List<FollowUp> GetFollowUpList()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "All")
+                new NameValuePair("p_QueryType", "All")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetFollowUpList, nameValuePairs).ToList<FollowUp>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetFollowUpList, NameValuePairs).ToList<FollowUp>();
         }
 
         public int InsertFollowUp(FollowUp followUp)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "INSERT"),
-                new nameValuePair("p_RequestNo", followUp.RequestNo),
-                new nameValuePair("p_IsFollowUp", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_FollowUpDoneBy", followUp.FollowUpDoneBy)
+                new NameValuePair("p_QueryType", "INSERT"),
+                new NameValuePair("p_RequestNo", followUp.RequestNo),
+                new NameValuePair("p_IsFollowUp", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_FollowUpDoneBy", followUp.FollowUpDoneBy)
             };
-            return mySqlDBAccess.InsertUpdateDeleteReturnInt(StoreProcedure.SetFollowUp, nameValuePairs);
+            return mySqlDBAccess.InsertUpdateDeleteReturnInt(StoreProcedure.SetFollowUp, NameValuePairs);
         }
 
         public List<Request> AdminRequisitionList()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {      
-                new nameValuePair("p_RequestId",0),
-                new nameValuePair("p_QueryType", "ONLYADMIN")
+                new NameValuePair("p_RequestId",0),
+                new NameValuePair("p_QueryType", "ONLYADMIN")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, nameValuePairs).ToList<Request>();
+            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs).ToList<Request>();
         }
 
         public RequisitionClaim GetRequisitionClaimDetails(int RequisitionId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_RequestId",RequisitionId),
-                new nameValuePair("p_QueryType", "GETNEXTUSERTYPE")
+                new NameValuePair("p_RequestId",RequisitionId),
+                new NameValuePair("p_QueryType", "GETNEXTUSERTYPE")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, nameValuePairs).ToList<RequisitionClaim>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs).ToList<RequisitionClaim>().FirstOrDefault();
         }
     }
 }

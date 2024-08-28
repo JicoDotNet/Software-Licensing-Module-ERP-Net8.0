@@ -1,13 +1,13 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,17 +17,17 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(Product product)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", 0),
-                //new nameValuePair("p_LicenceTypeId", product.LicenceTypeId),
-                new nameValuePair("p_ProductName", product.ProductName),
-                new nameValuePair("p_ProductDetails", product.ProductDetails),
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_Id", 0),
+                //new NameValuePair("p_LicenceTypeId", product.LicenceTypeId),
+                new NameValuePair("p_ProductName", product.ProductName),
+                new NameValuePair("p_ProductDetails", product.ProductDetails),
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
            return Convert.ToInt32( mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetProduct, nvp, "Out_Param"));
@@ -35,28 +35,28 @@ namespace LicensingERP.Logic.BLL
 
         public List<Product> GetProuct()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_ProductId", 0),
-                new nameValuePair("p_QueryType", "ALL")
+                new NameValuePair("p_ProductId", 0),
+                new NameValuePair("p_QueryType", "ALL")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetProduct, nameValuePairs).ToList<Product>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetProduct, NameValuePairs).ToList<Product>();
         }
 
         public int Update(Product product)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", product.Id),
-                new nameValuePair("p_ProductName",product.ProductName),
-                new nameValuePair("p_ProductDetails", product.ProductDetails),
+                new NameValuePair("p_Id", product.Id),
+                new NameValuePair("p_ProductName",product.ProductName),
+                new NameValuePair("p_ProductDetails", product.ProductDetails),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "UPDATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "UPDATE")
             };
 
           return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetProduct, nvp, "Out_Param"));
@@ -64,33 +64,33 @@ namespace LicensingERP.Logic.BLL
 
         public Product GetProductType(int ProductId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                //new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_ProductId", ProductId),
-                //new nameValuePair("p_UserName", null),
-                new nameValuePair("p_QueryType", "PRODUCT")
+                //new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_ProductId", ProductId),
+                //new NameValuePair("p_UserName", null),
+                new NameValuePair("p_QueryType", "PRODUCT")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetProduct, nameValuePairs).ToList<Product>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetProduct, NameValuePairs).ToList<Product>().FirstOrDefault();
 
         }
 
         public int Deactivate(int ProductId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", ProductId),
-                new nameValuePair("p_ProductName", null),
-                new nameValuePair("p_ProductDetails", null),
+                new NameValuePair("p_Id", ProductId),
+                new NameValuePair("p_ProductName", null),
+                new NameValuePair("p_ProductDetails", null),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "DEACTIVATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "DEACTIVATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetProduct, nvp, "Out_Param"));

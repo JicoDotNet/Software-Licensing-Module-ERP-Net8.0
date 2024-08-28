@@ -12,7 +12,6 @@ namespace LicensingERP.Models
         public IReadOnlyList<LicenceType> LicenceTypes { get; set; }
         public IReadOnlyList<ProductFeatures> Features { get; set; }
         public IReadOnlyList<ProductModule> Modules { get; set; }
-        // arindrajit Implement
         //public IReadOnlyList<RequestType> RequestType { get; set; }
     }
 }

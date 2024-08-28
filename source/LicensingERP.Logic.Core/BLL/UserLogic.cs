@@ -2,13 +2,13 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
 using LicensingERP.Logic.Encryption;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -18,22 +18,22 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(User user, Password password)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", 0),
-                new nameValuePair("p_UserTypeId", user.UserTypeId),
-                new nameValuePair("p_FullName", user.FullName),
-                new nameValuePair("p_UserName", user.UserName),
-                new nameValuePair("p_Email", user.Email),
-                new nameValuePair("p_Mobile", user.Mobile),
-                new nameValuePair("p_Address", user.Address),
-                new nameValuePair("p_Designation", user.Designation),
-                //new nameValuePair("p_Password", password.PasswordText),
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_Id", 0),
+                new NameValuePair("p_UserTypeId", user.UserTypeId),
+                new NameValuePair("p_FullName", user.FullName),
+                new NameValuePair("p_UserName", user.UserName),
+                new NameValuePair("p_Email", user.Email),
+                new NameValuePair("p_Mobile", user.Mobile),
+                new NameValuePair("p_Address", user.Address),
+                new NameValuePair("p_Designation", user.Designation),
+                //new NameValuePair("p_Password", password.PasswordText),
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             int UserId = Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetUser, nvp, "Out_Param"));
@@ -51,22 +51,22 @@ namespace LicensingERP.Logic.BLL
 
         public int Update(User user)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", user.Id),
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_FullName", user.FullName),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_Email", user.Email),
-                new nameValuePair("p_Mobile", user.Mobile),
-                new nameValuePair("p_Address", user.Address),
-                new nameValuePair("p_Designation", user.Designation),
-                //new nameValuePair("p_Password", null),
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "UPDATE")
+                new NameValuePair("p_Id", user.Id),
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_FullName", user.FullName),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_Email", user.Email),
+                new NameValuePair("p_Mobile", user.Mobile),
+                new NameValuePair("p_Address", user.Address),
+                new NameValuePair("p_Designation", user.Designation),
+                //new NameValuePair("p_Password", null),
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "UPDATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetUser, nvp, "Out_Param"));
@@ -74,22 +74,22 @@ namespace LicensingERP.Logic.BLL
 
         public int Deactivate(int UserId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", UserId),
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_FullName", null),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_Email", null),
-                new nameValuePair("p_Mobile", null),
-                new nameValuePair("p_Address", null),
-                new nameValuePair("p_Designation", null),
-                //new nameValuePair("p_Password", null),
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "DEACTIVE")
+                new NameValuePair("p_Id", UserId),
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_FullName", null),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_Email", null),
+                new NameValuePair("p_Mobile", null),
+                new NameValuePair("p_Address", null),
+                new NameValuePair("p_Designation", null),
+                //new NameValuePair("p_Password", null),
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "DEACTIVE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetUser, nvp, "Out_Param"));
@@ -97,82 +97,82 @@ namespace LicensingERP.Logic.BLL
 
         public List<User> GetUsers()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_UserId", 0),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_QueryType", "ALL")
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_UserId", 0),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_QueryType", "ALL")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetUser, nameValuePairs).ToList<User>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetUser, NameValuePairs).ToList<User>();
         }
 
         public List<User> GetUsers(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", UserTypeId),
-                new nameValuePair("p_UserId", 0),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_QueryType", "BYUSERTYPE")
+                new NameValuePair("p_UserTypeId", UserTypeId),
+                new NameValuePair("p_UserId", 0),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_QueryType", "BYUSERTYPE")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetUser, nameValuePairs).ToList<User>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetUser, NameValuePairs).ToList<User>();
         }
 
         public User GetUser(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_UserId", UserId),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_QueryType", "USER")
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_UserId", UserId),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_QueryType", "USER")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetUser, nameValuePairs).ToList<User>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetUser, NameValuePairs).ToList<User>().FirstOrDefault();
         }
         
         public User GetUser(string UserName)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_UserId", 0),
-                new nameValuePair("p_UserName", UserName),
-                new nameValuePair("p_QueryType", "USERNAME")
+                new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_UserId", 0),
+                new NameValuePair("p_UserName", UserName),
+                new NameValuePair("p_QueryType", "USERNAME")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetUser, nameValuePairs).ToList<User>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetUser, NameValuePairs).ToList<User>().FirstOrDefault();
         }
 
         public int Delete(int UserId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", UserId),
-                new nameValuePair("p_UserTypeId", null),
-                new nameValuePair("p_FullName", null),
-                new nameValuePair("p_UserName", null),
-                new nameValuePair("p_Email", null),
-                new nameValuePair("p_Mobile", null),
-                new nameValuePair("p_Address", null),
-                new nameValuePair("p_Designation", null),
-                //new nameValuePair("p_Password", password.PasswordText),
-                new nameValuePair("p_IsActive", false),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "DELETE")
+                new NameValuePair("p_Id", UserId),
+                new NameValuePair("p_UserTypeId", null),
+                new NameValuePair("p_FullName", null),
+                new NameValuePair("p_UserName", null),
+                new NameValuePair("p_Email", null),
+                new NameValuePair("p_Mobile", null),
+                new NameValuePair("p_Address", null),
+                new NameValuePair("p_Designation", null),
+                //new NameValuePair("p_Password", password.PasswordText),
+                new NameValuePair("p_IsActive", false),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "DELETE")
             };
 
             UserId = Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetUser, nvp, "Out_Param"));

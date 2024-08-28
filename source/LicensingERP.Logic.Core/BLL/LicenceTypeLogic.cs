@@ -1,13 +1,13 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,19 +17,19 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(LicenceType licenceType)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nvp = new nameValuePairs
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", 0),
-                new nameValuePair("p_TypeName", licenceType.TypeName),
-                new nameValuePair("p_LicenceTypeDetails",licenceType.LicenceTypeDetails),
-                new nameValuePair("p_NumberOfLicence", 0),
-                new nameValuePair("p_IsScalingEligible", 0),
+                new NameValuePair("p_Id", 0),
+                new NameValuePair("p_TypeName", licenceType.TypeName),
+                new NameValuePair("p_LicenceTypeDetails",licenceType.LicenceTypeDetails),
+                new NameValuePair("p_NumberOfLicence", 0),
+                new NameValuePair("p_IsScalingEligible", 0),
 
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "INSERT")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "INSERT")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetLicenceType, nvp, "Out_Param"));
@@ -37,45 +37,45 @@ namespace LicensingERP.Logic.BLL
 
         public List<LicenceType> GetLicenceType()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs();
-            nameValuePairs.Add(new nameValuePair("p_licenceTypeId", 0));
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
+            NameValuePairs NameValuePairs = new NameValuePairs();
+            NameValuePairs.Add(new NameValuePair("p_licenceTypeId", 0));
+            NameValuePairs.Add(new NameValuePair("p_QueryType", "ALL"));
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceType, nameValuePairs).ToList<LicenceType>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceType, NameValuePairs).ToList<LicenceType>();
         }
 
         public LicenceType GetLicenceType(int LicenceTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nameValuePairs = new nameValuePairs
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                //new nameValuePair("p_UserTypeId", 0),
-                new nameValuePair("p_licenceTypeId", LicenceTypeId),
-                //new nameValuePair("p_UserName", null),
-                new nameValuePair("p_QueryType", "LICENSETYPE")
+                //new NameValuePair("p_UserTypeId", 0),
+                new NameValuePair("p_licenceTypeId", LicenceTypeId),
+                //new NameValuePair("p_UserName", null),
+                new NameValuePair("p_QueryType", "LICENSETYPE")
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceType, nameValuePairs).ToList<LicenceType>().FirstOrDefault();
+            return mySqlDBAccess.GetData(StoreProcedure.GetLicenceType, NameValuePairs).ToList<LicenceType>().FirstOrDefault();
         }
 
         public int Update(LicenceType licenceType)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", licenceType.Id),
-                new nameValuePair("p_TypeName", licenceType.TypeName),
-                new nameValuePair("p_LicenceTypeDetails",licenceType.LicenceTypeDetails),
-                new nameValuePair("p_NumberOfLicence", 0),
-                new nameValuePair("p_IsScalingEligible", 0),
+                new NameValuePair("p_Id", licenceType.Id),
+                new NameValuePair("p_TypeName", licenceType.TypeName),
+                new NameValuePair("p_LicenceTypeDetails",licenceType.LicenceTypeDetails),
+                new NameValuePair("p_NumberOfLicence", 0),
+                new NameValuePair("p_IsScalingEligible", 0),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "UPDATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "UPDATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetLicenceType, nvp, "Out_Param"));
@@ -83,19 +83,19 @@ namespace LicensingERP.Logic.BLL
 
         public int Deactivate(int LicenceTypeId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_Id", LicenceTypeId),
-                new nameValuePair("p_TypeName", null),
-                new nameValuePair("p_LicenceTypeDetails", null),
-                new nameValuePair("p_NumberOfLicence", 0),
-                new nameValuePair("p_IsScalingEligible", 0),
+                new NameValuePair("p_Id", LicenceTypeId),
+                new NameValuePair("p_TypeName", null),
+                new NameValuePair("p_LicenceTypeDetails", null),
+                new NameValuePair("p_NumberOfLicence", 0),
+                new NameValuePair("p_IsScalingEligible", 0),
 
-                new nameValuePair("p_IsActive", true),
-                new nameValuePair("p_SessionId", CommonObj.SessionId),
-                new nameValuePair("p_QueryType", "DEACTIVATE")
+                new NameValuePair("p_IsActive", true),
+                new NameValuePair("p_SessionId", CommonObj.SessionId),
+                new NameValuePair("p_QueryType", "DEACTIVATE")
             };
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetLicenceType, nvp, "Out_Param"));

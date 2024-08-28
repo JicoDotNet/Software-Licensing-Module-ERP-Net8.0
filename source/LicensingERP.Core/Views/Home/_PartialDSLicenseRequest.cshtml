@@ -27,8 +27,11 @@
             labels += "\"" + Model[i].TypeName + "\",";
             data +=  Model[i].LicenseCount + ",";
         }
-        data = "[" + data.Substring(0, data.Length - 1) + "]";
-        labels = "[" + labels.Substring(0, labels.Length - 1) + "]";
+        if(!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(labels))
+        {
+            data = "[" + data.Substring(0, data.Length - 1) + "]";
+            labels = "[" + labels.Substring(0, labels.Length - 1) + "]";
+        }        
     }
     var _labels = "@labels";
     var _data = @data;

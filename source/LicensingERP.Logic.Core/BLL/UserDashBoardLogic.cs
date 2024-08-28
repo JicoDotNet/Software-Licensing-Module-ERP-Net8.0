@@ -1,11 +1,11 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -24,14 +24,14 @@ namespace LicensingERP.Logic.BLL
                 {
                     Deactivate(userDashboard.UserTypeId);
                 }
-                using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
                 {
-                    nameValuePairs nvp = new nameValuePairs
+                    NameValuePairs nvp = new NameValuePairs
                     {
-                        new nameValuePair("p_DashboardId",userDashboard.DashboardId),
-                        new nameValuePair("p_UserTypeId", userDashboard.UserTypeId),
-                        new nameValuePair("p_SessionId", CommonObj.SessionId),
-                        new nameValuePair("p_QueryType", "ASSIGN")
+                        new NameValuePair("p_DashboardId",userDashboard.DashboardId),
+                        new NameValuePair("p_UserTypeId", userDashboard.UserTypeId),
+                        new NameValuePair("p_SessionId", CommonObj.SessionId),
+                        new NameValuePair("p_QueryType", "ASSIGN")
                     };
                     try
                     {
@@ -48,14 +48,14 @@ namespace LicensingERP.Logic.BLL
 
         public int Deactivate(int UsertypeId)
         {
-            using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+            using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString))
             {
-                nameValuePairs nvp = new nameValuePairs
+                NameValuePairs nvp = new NameValuePairs
                 {
-                    new nameValuePair("p_DashboardId",0),
-                    new nameValuePair("p_UserTypeId", UsertypeId),
-                    new nameValuePair("p_SessionId", CommonObj.SessionId),
-                    new nameValuePair("p_QueryType", "DEACTIVATE")
+                    new NameValuePair("p_DashboardId",0),
+                    new NameValuePair("p_UserTypeId", UsertypeId),
+                    new NameValuePair("p_SessionId", CommonObj.SessionId),
+                    new NameValuePair("p_QueryType", "DEACTIVATE")
                 };
                 try
                 {
@@ -70,13 +70,13 @@ namespace LicensingERP.Logic.BLL
 
         public List<UserDashboard> GetAccessdashBoard(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
+            NameValuePairs NameValuePairs = new NameValuePairs
             {
-                new nameValuePair("p_QueryType", "USERTYPE"),
-                new nameValuePair("p_UserTypeId", UserTypeId)
+                new NameValuePair("p_QueryType", "USERTYPE"),
+                new NameValuePair("p_UserTypeId", UserTypeId)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetDashboardForUser, nameValuePairs).ToList<UserDashboard>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetDashboardForUser, NameValuePairs).ToList<UserDashboard>();
         }
 
 

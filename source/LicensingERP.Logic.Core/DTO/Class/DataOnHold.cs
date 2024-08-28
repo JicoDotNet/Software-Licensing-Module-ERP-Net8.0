@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LicensingERP.Logic.DTO.SP;
 
 namespace LicensingERP.Logic.DTO.Class
 {

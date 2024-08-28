@@ -3,13 +3,13 @@ using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.DTO.SP;
 using LicensingERP.Logic.Model.Class;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -19,13 +19,13 @@ namespace LicensingERP.Logic.BLL
 
         public LoginCredentials Authenticate(LoginCredentials loginCredentials)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            nameValuePairs nvp = new nameValuePairs
+            NameValuePairs nvp = new NameValuePairs
             {
-                new nameValuePair("p_UserName", loginCredentials.UserName),
-                new nameValuePair("p_Password", loginCredentials.PasswordText),
-                new nameValuePair("p_SessionId", CommonObj.SessionId)
+                new NameValuePair("p_UserName", loginCredentials.UserName),
+                new NameValuePair("p_Password", loginCredentials.PasswordText),
+                new NameValuePair("p_SessionId", CommonObj.SessionId)
             };
 
             List<User> UsersObj = mySqlDBAccess.GetData(StoreProcedure.LoginAuthenticate, nvp).ToList<User>();
