@@ -1,11 +1,11 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -16,7 +16,7 @@ namespace LicensingERP.Logic.BLL
         {
             foreach (RequestRestrict requestRestrict in requestRestricts)
             {
-                using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
                 {
                     nameValuePairs nvp = new nameValuePairs
                     {

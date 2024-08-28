@@ -1,13 +1,13 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,7 +17,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<MenuList> GetMenuList()
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_Id", 0),
@@ -39,7 +39,7 @@ namespace LicensingERP.Logic.BLL
                 {
                     Deactivate(userMenu.UserTypeId);
                 }
-                using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+                using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
                 {
                     nameValuePairs nvp = new nameValuePairs
                     {
@@ -64,7 +64,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Deactivate(int UserTypeId)
         {
-            using (MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
+            using (MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure))
             {
                 nameValuePairs nvp = new nameValuePairs
                     {
@@ -86,7 +86,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<UserMenu> GetAccessPermission(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", "FORUSERTYPE"),
@@ -97,7 +97,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<MenuGroup> GetMenuForUser(int UserTypeId)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", "FORUSER"),

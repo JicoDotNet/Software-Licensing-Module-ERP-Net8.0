@@ -1,10 +1,10 @@
 ﻿using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -14,7 +14,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(ProductModule productModule)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -32,7 +32,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<ProductModule> GetDatas(int ProductId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {

@@ -2,12 +2,12 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,7 +17,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<LicenceCompare> CompareLicenceGet(int ClientId , int LicenceTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nvp = new nameValuePairs
             {
                 new nameValuePair("p_RequestNo", 0),
@@ -29,7 +29,7 @@ namespace LicensingERP.Logic.BLL
         }
         public CompareLList CompareLicenceDisplay(string RequisitionId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nvp = new nameValuePairs
             {
                 new nameValuePair("p_RequestNo", RequisitionId),

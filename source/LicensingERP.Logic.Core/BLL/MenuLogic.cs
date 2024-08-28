@@ -1,22 +1,23 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using LicensingERP.Logic.DTO.SP;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
     public class MenuLogic : ConnectionString
     {
-       public MenuLogic(sCommonDto CommonObj) : base(CommonObj) { }
+        public MenuLogic(sCommonDto CommonObj) : base(CommonObj) { }
 
         public void InsertMenuGroup(MenuGroup menuGroup, string SessionId)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs();
 
             nameValuePairs.Add(new nameValuePair("p_Id", 0));
@@ -33,9 +34,9 @@ namespace LicensingERP.Logic.BLL
 
         public List<MenuGroup> GetMenuGroup()
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs();
-            
+
             nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
             nameValuePairs.Add(new nameValuePair("p_Id", 0));
 
@@ -44,7 +45,7 @@ namespace LicensingERP.Logic.BLL
 
         public void InsertMenuList(MenuList menuList, string SessionId)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs();
 
             nameValuePairs.Add(new nameValuePair("P_Id", 0));
@@ -69,7 +70,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<MenuList> GetMenuList()
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs();
 
             nameValuePairs.Add(new nameValuePair("p_QueryType", "ALL"));
@@ -79,10 +80,12 @@ namespace LicensingERP.Logic.BLL
         }
         public MenuList GetMenuList(int id)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
-            nameValuePairs nameValuePairs = new nameValuePairs();
-            nameValuePairs.Add(new nameValuePair("p_QueryType", "ONE"));
-            nameValuePairs.Add(new nameValuePair("p_Id", id));
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            nameValuePairs nameValuePairs = new nameValuePairs()
+            {
+                new nameValuePair("p_QueryType", "ONE"),
+                new nameValuePair("p_Id", id)
+            };
             return mySqlDBAccess.GetData("sp_Get_menu_list", nameValuePairs).ToList<MenuList>().FirstOrDefault();
         }
     }

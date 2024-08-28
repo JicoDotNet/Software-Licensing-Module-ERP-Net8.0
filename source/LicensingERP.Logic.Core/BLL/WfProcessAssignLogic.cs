@@ -2,13 +2,13 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -18,7 +18,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(WfProcessAssign wfProcessAssign)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nvp = new nameValuePairs
             {
                 new nameValuePair("p_WFProcessId", wfProcessAssign.WFProcessId),
@@ -35,7 +35,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<WfAssign> GetWfProcessAssigns()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", "ALL"),
@@ -45,7 +45,7 @@ namespace LicensingERP.Logic.BLL
         }
         public List<WfAssign> GetWfProcessAssigns(int LicenceTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", "FORLICENSE"),

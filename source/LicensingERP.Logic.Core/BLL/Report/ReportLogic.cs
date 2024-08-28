@@ -2,11 +2,11 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.ReportClass;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL.Report
 {
@@ -18,7 +18,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfUser> GetUsertype(ReportOfUser userdata)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             // to do here
             if(userdata.UserTypeId != 0)
@@ -91,7 +91,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfRequest> GetLicenseInfo(ReportOfRequest request)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (request.UserTypeId != 0)
             {
@@ -132,7 +132,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfUserLogin> GetLoginInfo(ReportOfUserLogin userLogin)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (userLogin.UserName != null)
             {
@@ -157,7 +157,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfActivity> GetActivityInfo(ReportOfActivity reportOfActivity)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -171,7 +171,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfRequestMovement> GetRequestMovementInfo(ReportOfRequestMovement reqMov)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (reqMov.UserTypeId != 0)
             {
@@ -213,7 +213,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfMakerChecker> GetMakerCheckerInfo(ReportOfMakerChecker reportOfMakerChecker)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (reportOfMakerChecker.CaseType != null)
             {
@@ -252,7 +252,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfStatus> GetStatusInfo(ReportOfStatus reportOfStatus)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (reportOfStatus.IsApproved != null)
             {
@@ -282,7 +282,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfRequestOnHold> GetRequestOnHold(ReportOfRequestOnHold reportOfRequestOnHold)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (reportOfRequestOnHold.User != null)
             {
@@ -319,7 +319,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfXmlDownload> GetXmlDownloadInfo(ReportOfXmlDownload reportOfXmlDownload)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (reportOfXmlDownload.User != null)
             {
@@ -352,7 +352,7 @@ namespace LicensingERP.Logic.BLL.Report
 
         public List<ReportOfRequest> GetPendingInfo(ReportOfRequest request)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (request.UserTypeId != 0)
             {

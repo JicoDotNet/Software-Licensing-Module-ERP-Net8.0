@@ -2,9 +2,9 @@
 using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace DataAccess.MySQL.Net
+namespace DataAccess.MySql
 {
-    public class MySqlDBAccess : MySQLManager
+    public class MySqlDbAccess : MySqlManager
     {
         public CommandType CommandType { get; }
         //public MySqlDBAccess(string ConnectionStringKeyName, CommandType Type) : base(ConnectionStringKeyName)
@@ -12,23 +12,23 @@ namespace DataAccess.MySQL.Net
         //    CommandType = Type;
         //}
 
-        public MySqlDBAccess(object ConnectionString, CommandType Type = CommandType.StoredProcedure) 
-            : base(ConnectionString)
+        public MySqlDbAccess(string connectionString, CommandType Type = CommandType.StoredProcedure) 
+            : base(connectionString)
         {
             CommandType = Type;
         }
 
-        public DataTable GetData(string Command, nameValuePairs NameValuePairObject)
+        public DataTable GetData(string command, nameValuePairs nameValuePairObject)
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand(Command);
+                MySqlCommand cmd = new MySqlCommand(command);
                 GetConnection(this.SqlConnectionObject);
                 cmd.Connection = this.SqlConnectionObject;
                 cmd.CommandType = CommandType;
                 cmd.Parameters.Clear();
 
-                foreach (nameValuePair objList in NameValuePairObject)
+                foreach (nameValuePair objList in nameValuePairObject)
                 {
                     cmd.Parameters.Add(createSqlParameter(objList.getName, objList.getValue));
                 }
@@ -58,12 +58,12 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public DataTable GetData(string Command)
+        public DataTable GetData(string command)
         {
             try
             {
                 GetConnection(this.SqlConnectionObject);
-                MySqlDataAdapter adp = new MySqlDataAdapter(Command, this.SqlConnectionObject);
+                MySqlDataAdapter adp = new MySqlDataAdapter(command, this.SqlConnectionObject);
                 DataSet ds = new DataSet();
                 adp.Fill(ds);
 
@@ -82,16 +82,16 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public DataSet GetDataSet(string Command, nameValuePairs NameValuePairObject)
+        public DataSet GetDataSet(string command, nameValuePairs nameValuePairObject)
         {
             try
             {
-                MySqlCommand cmd = new MySqlCommand(Command);
+                MySqlCommand cmd = new MySqlCommand(command);
                 GetConnection(this.SqlConnectionObject);
                 cmd.Connection = this.SqlConnectionObject;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Clear();
-                foreach (nameValuePair objList in NameValuePairObject)
+                foreach (nameValuePair objList in nameValuePairObject)
                 {
                     cmd.Parameters.Add(createSqlParameter(objList.getName, objList.getValue));
                 }
@@ -111,21 +111,22 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public int InsertUpdateDeleteReturnInt(string Command, nameValuePairs NameValuePairObject)
+        public int InsertUpdateDeleteReturnInt(string command, nameValuePairs nameValuePairObject)
         {
-            MySqlCommand cmdObject = new MySqlCommand(Command);
+            MySqlCommand cmdObject = new MySqlCommand(command);
             GetConnection(this.SqlConnectionObject);
             cmdObject.Connection = this.SqlConnectionObject;
             cmdObject.CommandType = CommandType;
             cmdObject.Parameters.Clear();
 
-            foreach (nameValuePair objList in NameValuePairObject)
+            foreach (nameValuePair objList in nameValuePairObject)
             {
                 cmdObject.Parameters.Add(createSqlParameter(objList.getName, objList.getValue));
             }
             try
             {
-                return Convert.ToInt32(cmdObject.ExecuteScalar());
+                cmdObject.ExecuteScalar();
+                return 1;//Convert.ToInt32();
             }
             catch (Exception exp)
             {
@@ -137,10 +138,10 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public DataTable InsertUpdateDeleteReturnData(string Command, nameValuePairs NameValuePairObject)
+        public DataTable InsertUpdateDeleteReturnData(string command, nameValuePairs nameValuePairObject)
         {
             GetConnection(this.SqlConnectionObject);
-            MySqlCommand cmdObject = new MySqlCommand(Command)
+            MySqlCommand cmdObject = new MySqlCommand(command)
             {
                 Connection = this.SqlConnectionObject,
                 CommandType = CommandType
@@ -148,7 +149,7 @@ namespace DataAccess.MySQL.Net
             cmdObject.Parameters.Clear();
             MySqlDataReader sdrObj;
 
-            foreach (nameValuePair objList in NameValuePairObject)
+            foreach (nameValuePair objList in nameValuePairObject)
             {
                 cmdObject.Parameters.Add(createSqlParameter(objList.getName, objList.getValue));
             }

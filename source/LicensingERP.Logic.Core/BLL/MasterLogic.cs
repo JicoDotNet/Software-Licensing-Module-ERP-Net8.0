@@ -1,10 +1,10 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -14,7 +14,7 @@ namespace LicensingERP.Logic.BLL
 
         public Master Get()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs();
             nameValuePairs.Add(new nameValuePair("p_QueryType", "COUNT"));

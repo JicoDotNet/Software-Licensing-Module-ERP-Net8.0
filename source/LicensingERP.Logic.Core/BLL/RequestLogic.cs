@@ -2,12 +2,12 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -17,7 +17,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(Request request)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nvp = new nameValuePairs
             {
                 new nameValuePair("p_Id", 0),
@@ -50,7 +50,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<Request> GetRequests(int UserId, int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -64,7 +64,7 @@ namespace LicensingERP.Logic.BLL
 
         public Request GetRequest(int RequestId, int UserId, int UserTypeId, bool idAdmin = false)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -107,7 +107,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Claim(int RequestId, int UserId, int UserTypeId,bool IsAdmin = false )
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             if (IsAdmin) {
                 nameValuePairs nameValuePairs = new nameValuePairs
@@ -137,7 +137,7 @@ namespace LicensingERP.Logic.BLL
 
         public bool ClaimUserExits(int RequestId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs1 = new nameValuePairs
                         {
                             new nameValuePair("p_RequestId",RequestId),
@@ -157,7 +157,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<RequestStatus> GetRequests(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -171,7 +171,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<FollowUp> GetFollowUpList()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -182,7 +182,7 @@ namespace LicensingERP.Logic.BLL
 
         public int InsertFollowUp(FollowUp followUp)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -197,7 +197,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<Request> AdminRequisitionList()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {      
                 new nameValuePair("p_RequestId",0),
@@ -208,7 +208,7 @@ namespace LicensingERP.Logic.BLL
 
         public RequisitionClaim GetRequisitionClaimDetails(int RequisitionId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_RequestId",RequisitionId),

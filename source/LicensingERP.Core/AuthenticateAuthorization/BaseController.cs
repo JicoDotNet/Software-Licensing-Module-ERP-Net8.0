@@ -7,6 +7,7 @@ using System;
 //using System.Net.Http;
 using System.Net;
 using System.IO;
+using LicensingERP.Logic.DTO.SP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -14,14 +15,14 @@ namespace Microsoft.AspNetCore.Mvc
 {
     public abstract class BaseController : Controller
     {
-        private object _ConnectionString;
+        private string _ConnectionString;
         ActionExecutingContext _filteringContext;
         ActionExecutedContext _filteredContext;
 
         public BaseController()
         {
             var Config = GetConfiguration();
-            _ConnectionString = (object)Config.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
+            _ConnectionString = Config.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
 
             Email email = new Email();
             email.Domain = Config.GetSection("Email").GetSection("Domain").Value;

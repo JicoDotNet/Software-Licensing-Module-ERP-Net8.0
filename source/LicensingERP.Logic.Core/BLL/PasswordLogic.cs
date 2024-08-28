@@ -1,12 +1,12 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -16,7 +16,7 @@ namespace LicensingERP.Logic.BLL
 
         public int InsertNewPassword(Password password, PasswordSecurity passwordSecurity)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -45,7 +45,7 @@ namespace LicensingERP.Logic.BLL
             password.Encrypt();
             #endregion
 
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -65,7 +65,7 @@ namespace LicensingERP.Logic.BLL
 
         public Password GetPassword(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nvp = new nameValuePairs
             {
                 new nameValuePair("p_UserId", UserId)
@@ -88,7 +88,7 @@ namespace LicensingERP.Logic.BLL
 
         public PasswordSecurity GetePasswordSecurityQuestions(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -101,7 +101,7 @@ namespace LicensingERP.Logic.BLL
 
         public int InsertPasswordResetRequest(string UserName)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -116,7 +116,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<PasswordResetRequest> GetResetRequests()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {

@@ -1,184 +1,65 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-  </PropertyGroup>
+	<PropertyGroup Label="Globals">
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>LicensingERP</RootNamespace>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>1.7.0</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RazorLangVersion>8.0</RazorLangVersion>
+		<RootNamespace>LicensingERP</RootNamespace>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Version>1.7.0</Version>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Areas\Report\Data\**" />
-    <Compile Remove="wwwroot\Theme\dist\css\alt\**" />
-    <Content Remove="Areas\Report\Data\**" />
-    <Content Remove="wwwroot\Theme\dist\css\alt\**" />
-    <EmbeddedResource Remove="Areas\Report\Data\**" />
-    <EmbeddedResource Remove="wwwroot\Theme\dist\css\alt\**" />
-    <None Remove="Areas\Report\Data\**" />
-    <None Remove="wwwroot\Theme\dist\css\alt\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Areas\Report\Data\**" />
+		<Content Remove="Areas\Report\Data\**" />
+		<EmbeddedResource Remove="Areas\Report\Data\**" />
+		<None Remove="Areas\Report\Data\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Controllers\TestController.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Controllers\TestController.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="wwwroot\Theme\loginForm\css\main.css" />
-    <None Remove="wwwroot\Theme\loginForm\css\util.css" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\css\font-awesome.css" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\css\font-awesome.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.eot" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\fonts\FontAwesome.otf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\animated.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\bordered-pulled.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\core.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\fixed-width.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\font-awesome.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\icons.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\larger.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\list.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\mixins.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\path.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\rotated-flipped.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\screen-reader.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\stacked.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\less\variables.less" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\font-awesome.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_animated.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_core.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_fixed-width.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_icons.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_larger.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_list.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_mixins.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_path.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_screen-reader.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_stacked.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\font-awesome-4.7.0\scss\_variables.scss" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\css\material-design-iconic-font.css" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\css\material-design-iconic-font.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\fonts\Material-Design-Iconic-Font.eot" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\fonts\Material-Design-Iconic-Font.svg" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\fonts\Material-Design-Iconic-Font.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\fonts\Material-Design-Iconic-Font.woff" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\iconic\fonts\Material-Design-Iconic-Font.woff2" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Black.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-BlackItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Bold.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-BoldItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-ExtraBold.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-ExtraBoldItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-ExtraLight.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-ExtraLightItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Italic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Light.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-LightItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Medium.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-MediumItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Regular.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-SemiBold.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-SemiBoldItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-Thin.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\fonts\poppins\Poppins-ThinItalic.ttf" />
-    <None Remove="wwwroot\Theme\loginForm\images\bg-01.jpg" />
-    <None Remove="wwwroot\Theme\loginForm\images\icons\favicon.ico" />
-    <None Remove="wwwroot\Theme\loginForm\js\main.js" />
-    <None Remove="wwwroot\Theme\loginForm\js\map-custom.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\animate\animate.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\animsition\css\animsition.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\animsition\css\animsition.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\animsition\js\animsition.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\animsition\js\animsition.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-grid.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-grid.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-grid.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-grid.min.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-reboot.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-reboot.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-reboot.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\css\bootstrap.min.css.map" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\js\bootstrap.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\js\bootstrap.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\js\popper.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\js\popper.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\bootstrap\js\tooltip.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\countdowntime\countdowntime.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\css-hamburgers\hamburgers.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\css-hamburgers\hamburgers.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\daterangepicker\daterangepicker.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\daterangepicker\daterangepicker.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\daterangepicker\moment.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\daterangepicker\moment.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\jquery\jquery-3.2.1.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\perfect-scrollbar\perfect-scrollbar.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\perfect-scrollbar\perfect-scrollbar.min.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\select2\select2.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\select2\select2.js" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\select2\select2.min.css" />
-    <None Remove="wwwroot\Theme\loginForm\vendor\select2\select2.min.js" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LicensingERP.Logic.Core\LicensingERP.Logic.Core.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LicensingERP.Logic.Core\LicensingERP.Logic.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Web">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Areas\Report\Views\MISUser\Activity.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Report\Views\MISUser\Login.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Report\Views\MISUser\UserReport.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Report\Views\MISUser\_PartialReportView.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\Report\Views\_ViewImports.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\_PartialMenu.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Update="Areas\Report\Views\MISUser\Activity.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+		<Content Update="Areas\Report\Views\MISUser\Login.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+		<Content Update="Areas\Report\Views\MISUser\UserReport.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+		<Content Update="Areas\Report\Views\MISUser\_PartialReportView.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+		<Content Update="Areas\Report\Views\_ViewImports.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+		<Content Update="Views\Shared\_PartialMenu.cshtml">
+			<Pack>$(IncludeRazorContentInPack)</Pack>
+		</Content>
+	</ItemGroup>
 
 </Project>

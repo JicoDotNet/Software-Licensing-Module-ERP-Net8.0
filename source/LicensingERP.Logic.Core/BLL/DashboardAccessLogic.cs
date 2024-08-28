@@ -2,10 +2,10 @@
 using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -15,7 +15,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<DTO.Class.Dashboard> GetAccessPermission(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", "FORUSER"),
@@ -31,7 +31,7 @@ namespace LicensingERP.Logic.BLL
         }
         public DTO.Class.Dashboard DashboardList(int Id)
         {
-            MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType","ONE"),

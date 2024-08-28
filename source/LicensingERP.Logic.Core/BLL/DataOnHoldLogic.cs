@@ -1,13 +1,13 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -22,7 +22,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(DataOnHold<T> dataOnHold)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -48,7 +48,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Approve(DataOnHold<T> dataOnHold)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -74,7 +74,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Decline(DataOnHold<T> dataOnHold)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -100,7 +100,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<DataOnHold<T>> GetPendingDatas(int UserId, int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -118,7 +118,7 @@ namespace LicensingERP.Logic.BLL
         }
         public DataOnHold<T> GetPendingData(int UserId, int UserTypeId, int Id)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {

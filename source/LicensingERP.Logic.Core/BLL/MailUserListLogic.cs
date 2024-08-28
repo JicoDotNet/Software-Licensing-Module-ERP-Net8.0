@@ -1,11 +1,11 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -16,7 +16,7 @@ namespace LicensingERP.Logic.BLL
         public List<User> MailUserRequisition(int UserType)
         {
             
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_UserType",UserType ),

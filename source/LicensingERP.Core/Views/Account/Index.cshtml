@@ -40,7 +40,7 @@
     @{
         ReturnObject returnObject = TempData.Get<ReturnObject>("ReturnMessage");
     }
-    
+
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
@@ -52,49 +52,49 @@
 
                 @using (Html.BeginForm("Index", "Account", FormMethod.Post, new { autocomplete = "off", @class = "login100-form validate-form" }))
                 {
-                    <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
-                        <span class="label-input100">Username</span>
-                        <input class="input100" type="text" autofocus name="UserName" placeholder="Enter username">
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
-                        <span class="label-input100">Password</span>
-                        <input class="input100" type="password"  name="PasswordText" placeholder="Enter password">
-                        <div id="message"></div>
-                        <span class="focus-input100"></span>
-                    </div>
-
-                    <div class="flex-sb-m p-b-10">
-                        <div class="contact100-form-checkbox">
-                            <a href="@Url.Action("ForgotPassword","Account")" class="txt1">
-                                Forgot Password?
-                            </a>
+                        <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                            <span class="label-input100">Username</span>
+                            <input class="input100" type="text" autofocus name="UserName" placeholder="Enter username">
+                            <span class="focus-input100"></span>
                         </div>
-                    </div>
-                    <div class="p-b-10">
+
+                        <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                            <span class="label-input100">Password</span>
+                            <input class="input100" type="password"  name="PasswordText" placeholder="Enter password">
+                            <div id="message"></div>
+                            <span class="focus-input100"></span>
+                        </div>
+
+                        <div class="flex-sb-m p-b-10">
+                            <div class="contact100-form-checkbox">
+                                <a href="@Url.Action("ForgotPassword","Account")" class="txt1">
+                                    Forgot Password?
+                                </a>
+                            </div>
+                        </div>
+                        <div class="p-b-10">
                         @if (returnObject != null)
                         {
 
                             if (returnObject.Status)
                             {
-                                <span><small class='text-success'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
+                                            <span><small class='text-success'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
                             }
                             else
                             {
-                                <span><small class='text-danger'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
+                                            <span><small class='text-danger'><strong>@Html.Raw(returnObject.Message)</strong></small></span>
                             }
                         }
 
-                    </div>
-                    
-                    <div class="container-login100-form-btn">
-                        <button class="login100-form-btn">
-                            Login
-                        </button>
-                        
+                        </div>
 
-                    </div>
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn">
+                                Login
+                            </button>
+
+
+                        </div>
                 }
             </div>
         </div>

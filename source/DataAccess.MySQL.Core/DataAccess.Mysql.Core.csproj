@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>DataAccess.Mysql.Net</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>DataAccess.MySql</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="6.10.7" />
+    <PackageReference Include="MySql.Data" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

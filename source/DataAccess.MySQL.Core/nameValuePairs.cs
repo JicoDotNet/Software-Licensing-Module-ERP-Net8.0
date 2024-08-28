@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataAccess.MySQL.Net
+namespace DataAccess.MySql
 {
     public class nameValuePairs : List<nameValuePair>
     {

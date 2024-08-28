@@ -1,5 +1,6 @@
 ﻿using LicensingERP.Logic.DTO.Class;
-using DataAccess.MySQL.Net;
+using LicensingERP.Logic.DTO.SP;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.Common
 {
@@ -10,6 +11,6 @@ namespace LicensingERP.Logic.Common
             CommonObj = sCommonDtoObj;
         }
         protected sCommonDto CommonObj { get; private set; }
-        protected MySqlDBAccess mySqlDBAccess;
+        protected MySqlDbAccess mySqlDBAccess;
     }
 }

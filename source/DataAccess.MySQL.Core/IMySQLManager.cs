@@ -1,12 +1,12 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
+using MySql.Data.MySqlClient;
 
-namespace DataAccess.MySQL.Net
+namespace DataAccess.MySql
 {
-    public interface IMySQLManager: IDisposable
+    public interface IMySqlManager: IDisposable
     {
         MySqlConnection SqlConnectionObject { get; }
-        void CloseConnection(MySqlConnection Connection);
+        void CloseConnection(MySqlConnection connection);
         void DisposeConnection();
         void CloseConnection();
     }

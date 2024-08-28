@@ -2,14 +2,14 @@
 using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace DataAccess.MySQL.Net
+namespace DataAccess.MySql
 {
-    public abstract class MySQLManager : IMySQLManager
+    public abstract class MySqlManager : IMySqlManager
     {
         public MySqlConnection SqlConnectionObject { get; private set; }
         public ConnectionState SqlConnectionState { get { return SqlConnectionObject.State; } }
 
-        private MySQLManager()
+        private MySqlManager()
         {
             SqlConnectionObject = null;
         }
@@ -37,22 +37,25 @@ namespace DataAccess.MySQL.Net
         //    }
         //}
 
-        public MySQLManager(object ConnectionString)
+        protected MySqlManager(string connectionString)
         {
-            if (string.IsNullOrEmpty(ConnectionString.ToString()))
+            if (string.IsNullOrEmpty(connectionString.ToString()))
             {
-                throw new ArgumentNullException("ConnectionString", "Connection String Key Name can't be empty");
+                throw new ArgumentNullException(nameof(connectionString), "Connection String Key Name can't be empty");
             }
             try
             {
-                SqlConnectionObject = new MySqlConnection(ConnectionString.ToString());
+                SqlConnectionObject = new MySqlConnection(connectionString);
                 //GetConnection();
             }
             catch (Exception ex)
             {
                 GC.Collect();
-                SqlConnectionObject.Close();
-                SqlConnectionObject.Dispose();
+                if (SqlConnectionObject != null)
+                {
+                    SqlConnectionObject.Close();
+                    SqlConnectionObject.Dispose();
+                }
             }
         }
 
@@ -83,25 +86,25 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public void GetConnection(MySqlConnection Connection)
+        public void GetConnection(MySqlConnection connection)
         {
             try
             {
-                if (Connection.State == ConnectionState.Open ||
-                    Connection.State == ConnectionState.Broken ||
-                    Connection.State == ConnectionState.Connecting)
+                if (connection.State == ConnectionState.Open ||
+                    connection.State == ConnectionState.Broken ||
+                    connection.State == ConnectionState.Connecting)
                 {
-                    Connection.Close();
-                    Connection.Open();
+                    connection.Close();
+                    connection.Open();
                 }
-                else if (Connection.State == ConnectionState.Closed)
+                else if (connection.State == ConnectionState.Closed)
                 {
-                    Connection.Open();
+                    connection.Open();
                 }
                 else
                 {
-                    Connection.Close();
-                    Connection.Open();
+                    connection.Close();
+                    connection.Open();
                 }
             }
             catch (Exception ex)
@@ -120,12 +123,12 @@ namespace DataAccess.MySQL.Net
             }
         }
 
-        public void CloseConnection(MySqlConnection Connection)
+        public void CloseConnection(MySqlConnection connection)
         {
-            if (Connection != null)
+            if (connection != null)
             {
-                Connection.Close();
-                Connection.Dispose();
+                connection.Close();
+                connection.Dispose();
             }            
         }
 
@@ -139,7 +142,7 @@ namespace DataAccess.MySQL.Net
             CloseConnection();
         }
 
-        ~MySQLManager()
+        ~MySqlManager()
         {
             //CloseConnection();
             GC.Collect();

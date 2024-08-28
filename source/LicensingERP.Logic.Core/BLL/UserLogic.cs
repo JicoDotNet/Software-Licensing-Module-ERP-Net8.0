@@ -2,13 +2,13 @@
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
 using LicensingERP.Logic.Encryption;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
@@ -18,7 +18,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Insert(User user, Password password)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -51,7 +51,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Update(User user)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -74,7 +74,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Deactivate(int UserId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {
@@ -97,7 +97,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<User> GetUsers()
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -112,7 +112,7 @@ namespace LicensingERP.Logic.BLL
 
         public List<User> GetUsers(int UserTypeId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -127,7 +127,7 @@ namespace LicensingERP.Logic.BLL
 
         public User GetUser(int UserId)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -142,7 +142,7 @@ namespace LicensingERP.Logic.BLL
         
         public User GetUser(string UserName)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
 
             nameValuePairs nameValuePairs = new nameValuePairs
             {
@@ -157,7 +157,7 @@ namespace LicensingERP.Logic.BLL
 
         public int Delete(int UserId)
         {
-            MySqlDBAccess DAobj = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+            MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
 
             nameValuePairs nvp = new nameValuePairs
             {

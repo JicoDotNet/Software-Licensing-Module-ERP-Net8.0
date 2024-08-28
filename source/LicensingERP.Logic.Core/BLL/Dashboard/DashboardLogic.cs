@@ -1,11 +1,11 @@
 ﻿using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.SP;
-using DataAccess.MySQL.Net;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL.Dashboard
 {
@@ -15,7 +15,7 @@ namespace LicensingERP.Logic.BLL.Dashboard
 
         protected DataSet GetDashboardValue(DashboardParam dashboardParam)
         {
-            mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
+            mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString, System.Data.CommandType.StoredProcedure);
             nameValuePairs nameValuePairs = new nameValuePairs
             {
                 new nameValuePair("p_QueryType", dashboardParam.p_QueryType),
