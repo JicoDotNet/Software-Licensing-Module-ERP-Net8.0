@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LicensingERP.Core.Controllers
 {
+    [Area("Report")]
     [SessionAuthenticate]
     public class MISLicenseController : BaseController
     {

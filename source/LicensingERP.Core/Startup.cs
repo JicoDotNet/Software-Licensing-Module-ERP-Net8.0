@@ -158,14 +158,14 @@ namespace LicensingERP
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",                    
-                    pattern: "{controller=Home}/{action=Index}/{id?}/{id2?}");
-
                 endpoints.MapAreaControllerRoute(
                     name: "MyAreaReport",
                     areaName: "Report",
-                    pattern: "Report/{controller=Home}/{action=Index}/{id?}");                
+                    pattern: "Report/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",                    
+                    pattern: "{controller=Home}/{action=Index}/{id?}/{id2?}");                
             });
         }
     }

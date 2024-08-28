@@ -2103,6 +2103,13 @@ SELECT
 FROM tbl_dashboard
 WHERE IsActive = 1;
 
+ELSEIF p_QueryType = 'ONE' THEN
+SELECT
+  *
+FROM tbl_dashboard
+WHERE Id = p_Id 
+  AND IsActive = 1;
+
 ELSEIF p_QueryType = 'GROUPWISEUSER' THEN
 SELECT
   UserTypeName,
