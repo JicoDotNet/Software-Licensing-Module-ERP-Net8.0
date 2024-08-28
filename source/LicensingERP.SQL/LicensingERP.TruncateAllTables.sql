@@ -6,7 +6,7 @@ TRUNCATE TABLE tbl_license_parameter;
 TRUNCATE TABLE tbl_log_activity;
 TRUNCATE TABLE tbl_log_login;
 TRUNCATE TABLE tbl_mc_data_on_hold;
-TRUNCATE TABLE tbl_menu_group
+TRUNCATE TABLE tbl_menu_group;
 TRUNCATE TABLE tbl_menu_list;
 TRUNCATE TABLE tbl_parameters;
 TRUNCATE TABLE tbl_password;
