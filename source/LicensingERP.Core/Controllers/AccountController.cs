@@ -32,8 +32,6 @@ namespace LicensingERP.Controllers
             if(loginCredentials != null)
             {
                 List<MenuGroup> menuLists = new MenuAccessLogic(BllCommonLogic).GetMenuForUser(loginCredentials.UserTypeId);
-                //CacheManagement cacheManagement = new CacheManagement(this.HttpContext);
-                //cacheManagement.SetCache(menuLists, "Menu", 60);
 
                 SessionManagement.SetSession(this.HttpContext.Session, menuLists, "Menu");
                 SessionManagement.SetSession(this.HttpContext.Session, loginCredentials, "User");
@@ -52,12 +50,10 @@ namespace LicensingERP.Controllers
             }
             return RedirectToAction("Index");
         }
+
         [SessionAuthenticate]
         public ActionResult Menu()
         {
-            //CacheManagement cacheManagement = new CacheManagement(this.HttpContext);
-            //List<MenuGroup> menuLists = cacheManagement.GetCache<List<MenuGroup>>("Menu");
-
             List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(this.HttpContext.Session, "Menu");
             return PartialView("_PartialMenu", menuLists);
         }
@@ -67,10 +63,12 @@ namespace LicensingERP.Controllers
             AbandonSession();
             return RedirectToAction("Index", "Account", new { returnURL = returnURL });
         }
+
         public ActionResult ForgotPassword()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult ForgotPassword(IFormCollection formCollection)
         {
