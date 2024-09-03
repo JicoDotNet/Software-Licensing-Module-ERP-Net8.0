@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace LicensingERP.Logic.DTO.Class
 {
-   public class User: IUser, ILogin, ISession, IActivity, IIdentity, IStatus
+    /// <summary>
+    ///  tbl_user`
+    /// </summary>
+    public class User: IUser, ISession, IActivity, IIdentity, IStatus
     {
+        public int UserId { get; set; }
         public int UserTypeId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

@@ -149,8 +149,16 @@ namespace LicensingERP
                 });
             }
 
+            //app.UseHttpsRedirection();
+
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.SameAsRequest
+            });
+
             app.UseResponseCaching();
             app.UseSession();
 

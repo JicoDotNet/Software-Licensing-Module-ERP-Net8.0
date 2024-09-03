@@ -3,8 +3,6 @@
 @{
     List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => !a.IsReport).ToList();
     List<MenuGroup> menuListsForReport = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => a.IsReport).ToList();
-    //MenuGroup menuGroup = SessionManagement.GetSession<MenuGroup>(HttpContextAccessor.HttpContext.Session, "ActiveMenu");
-    //menuGroup = (menuGroup != null) ? menuGroup : new MenuGroup();
 }
 
 <nav class="mt-2">

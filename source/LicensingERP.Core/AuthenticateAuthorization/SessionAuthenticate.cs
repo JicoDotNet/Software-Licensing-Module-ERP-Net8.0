@@ -32,7 +32,8 @@ namespace Microsoft.AspNetCore.Mvc
                 if (filterContext.HttpContext.Session != null)
                 {
                     //Login Session Check
-                    if (SessionManagement.GetSession<LoginCredentials>(filterContext.HttpContext.Session, _SessionKey) != null)
+                    //if (SessionManagement.GetSession<AuthticateCredential>(filterContext.HttpContext.Session, _SessionKey) != null)
+                    if (filterContext.HttpContext.CookieAvailable<AuthticateCredential>(_SessionKey))
                     {
                         base.OnActionExecuting(filterContext);
                     }

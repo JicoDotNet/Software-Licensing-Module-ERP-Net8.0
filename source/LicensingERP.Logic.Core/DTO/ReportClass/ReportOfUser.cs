@@ -7,6 +7,7 @@ namespace LicensingERP.Logic.DTO.ReportClass
 {
     public class ReportOfUser : IUser,IUserType
     {
+        public int UserId { get; set; }
         public int UserTypeId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

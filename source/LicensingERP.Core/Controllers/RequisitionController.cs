@@ -582,7 +582,7 @@ namespace LicensingERP.Core.Controllers
 
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
-                fu.FollowUpDoneBy = SessionPerson.Email;
+                //fu.FollowUpDoneBy = SessionPerson.Email;
 
                 RequestLogic logic = new RequestLogic(BllCommonLogic);
                 int flag = logic.InsertFollowUp(fu);
@@ -617,7 +617,7 @@ namespace LicensingERP.Core.Controllers
                
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
-                fu.FollowUpDoneBy = SessionPerson.Email;
+                //fu.FollowUpDoneBy = SessionPerson.Email;
 
                 RequestLogic logic = new RequestLogic(BllCommonLogic);
                 int flag = logic.InsertFollowUp(fu);

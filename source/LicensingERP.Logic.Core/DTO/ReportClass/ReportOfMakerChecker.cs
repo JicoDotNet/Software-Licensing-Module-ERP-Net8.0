@@ -7,6 +7,10 @@ namespace LicensingERP.Logic.DTO.ReportClass
 {
     public class ReportOfMakerChecker : IDataOnHold, IUser,IActivity, ISession, IStatus,IUserType
     {
+        public string UserName { get; set; }
+
+
+        public int UserId { get; set; }
         public string CaseType { get; set; }
         public string Purpose { get; set; }
         public string EffectedData { get; set; }

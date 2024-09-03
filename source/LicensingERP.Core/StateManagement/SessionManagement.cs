@@ -115,7 +115,7 @@ namespace LicensingERP.StateManagement
     [Session(SessionTimeOut = 86400, SessionCookieless = false)]
     public static class CookieManagement
     {
-        public static bool Set<T>(this HttpContext context, T cookieObject, string cookieKey) where T : new()
+        public static bool SetCookie<T>(this HttpContext context, T cookieObject, string cookieKey) where T : new()
         {
             if (context != null)
             {
@@ -132,7 +132,7 @@ namespace LicensingERP.StateManagement
             return false;
         }
 
-        public static T Get<T>(this HttpContext context, string cookieKey) where T : new()
+        public static T GetCookie<T>(this HttpContext context, string cookieKey) where T : new()
         {
             if (context != null)
             {
@@ -144,7 +144,19 @@ namespace LicensingERP.StateManagement
             return default;
         }
 
-        public static bool Delete(this HttpContext context, string cookieKey)
+        public static bool CookieAvailable<T>(this HttpContext context, string cookieKey) where T : new()
+        {
+            if (context != null)
+            {
+                if (context.Request.Cookies[cookieKey] != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool DeleteCookie(this HttpContext context, string cookieKey)
         {
             if (context != null)
             {
@@ -154,7 +166,7 @@ namespace LicensingERP.StateManagement
             return false;
         }
 
-        public static bool Delete(this HttpContext context)
+        public static bool DeleteCookie(this HttpContext context)
         {
             if (context != null)
             {

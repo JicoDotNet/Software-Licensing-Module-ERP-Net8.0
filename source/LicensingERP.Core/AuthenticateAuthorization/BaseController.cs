@@ -15,9 +15,21 @@ namespace Microsoft.AspNetCore.Mvc
 {
     public abstract class BaseController : Controller
     {
+        //--- Property
+        public string controller { get; set; }
+        public string action { get; set; }
+        public string id { get; set; }
+        public string id2 { get; set; }
+
+        public AuthticateCredential SessionPerson { get; private set; }
+        public string SessionID { get; private set; }
+
+        public ReturnObject ReturnMessage { get; set; }
+        public sCommonDto BllCommonLogic { get; private set; }
+
         private string _ConnectionString;
-        ActionExecutingContext _filteringContext;
-        ActionExecutedContext _filteredContext;
+        private ActionExecutingContext _filteringContext;
+        private ActionExecutedContext _filteredContext;
 
         public BaseController()
         {
@@ -59,9 +71,10 @@ namespace Microsoft.AspNetCore.Mvc
                 };
                 SessionPerson = null;
                 
-                if (SessionManagement.SessionAvailable<LoginCredentials>(filterContext.HttpContext.Session, "User"))
+                if (filterContext.HttpContext.CookieAvailable<AuthticateCredential>("User"))
                 {
-                    SessionPerson = SessionManagement.GetSession<LoginCredentials>(filterContext.HttpContext.Session, "User");
+                    //SessionPerson = SessionManagement.GetSession<AuthticateCredential>(filterContext.HttpContext.Session, "User");
+                    SessionPerson = filterContext.HttpContext.GetCookie<AuthticateCredential>("User");
                 }
 
                 ReturnMessage = SessionManagement.GetSession<ReturnObject>(filterContext.HttpContext.Session, "ReturnMessage");
@@ -129,8 +142,8 @@ namespace Microsoft.AspNetCore.Mvc
             _filteredContext = filterContext;
             #endregion
 
-            TempData.Put<ReturnObject>("ReturnMessage", ReturnMessage);
-            TempData.Put<LoginCredentials>("SessionPerson", SessionPerson);
+            TempData.Put("ReturnMessage", ReturnMessage);
+            TempData.Put("SessionPerson", SessionPerson);
             if(ReturnMessage != null)
                 SessionManagement.SetSession(filterContext.HttpContext.Session, ReturnMessage, "ReturnMessage");
             base.OnActionExecuted(filterContext);
@@ -168,68 +181,6 @@ namespace Microsoft.AspNetCore.Mvc
 
             //return context.Request.ServerVariables["REMOTE_ADDR"];
             return "LOCAL";
-        }
-        
-        //[DllImport("Iphlpapi.dll")]
-        //private static extern int SendARP(Int32 dest, Int32 host, ref Int64 mac, ref Int32 length);
-        //[DllImport("Ws2_32.dll")]
-        //private static extern Int32 inet_addr(string ip);
-        //public string GetClientMac(HttpContextBase context)
-        //{
-        //    try
-        //    {
-        //        string userip = context.Request.UserHostAddress;
-        //        string strClientIP = context.Request.UserHostAddress.ToString().Trim();
-        //        Int32 ldest = inet_addr(strClientIP);
-        //        Int32 lhost = inet_addr("");
-        //        Int64 macinfo = new Int64();
-        //        Int32 len = 6;
-        //        int res = SendARP(ldest, 0, ref macinfo, ref len);
-        //        string mac_src = macinfo.ToString("X");
-        //        if (mac_src == "0")
-        //        {
-        //            return null;
-        //        }
-
-        //        while (mac_src.Length < 12)
-        //        {
-        //            mac_src = mac_src.Insert(0, "0");
-        //        }
-
-        //        string mac_dest = "";
-
-        //        for (int i = 0; i < 11; i++)
-        //        {
-        //            if (0 == (i % 2))
-        //            {
-        //                if (i == 10)
-        //                {
-        //                    mac_dest = mac_dest.Insert(0, mac_src.Substring(i, 2));
-        //                }
-        //                else
-        //                {
-        //                    mac_dest = "-" + mac_dest.Insert(0, mac_src.Substring(i, 2));
-        //                }
-        //            }
-        //        }
-        //        return mac_dest;
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return err.Message;
-        //    }
-        //}
-
-        //--- Property
-        public string controller { get; set; }
-        public string action { get; set; }
-        public string id { get; set; }
-        public string id2 { get; set; }
-
-        public LoginCredentials SessionPerson { get; private set; }
-        public string SessionID { get; private set; }
-
-        public ReturnObject ReturnMessage { get; set; }
-        public sCommonDto BllCommonLogic { get; private set; }
+        }        
     }
 }
