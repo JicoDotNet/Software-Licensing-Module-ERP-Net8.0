@@ -35,7 +35,10 @@ namespace LicensingERP.Controllers
 
                 SessionManagement.SetSession(this.HttpContext.Session, menuLists, "Menu");
                 SessionManagement.SetSession(this.HttpContext.Session, loginCredentials, "User");
-                if(!loginCredentials.IsChangeable)
+
+                HttpContext.Set(loginCredentials, "User");
+
+                if (!loginCredentials.IsChangeable)
                     return RedirectToAction("Index", "Home");
                 else
                     return RedirectToAction("ResetPassword", "Profile");
