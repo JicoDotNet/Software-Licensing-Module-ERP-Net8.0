@@ -10,6 +10,7 @@ using System.IO;
 using LicensingERP.Logic.DTO.SP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Mvc
 {
@@ -149,7 +150,8 @@ namespace Microsoft.AspNetCore.Mvc
         public void AbandonSession()
         {
             _filteringContext.HttpContext.Session.Clear();
-            _filteringContext.HttpContext.Session.Remove("User");
+            _filteringContext.HttpContext.DeleteCookie("User");
+            _filteringContext.HttpContext.RemoveSession<List<MenuGroup>>("Menu");
             
             if (_filteringContext.HttpContext.Request.Cookies["ASP.NET_SessionId"] != null)
             {
