@@ -32,12 +32,10 @@ namespace Microsoft.AspNetCore.Mvc
                         { "controller", "Home" },
                         { "returnUrl", filterContext.HttpContext.Request.Path.Value }
                     };
-            ////object mc = filterContext.HttpContext.RequestServices.GetService(filterContext.HttpContext.RequestServices);
-            //CacheManagement cacheManagement = new CacheManagement(filterContext.HttpContext. .RequestServices.GetService<IMemoryCache>());
-            //List<MenuGroup> menuLists = cacheManagement.GetCache<List<MenuGroup>>("Menu");
-            List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(filterContext.HttpContext.Session, "Menu");
 
-            if (menuLists == null)
+            List<MenuGroup> menuGroupLists = filterContext.HttpContext.GetCookie<List<MenuGroup>>("Menu");
+
+            if (menuGroupLists == null)
             {
                 ReturnObject returnObject = new ReturnObject()
                 {
@@ -49,7 +47,7 @@ namespace Microsoft.AspNetCore.Mvc
                             new RedirectToRouteResult(LogoutRouteObj);
                 return;
             }
-            else if (menuLists.Where(a => a.Controller == controller && a.ActionResult == action).FirstOrDefault() == null)
+            else if (menuGroupLists.Where(a => a.Controller == controller && a.ActionResult == action).FirstOrDefault() == null)
             {
                 ReturnObject returnObject = new ReturnObject()
                 {

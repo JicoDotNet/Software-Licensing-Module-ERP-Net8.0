@@ -11,6 +11,5 @@ namespace LicensingERP.Logic.DTO.Interface
         int Id { get; set; }
         string Icon { get; set; }
         string DisplayText { get; set; }
-        bool IsDisplayable { get; set; }
     }
 }

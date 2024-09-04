@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using LicensingERP.Logic.Encryption;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
@@ -112,17 +113,17 @@ namespace LicensingERP.StateManagement
         }
     }
 
-    [Session(SessionTimeOut = 86400, SessionCookieless = false)]
     public static class CookieManagement
     {
         public static bool SetCookie<T>(this HttpContext context, T cookieObject, string cookieKey) where T : new()
         {
-            if (context != null)
+            if (context != null && cookieObject != null)
             {
-                context.Response.Cookies.Append(cookieKey, JsonConvert.SerializeObject(cookieObject),
+                context.Response.Cookies.Append(cookieKey, 
+                    new CryptoEngine().Encrypt(JsonConvert.SerializeObject(cookieObject)),
                     new CookieOptions
                     {
-                        Expires = DateTimeOffset.UtcNow.AddSeconds(86400),
+                        Expires = GenericLogic.IstNow.AddDays(6),
                         HttpOnly = true,
                         Secure = true,
                         SameSite = SameSiteMode.Strict
@@ -137,8 +138,8 @@ namespace LicensingERP.StateManagement
             if (context != null)
             {
                 if (context.Request.Cookies.TryGetValue(cookieKey, out string cookieValue))
-                {
-                    return JsonConvert.DeserializeObject<T>(cookieValue);
+                {                    
+                    return JsonConvert.DeserializeObject<T>(new CryptoEngine().Decrypt(cookieValue));
                 }
             }
             return default;

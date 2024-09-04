@@ -1,8 +1,7 @@
 ﻿@using LicensingERP.Logic.DTO.Class
 @using LicensingERP.StateManagement;
 @{
-    List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => !a.IsReport).ToList();
-    List<MenuGroup> menuListsForReport = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu").Where(a => a.IsReport).ToList();
+    List<MenuGroup> menuGroupLists = HttpContextAccessor.HttpContext.GetCookie<List<MenuGroup>>("Menu");
 }
 
 <nav class="mt-2">
@@ -24,9 +23,9 @@
                 </p>
             </a>
         </li>
-        @if (menuLists != null)
+        @if (menuGroupLists != null)
         {
-            foreach (MenuGroup MG in menuLists)
+            foreach (MenuGroup MG in menuGroupLists)
             {
                 @if (MG.menuLists != null && MG.menuLists.Count > 0)
                 {
@@ -42,39 +41,17 @@
                             @foreach (MenuList menuList in MG.menuLists)
                             {
                                 if (menuList.IsDisplayable)
-                                {
-                                    <li class="nav-item has-treeview menu-open">
-                                        @*<a href="@Url.Action(menuList.ActionResult, menuList.Controller, new { area = (menuList.IsReport) ? "Area" : "" })" class="nav-link">
-                                            <i class="nav-icon @menuList.Icon"></i>
-                                            <p>
-                                                @menuList.DisplayText
-                                            </p>
-                                        </a>*@
-                                        <a asp-area="@((menuList.IsReport) ? "Report" : "")" asp-controller="@menuList.Controller" asp-action="@menuList.ActionResult" asp-route-id="" class="nav-link">
-                                            <i class="nav-icon @menuList.Icon"></i>
-                                            <p>
-                                                @menuList.DisplayText
-                                            </p>
-                                        </a> 
-                                    </li>
-                                }
+                                <li class="nav-item has-treeview menu-open">
+                                    <a asp-area="@((menuList.IsReport) ? "Report" : "")" asp-controller="@menuList.Controller" asp-action="@menuList.ActionResult" asp-route-id="" class="nav-link">
+                                        <i class="nav-icon @menuList.Icon"></i>
+                                        <p>
+                                            @menuList.DisplayText
+                                        </p>
+                                    </a>
+                                </li>
                             }
                         </ul>
                     </li>
-                }
-                else
-                {
-                    if (MG.IsDisplayable)
-                    {
-                        <li class="nav-item">
-                            <a href="@Url.Action(MG.ActionResult,MG.Controller, new { area = (MG.IsReport) ? "Report" : ""})" class="nav-link">
-                                <i class="nav-icon @MG.Icon"></i>
-                                <p>
-                                    @MG.DisplayText
-                                </p>
-                            </a>
-                        </li>
-                    }
                 }
             }
         }

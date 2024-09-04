@@ -42,9 +42,9 @@ namespace LicensingERP.Controllers
                     Email = loginCredentials.Email,
                 };
 
-                SessionManagement.SetSession(this.HttpContext.Session, menuLists, "Menu");
-                //SessionManagement.SetSession(this.HttpContext.Session, credential, "User");
                 this.HttpContext.SetCookie(credential, "User");
+                this.HttpContext.SetCookie(menuLists, "Menu");
+                
 
                 if (!loginCredentials.IsChangeable)
                     TempData["Url"] = Url.Action("Index", "Home");

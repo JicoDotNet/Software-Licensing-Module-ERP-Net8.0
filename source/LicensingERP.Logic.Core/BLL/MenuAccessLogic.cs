@@ -105,20 +105,20 @@ namespace LicensingERP.Logic.BLL
             };
 
             DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetMenuForUser, NameValuePairs);
-            List<MenuGroup> AccessMenuList = dataSet.Tables[0].ToList<MenuGroup>();
+            List<MenuList> AccessMenuList = dataSet.Tables[0].ToList<MenuList>();
             List<MenuGroup> AllmenuGroups = dataSet.Tables[1].ToList<MenuGroup>();
 
             foreach (MenuGroup mg in AllmenuGroups)
             {
-                mg.menuLists = AccessMenuList.Where(a => a.MenuGroupId == mg.Id).ToList<MenuList>();
+                mg.menuLists = AccessMenuList.Where(a => a.MenuGroupId == mg.Id).ToList();
             }
 
-            AllmenuGroups.RemoveAll(a => a.menuLists.Count < 1 && string.IsNullOrEmpty(a.Controller));
-            AccessMenuList = AccessMenuList.Where(a => a.MenuGroupId == 0).ToList();
-            foreach (MenuGroup mg in AccessMenuList)
-            {
-                AllmenuGroups.Add(mg);
-            }
+            AllmenuGroups.RemoveAll(a => a.menuLists.Count < 1);
+            //AccessMenuList = AccessMenuList.Where(a => a.MenuGroupId == 0).ToList();
+            //foreach (MenuList mg in AccessMenuList)
+            //{
+            //    AllmenuGroups.Add(mg);
+            //}
 
             return AllmenuGroups;
         }

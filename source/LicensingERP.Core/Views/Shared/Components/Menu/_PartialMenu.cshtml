@@ -3,7 +3,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @model List<MenuGroup>
 @{
-    List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "Menu");
+    List<MenuGroup> menuLists = HttpContextAccessor.HttpContext.GetCookie<List<MenuGroup>>("Menu");
 }
 
 <nav class="mt-2">
