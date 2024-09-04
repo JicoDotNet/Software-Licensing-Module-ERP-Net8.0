@@ -1,4 +1,4 @@
-﻿using LicensingERP.Logic.BLL.Log;
+﻿using LicensingERP.Logic.BLL.Audit;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.Model.Class;
 using LicensingERP.StateManagement;
@@ -87,7 +87,7 @@ namespace Microsoft.AspNetCore.Mvc
                         //|| filterContext.HttpContext.Request.Url.AbsoluteUri.Contains("azure"));
                 if (_ApplicableLog)
                 {
-                    Logger LogObj = new Logger(BllCommonLogic)
+                    LoggerLogic LogObj = new LoggerLogic(BllCommonLogic)
                     {
                         IPAddress = HttpContext.Connection.RemoteIpAddress.ToString(),
                         DNS = Dns.GetHostName().ToString(),
