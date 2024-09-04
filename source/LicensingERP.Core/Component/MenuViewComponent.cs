@@ -12,7 +12,7 @@ namespace LicensingERP.Component
     {
         public IViewComponentResult Invoke()
         {
-            List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(this.HttpContext.Session, "Menu");
+            List<MenuGroup> menuLists = this.HttpContext.GetSession<List<MenuGroup>>("Menu");
             return View("_PartialMenu", menuLists);
         }
     }

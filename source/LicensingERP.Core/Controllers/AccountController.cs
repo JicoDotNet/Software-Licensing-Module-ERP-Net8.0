@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace LicensingERP.Controllers
 {
@@ -43,8 +41,7 @@ namespace LicensingERP.Controllers
                 };
 
                 this.HttpContext.SetCookie(credential, "User");
-                this.HttpContext.SetCookie(menuLists, "Menu");
-                
+                this.HttpContext.SetSession(menuLists, "Menu");
 
                 if (!loginCredentials.IsChangeable)
                     TempData["Url"] = Url.Action("Index", "Home");
@@ -78,7 +75,7 @@ namespace LicensingERP.Controllers
         [SessionAuthenticate]
         public ActionResult Menu()
         {
-            List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(this.HttpContext.Session, "Menu");
+            List<MenuGroup> menuLists = this.HttpContext.GetSession<List<MenuGroup>>("Menu");
             return PartialView("_PartialMenu", menuLists);
         }
 

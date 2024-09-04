@@ -1,5 +1,5 @@
 ﻿@{
-    SessionManagement.RemoveSession<List<MenuGroup>>(HttpContextAccessor.HttpContext.Session, "ReturnMessage");
+    HttpContextAccessor.HttpContext.RemoveSession<List<MenuGroup>>("ReturnMessage");
 }
 <!DOCTYPE html>
 <html lang="en">

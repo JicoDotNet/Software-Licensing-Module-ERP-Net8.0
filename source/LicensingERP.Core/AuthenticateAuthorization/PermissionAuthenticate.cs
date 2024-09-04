@@ -33,35 +33,37 @@ namespace Microsoft.AspNetCore.Mvc
                         { "returnUrl", filterContext.HttpContext.Request.Path.Value }
                     };
 
-            List<MenuGroup> menuGroupLists = filterContext.HttpContext.GetCookie<List<MenuGroup>>("Menu");
+            List<MenuGroup> menuGroupLists = filterContext.HttpContext.GetSession<List<MenuGroup>>("Menu");
 
-            if (menuGroupLists == null)
+            bool permissionGranted = false;
+
+            if (menuGroupLists != null && menuGroupLists.Count > 0)
             {
-                ReturnObject returnObject = new ReturnObject()
+                foreach (MenuGroup menuGroup in menuGroupLists)
                 {
-                    Status = false,
-                    Message ="You are no authorised to access this scope!"
-                };
-                ((Controller)filterContext.Controller).TempData.Add("ReturnMessage", returnObject);
-                filterContext.Result =
-                            new RedirectToRouteResult(LogoutRouteObj);
-                return;
+                    if (menuGroup.menuLists?.FirstOrDefault(a => a.Controller == controller && a.ActionResult == action) != null)
+                    {
+                        permissionGranted = true;
+                        break;
+                    }
+                }
             }
-            else if (menuGroupLists.Where(a => a.Controller == controller && a.ActionResult == action).FirstOrDefault() == null)
+
+            if (permissionGranted)
             {
-                ReturnObject returnObject = new ReturnObject()
-                {
-                    Status = false,
-                    Message = "You are no authorised to access this scope!"
-                };
-                ((Controller)filterContext.Controller).TempData.Add("ReturnMessage", returnObject);
-                filterContext.Result =
-                            new RedirectToRouteResult(LogoutRouteObj);
-                return;
+                base.OnActionExecuting(filterContext);
             }
             else
             {
-                base.OnActionExecuting(filterContext);
+                ReturnObject returnObject = new ReturnObject()
+                {
+                    Status = false,
+                    Message = "You are unuthorised to access this scope!"
+                };
+                ((Controller)filterContext.Controller).TempData.Add("ReturnMessage", returnObject);
+                filterContext.Result =
+                            new RedirectToRouteResult(LogoutRouteObj);
+                return;
             }
         }
     }

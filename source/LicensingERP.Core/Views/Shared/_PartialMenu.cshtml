@@ -1,7 +1,7 @@
 ﻿@using LicensingERP.Logic.DTO.Class
 @using LicensingERP.StateManagement;
 @{
-    List<MenuGroup> menuGroupLists = HttpContextAccessor.HttpContext.GetCookie<List<MenuGroup>>("Menu");
+    List<MenuGroup> menuGroupLists = HttpContextAccessor.HttpContext.GetSession<List<MenuGroup>>("Menu");
 }
 
 <nav class="mt-2">
@@ -40,7 +40,6 @@
                         <ul class="nav nav-treeview">
                             @foreach (MenuList menuList in MG.menuLists)
                             {
-                                if (menuList.IsDisplayable)
                                 <li class="nav-item has-treeview menu-open">
                                     <a asp-area="@((menuList.IsReport) ? "Report" : "")" asp-controller="@menuList.Controller" asp-action="@menuList.ActionResult" asp-route-id="" class="nav-link">
                                         <i class="nav-icon @menuList.Icon"></i>

@@ -77,8 +77,8 @@ namespace Microsoft.AspNetCore.Mvc
                     SessionPerson = filterContext.HttpContext.GetCookie<AuthticateCredential>("User");
                 }
 
-                ReturnMessage = SessionManagement.GetSession<ReturnObject>(filterContext.HttpContext.Session, "ReturnMessage");
-                SessionManagement.RemoveSession<ReturnObject>(filterContext.HttpContext.Session, "ReturnMessage");
+                ReturnMessage = filterContext.HttpContext.GetSession<ReturnObject>("ReturnMessage");
+                filterContext.HttpContext.RemoveSession<ReturnObject>("ReturnMessage");
 
                 #endregion
 
@@ -105,16 +105,6 @@ namespace Microsoft.AspNetCore.Mvc
                     };
                     LogObj.Set();
                 }
-                #endregion
-
-                #region Menu
-                //if (((SessionManagement.GetSession<List<MenuGroup>>(filterContext.HttpContext.Session, "Menu") != null)?
-                //    SessionManagement.GetSession<List<MenuGroup>>(filterContext.HttpContext.Session, "Menu")
-                //    .Where(a => a.Controller == this.controller && a.ActionResult == this.action).Where(a => a.IsDisplayable).Count(): -1) > 0)
-                //{
-                //    MenuGroup activeMenu = new MenuGroup { Controller = this.controller, ActionResult = this.action };
-                //    SessionManagement.SetSession(filterContext.HttpContext.Session, activeMenu, "ActiveMenu");
-                //}                
                 #endregion
 
                 #region View Bag for Rezor View
@@ -145,7 +135,7 @@ namespace Microsoft.AspNetCore.Mvc
             TempData.Put("ReturnMessage", ReturnMessage);
             TempData.Put("SessionPerson", SessionPerson);
             if(ReturnMessage != null)
-                SessionManagement.SetSession(filterContext.HttpContext.Session, ReturnMessage, "ReturnMessage");
+                filterContext.HttpContext.SetSession(ReturnMessage, "ReturnMessage");
             base.OnActionExecuted(filterContext);
         }
 

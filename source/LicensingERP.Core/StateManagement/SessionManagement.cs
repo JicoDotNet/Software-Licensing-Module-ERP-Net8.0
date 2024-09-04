@@ -1,29 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using LicensingERP.Logic.Encryption;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 
 namespace LicensingERP.StateManagement
 {
-    public class SessionAttribute : Attribute
+    public static class SessionManagement
     {
-        public int SessionTimeOut { get; set; }
-        public bool SessionCookieless { get; set; }
-    }
-
-    [Session(SessionTimeOut = 60, SessionCookieless = false)]
-    public class SessionManagement : ISessionManagement
-    {
-        public static ISession SetSession<T>(ISession session, T SessionObject, string SessionKey = null) where T : new()
+        public static void SetSession<T>(this HttpContext context, T SessionObject, string SessionKey = null) where T : new()
         {
             try
             {
-                session.SetString(GetSessionKey<T>(SessionKey), JsonConvert.SerializeObject(SessionObject));
-                return session;
+                context.Session.SetString(GetSessionKey<T>(SessionKey), JsonConvert.SerializeObject(SessionObject));
             }
             catch (Exception)
             {
@@ -31,13 +18,13 @@ namespace LicensingERP.StateManagement
             }
         }
 
-        public static T GetSession<T>(ISession session, string SessionKey = null) where T : new()
+        public static T GetSession<T>(this HttpContext context, string SessionKey = null) where T : new()
         {
             try
             {
-                if (SessionAvailable<T>(session, SessionKey))
+                if (SessionAvailable<T>(context, SessionKey))
                 {
-                    var data = session.GetString(GetSessionKey<T>(SessionKey));
+                    var data = context.Session.GetString(GetSessionKey<T>(SessionKey));
                     if (data == null)
                     {
                         return default;
@@ -52,15 +39,14 @@ namespace LicensingERP.StateManagement
             }
         }
 
-        public static ISession RemoveSession<T>(ISession session, string SessionKey = null) where T : new()
+        public static void RemoveSession<T>(this HttpContext context, string SessionKey = null) where T : new()
         {
             try
             {
-                if (SessionAvailable<T>(session, SessionKey))
+                if (SessionAvailable<T>(context, SessionKey))
                 {
-                    session.Remove(GetSessionKey<T>(SessionKey));
+                    context.Session.Remove(GetSessionKey<T>(SessionKey));
                 }
-                return session;
             }
             catch (Exception)
             {
@@ -68,11 +54,11 @@ namespace LicensingERP.StateManagement
             }
         }
 
-        public static bool SessionAvailable<T>(ISession session, string SessionKey = null) where T : new()
+        public static bool SessionAvailable<T>(this HttpContext context, string SessionKey) where T : new()
         {
             try
             {
-                if (session.GetString(SessionKey) == null)
+                if (context.Session.GetString(SessionKey) == null)
                     return false;
                 else
                     return true;
@@ -83,11 +69,11 @@ namespace LicensingERP.StateManagement
             }
         }
 
-        public static bool SessionAvailable(ISession session)
+        public static bool SessionAvailable(this HttpContext context)
         {
             try
             {
-                if (!session.IsAvailable)
+                if (!context.Session.IsAvailable)
                     return false;
                 else
                     return true;
@@ -104,81 +90,6 @@ namespace LicensingERP.StateManagement
                 return new T().GetType().Name + "Session";
             else
                 return SessionKey;
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            GC.Collect();
-        }
-    }
-
-    public static class CookieManagement
-    {
-        public static bool SetCookie<T>(this HttpContext context, T cookieObject, string cookieKey) where T : new()
-        {
-            if (context != null && cookieObject != null)
-            {
-                context.Response.Cookies.Append(cookieKey, 
-                    new CryptoEngine().Encrypt(JsonConvert.SerializeObject(cookieObject)),
-                    new CookieOptions
-                    {
-                        Expires = GenericLogic.IstNow.AddDays(6),
-                        HttpOnly = true,
-                        Secure = true,
-                        SameSite = SameSiteMode.Strict
-                    });
-                return true;
-            }
-            return false;
-        }
-
-        public static T GetCookie<T>(this HttpContext context, string cookieKey) where T : new()
-        {
-            if (context != null)
-            {
-                if (context.Request.Cookies.TryGetValue(cookieKey, out string cookieValue))
-                {                    
-                    return JsonConvert.DeserializeObject<T>(new CryptoEngine().Decrypt(cookieValue));
-                }
-            }
-            return default;
-        }
-
-        public static bool CookieAvailable<T>(this HttpContext context, string cookieKey) where T : new()
-        {
-            if (context != null)
-            {
-                if (context.Request.Cookies[cookieKey] != null)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool DeleteCookie(this HttpContext context, string cookieKey)
-        {
-            if (context != null)
-            {
-                context.Response.Cookies.Delete(cookieKey);
-                return true;
-            }
-            return false;
-        }
-
-        public static bool DeleteCookie(this HttpContext context)
-        {
-            if (context != null)
-            {
-                IRequestCookieCollection cookies = context.Request.Cookies;
-                foreach (KeyValuePair<string, string> cookie in cookies)
-                {
-                    context.Response.Cookies.Delete(cookie.Key);
-                }
-                return true;
-            }
-            return false;
         }
     }
 }

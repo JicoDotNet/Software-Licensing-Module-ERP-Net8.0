@@ -110,7 +110,7 @@ namespace LicensingERP
             services.AddSession(options =>
             {
                 options.Cookie.Name = "ASP.NET_SessionId";
-                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.IdleTimeout = TimeSpan.FromDays(6);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });

@@ -176,11 +176,7 @@
                             <th>Display Text</th>
                             <th>Icon</th>
                             <th>Controller</th>
-                            <th>Actionresult</th>
-                            <th>Query String</th>
-                            <th>HTTP Type</th>
-                            <th>Status</th>
-                            <th>Is Displayable</th>
+                            <th>Action</th>
                             <th>Is For Admin</th>
                             <th>Is For Workflow?</th>
                             <th>Description</th>
@@ -194,28 +190,6 @@
                             <td>@ML.Icon</td>
                             <td>@ML.Controller</td>
                             <td>@ML.ActionResult</td>
-                            <td>@ML.QueryString</td>
-                            <td>@ML.HttpType</td>
-                            <td>
-                                @if (ML.IsActive)
-                                {
-                                    <span class="right badge badge-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="right badge badge-danger">Inactive</span>
-                                }
-                            </td>
-                            <td>
-                                @if (ML.IsDisplayable)
-                                {
-                                    <span class="right badge badge-success">Yes</span>
-                                }
-                                else
-                                {
-                                    <span class="right badge badge-danger">No</span>
-                                }
-                            </td>
                             <td>
                                 @if (ML.IsForAdmin)
                                 {
