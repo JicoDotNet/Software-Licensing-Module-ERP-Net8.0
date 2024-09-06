@@ -11,15 +11,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace LicensingERP.Controllers
 {
-    public class EmailController : Controller
+    public class EmailController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-
-        //[HttpPost]
         public IActionResult Index(Email email)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);

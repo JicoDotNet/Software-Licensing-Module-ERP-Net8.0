@@ -14,7 +14,7 @@ namespace LicensingERP.Core.Controllers
 {
     [Area("Report")]
     [SessionAuthenticate]
-    public class MISLicenseController : BaseController
+    public class MISLicenseController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public IActionResult Requests()
         {

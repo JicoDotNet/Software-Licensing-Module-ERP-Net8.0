@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 namespace LicensingERP.Core.Controllers
 {
     [SessionAuthenticate]
-    public class CheckerController : BaseController
+    public class CheckerController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public IActionResult Index()
         {

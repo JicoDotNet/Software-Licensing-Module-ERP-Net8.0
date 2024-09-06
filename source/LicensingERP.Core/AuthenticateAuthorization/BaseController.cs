@@ -17,6 +17,8 @@ namespace Microsoft.AspNetCore.Mvc
     public abstract class BaseController : Controller
     {
         //--- Property
+        private readonly IAppSettingsService _appSettingsService;
+
         public string controller { get; set; }
         public string action { get; set; }
         public string id { get; set; }
@@ -32,19 +34,15 @@ namespace Microsoft.AspNetCore.Mvc
         private ActionExecutingContext _filteringContext;
         private ActionExecutedContext _filteredContext;
 
-        public BaseController()
+        public BaseController(IAppSettingsService appSettingsService)
         {
-            var Config = GetConfiguration();
-            _ConnectionString = Config.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
+            _appSettingsService = appSettingsService;
+
+            _ConnectionString = _appSettingsService.GetSetting("ConnectionStrings.MySqlConnection");
 
             Email email = new Email();
-            email.Domain = Config.GetSection("Email").GetSection("Domain").Value;
-        }
-        private IConfigurationRoot GetConfiguration()
-        {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);
-            return builder.Build();
-        }        
+            email.Domain = _appSettingsService.GetSetting("Email.SMTP");
+        }     
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

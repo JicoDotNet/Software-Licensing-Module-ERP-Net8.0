@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace LicensingERP.Controllers
 {
     [SessionAuthenticate]
-    public class ProfileController : BaseController
+    public class ProfileController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Profile
         public ActionResult Index()

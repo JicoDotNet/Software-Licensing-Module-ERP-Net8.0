@@ -11,7 +11,7 @@ using System.Web;
 namespace LicensingERP.Controllers
 {
     [SessionAuthenticate]
-    public class HomeController : BaseController
+    public class HomeController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Home
         public ActionResult Index()

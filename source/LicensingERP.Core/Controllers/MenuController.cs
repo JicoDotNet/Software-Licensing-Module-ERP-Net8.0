@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace LicensingERP.Controllers
 {
-    public class MenuController : BaseController
+    public class MenuController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Menu
         public ActionResult Index()

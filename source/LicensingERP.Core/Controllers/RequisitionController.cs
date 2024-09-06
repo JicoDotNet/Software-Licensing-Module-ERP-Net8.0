@@ -19,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 namespace LicensingERP.Core.Controllers
 {
     [SessionAuthenticate]
-    public class RequisitionController : BaseController
+    public class RequisitionController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public ActionResult Index()
         {

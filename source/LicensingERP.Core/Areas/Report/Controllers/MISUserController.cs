@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using LicensingERP.Logic.BLL;
 using LicensingERP.Logic.BLL.Report;
 using LicensingERP.Logic.DTO.Class;
@@ -12,7 +10,7 @@ namespace LicensingERP.Core.Areas.Report.Controllers
 {
     [Area("Report")]
     [SessionAuthenticate]
-    public class MISUserController : BaseController
+    public class MISUserController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public ActionResult UserReport()
         {

@@ -12,7 +12,7 @@ using System.Web;
 namespace LicensingERP.Controllers
 {
     [SessionAuthenticate]
-    public class WorkflowController : BaseController
+    public class WorkflowController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Workflow
         public ActionResult Index()

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace LicensingERP.Controllers
 {
-    public class AccountController : BaseController
+    public class AccountController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public IActionResult Index()
         {
