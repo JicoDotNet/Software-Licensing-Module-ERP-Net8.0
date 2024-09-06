@@ -19,19 +19,28 @@ using Microsoft.Extensions.Configuration;
 namespace LicensingERP.Core.Controllers
 {
     [SessionAuthenticate]
-    public class RequisitionController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
+    public class RequisitionController : BaseController
     {
-        public ActionResult Index()
+        private readonly IRequestRestrictMetaValueService _restrictMetaValueService;
+
+        public RequisitionController(
+            IAppSettingsService appSettingsService,
+            IRequestRestrictMetaValueService restrictMetaValueService) : base(appSettingsService)
+        {
+            _restrictMetaValueService = restrictMetaValueService;
+        }
+
+        public IActionResult Index()
         {
             if(id == null)
             {
-                // RequestLogic requestLogic = new RequestLogic(BllCommonLogic);
                 LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(BllCommonLogic);
                 ClientLogic clientLogic = new ClientLogic(BllCommonLogic);
                 ProductLogic productLogic = new ProductLogic(BllCommonLogic);
                 UserLogic ULogic = new UserLogic(BllCommonLogic);
                 _LicencetypeClientProduct _licencetypeClientProduct = new _LicencetypeClientProduct
                 {
+                    restrictMetaData = _restrictMetaValueService.GetRestrictMetaValues(),
                     licenceType = licenceTypeLogic.GetLicenceType(),
                     client = clientLogic.GetClients(),
                     product = productLogic.GetProuct(),
@@ -55,10 +64,24 @@ namespace LicensingERP.Core.Controllers
                 };
 
                 return View(_licencetypeClientProduct);
-
-                //return View();
             }
            
+        }
+
+        public PartialViewResult BindRestrictMetaData(int noOfLicence = 1)
+        {
+            RequestRestrictsMeta requestRestrictMetas = _restrictMetaValueService.GetRestrictMetaValues();
+            IList<RequestRestrictsMeta> requestRestrictMet = new List<RequestRestrictsMeta>();
+            for (int i = 0; i < noOfLicence; i++)
+            {
+                requestRestrictMet.Add(requestRestrictMetas);
+            }
+            return PartialView("_PartialRestrictMetaData", requestRestrictMet);
+        }
+
+        public JsonResult GetRestrictMetaData()
+        {
+            return Json(_restrictMetaValueService.GetRestrictMetaValues());
         }
 
         //[HttpPost]
@@ -516,19 +539,20 @@ namespace LicensingERP.Core.Controllers
                
         }
 
-        [HttpPost]
-        public PartialViewResult GetCompareList([FromBody] Request request)
-        {
-            if (request != null)
-            {
-                return PartialView("_PartialCompare", new LicenceCompareLogic(BllCommonLogic).CompareLicenceGet(request.ClientId, request.LicenceTypeId));
-            }
-            else
-            {
-                return null;
-            }
+        //[HttpPost]
+        //public PartialViewResult GetCompareList([FromBody] Request request)
+        //{
+        //    if (request != null)
+        //    {
+        //        return PartialView("_PartialCompare", new LicenceCompareLogic(BllCommonLogic).CompareLicenceGet(request.ClientId, request.LicenceTypeId));
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
            
-        }
+        //}
+
         [HttpGet]
         public ActionResult DisplayCompareLicence()
         {

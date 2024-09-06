@@ -111,6 +111,8 @@ namespace LicensingERP
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IAppSettingsService, AppSettingsService>();
+            services.AddScoped<IRequestRestrictMetaValueService, RequestRestrictMetaValueService>();
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -128,6 +130,10 @@ namespace LicensingERP
             services.AddResponseCaching();
             services.AddMemoryCache();
             services.AddControllersWithViews();
+                //.AddJsonOptions(options =>
+                //{
+                //    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //}); 
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = true;
