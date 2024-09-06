@@ -84,7 +84,7 @@ INSERT INTO tbl_s_state(Name, IsPositive, IsNegative, IsHold, SessionId, IsActiv
 ('OnHold', False, False, True, 'DEVELOPER', False, NOW());
 
 INSERT INTO tbl_user (UserTypeId, FullName, UserName, Email, Mobile, Address, Designation, IsActive, SessionId, TransactionDate) 
-VALUES  (1, 'Company Admin', 'admin', 'admin@admin.com',  '9999999999', 'Kolkata, India', null, 1, 'DEVELOPER', NOW());
+VALUES  (1, 'Company Admin', 'admin', 'admin@admin.com',  '9999999999', 'Bangalore, India', null, 1, 'DEVELOPER', NOW());
 
 
 INSERT INTO tbl_usermenu (MenuId, UserId, UserTypeId, IsActive, SessionId, TransactionDate)

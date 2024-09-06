@@ -15,6 +15,7 @@ using LicensingERP.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace LicensingERP.Core.Controllers
 {
@@ -149,8 +150,9 @@ namespace LicensingERP.Core.Controllers
         }
 
         [HttpPost]
-        public JsonResult SubmitRequest([FromBody] Request request)
+        public JsonResult SubmitRequest([FromBody] object requestObject)
         {
+            Request request = JsonConvert.DeserializeObject<Request>(requestObject.ToString());
             request.ToDateObject();
             request.UserId = SessionPerson.UserId;
             request.UserTypeId = SessionPerson.UserTypeId;
@@ -221,8 +223,7 @@ namespace LicensingERP.Core.Controllers
                     RequisitionClaim requisition = new RequestLogic(BllCommonLogic).GetRequisitionClaimDetails(Convert.ToInt32(id));
                    // SessionPerson.BUsertypeId = requisition.NextUserTypeId;
                     return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), requisition.ClaimUserId, requisition.NextUserTypeId,true));
-                }
-                    
+                }                    
             }
             else
             {
@@ -231,7 +232,6 @@ namespace LicensingERP.Core.Controllers
                 else
                     return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), SessionPerson.UserId, SessionPerson.UserTypeId));
             }
-
         }
 
         public ActionResult Status()
@@ -239,7 +239,7 @@ namespace LicensingERP.Core.Controllers
             return View(new RequestLogic(BllCommonLogic).GetRequests(SessionPerson.UserId));
         }
 
-        public ActionResult Download()
+        public FileResult Download()
         {
             XmlDownload xmlDownload = new XmlDownload(BllCommonLogic);
             Request request = xmlDownload.GetDownloadData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
@@ -284,35 +284,35 @@ namespace LicensingERP.Core.Controllers
                 #region Symmetric Cryptography
 
                 doc.Save(ms);
-                //string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                byte[] toEncryptArray = ms.ToArray();
-               // string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                string SecretKey = "$1234%&Key%Glob%"; // this is common key in java and .net
-                                                  //string SecretKey = "$1234%&Key%Glob%";
+                string toEncryptArray = Convert.ToBase64String(ms.ToArray());
+                //// byte[] toEncryptArray = ms.ToArray();
+                ////// string toEncryptArray = Convert.ToBase64String(ms.ToArray());
+                //// string SecretKey = "$1234%&Key%Glob%"; // this is common key in java and .net
+                ////                                   //string SecretKey = "$1234%&Key%Glob%";
 
-                //string SecretKey = "$1234%&Key%";
-                byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
+                //// //string SecretKey = "$1234%&Key%";
+                //// byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
 
-                // string inputAsString = Encrypt(toEncryptArray, SecretKey);
-                //string inputAsString = Convert.ToBase64String(Encrypt(toEncryptArray, GetRijndaelManaged(SecretKey)));
+                //// // string inputAsString = Encrypt(toEncryptArray, SecretKey);
+                //// //string inputAsString = Convert.ToBase64String(Encrypt(toEncryptArray, GetRijndaelManaged(SecretKey)));
 
-                #region Deprecated .. Not matching with Java Program
-                RijndaelManaged myRijndael = new RijndaelManaged();
+                //// #region Deprecated .. Not matching with Java Program
+                //// RijndaelManaged myRijndael = new RijndaelManaged();
 
-                myRijndael.Key = keyArray;
-                myRijndael.Mode = CipherMode.ECB;
+                //// myRijndael.Key = keyArray;
+                //// myRijndael.Mode = CipherMode.ECB;
 
-                myRijndael.Padding = PaddingMode.PKCS7;
-                // better lang support
-                ICryptoTransform cTransform = myRijndael.CreateEncryptor();
-                byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                //// myRijndael.Padding = PaddingMode.PKCS7;
+                //// // better lang support
+                //// ICryptoTransform cTransform = myRijndael.CreateEncryptor();
+                //// byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
-                string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
-                ms = new MemoryStream();
-                #endregion
-                ms = new MemoryStream();
+                //// string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
+                //// ms = new MemoryStream();
+                //// #endregion
+                //// ms = new MemoryStream();
                 StreamWriter writer = new StreamWriter(ms);
-                writer.Write(inputAsString);
+                writer.Write(toEncryptArray);
                 writer.Flush();
                 ms.Position = 0;
                 return File(ms, "text/xml", request.RequestNo + "-" + id2 + ".lic");
