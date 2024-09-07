@@ -35,7 +35,6 @@ namespace LicensingERP.Controllers
         public ActionResult Index(Client client)
         {
             client.CompanyAddress = client.CompanyAddress.Trim();
-            ClientLogic clientlg = new ClientLogic(BllCommonLogic);
             int flag = 0;
             if (string.IsNullOrEmpty(id))
             {
@@ -79,8 +78,6 @@ namespace LicensingERP.Controllers
                 #region
                 //  clientlg.Insert(client);
                 #endregion
-                
-
             }
             else
             {

@@ -10,11 +10,13 @@ using LicensingERP.Logic.DTO.SP;
 
 namespace LicensingERP.Logic.DTO.Class
 {
-    public class DataOnHold<T> : IDataOnHold, ISession, IActivity, IIdentity, IStatus
+    public class DataOnHold<T> : IDataOnHold, ISession, IActivity, IIdentity, IStatus where T : class
     {
-        public DataOnHold(){}
+        private sCommonDto _BllCommonLogic { get; }
+
+        public DataOnHold() { }
         public DataOnHold(sCommonDto CommonObj) { _BllCommonLogic = CommonObj; }
-        private sCommonDto _BllCommonLogic { get; set; }
+        
 
         public string CaseType { get; set; }
         public eDataOnHoldCaseType eCaseType { get; set; }
@@ -61,7 +63,7 @@ namespace LicensingERP.Logic.DTO.Class
             this.Purpose = this.ePurpose.ToString();
             this.CaseType = this.eCaseType.ToString();
             this.EffectedData = JsonConvert.SerializeObject(this.tEffectedData);
-            this.EffectedDataDisplay = DataDisplay();
+            this.EffectedDataDisplay = PrepareDataDisplay();
             this.OldDataDisplay = OldDisplay();
             return null;
         }
@@ -136,25 +138,25 @@ namespace LicensingERP.Logic.DTO.Class
             return default(T);
         }
 
-        private string DataDisplay()
+        private string PrepareDataDisplay()
         {
-            DataOnHold<T> dataOnHold = this;
-            switch (dataOnHold.eCaseType)
+            //DataOnHold<T> dataOnHold = this;
+            switch (this.eCaseType)
             {
                 case eDataOnHoldCaseType.UserGroup:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         // Where Joining Found, Get data By joining FROM DB, or return
                         // JsonConvert.SerializeObject(this.tEffectedData)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     }
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
                 case eDataOnHoldCaseType.User:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -163,7 +165,7 @@ namespace LicensingERP.Logic.DTO.Class
                         user.UserTypeName = usertype.UserTypeName;
                         return JsonConvert.SerializeObject(user);
                     }
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                         {
                             User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                             UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -172,7 +174,7 @@ namespace LicensingERP.Logic.DTO.Class
                             user.UserTypeName = usertype.UserTypeName;
                             return JsonConvert.SerializeObject(user);
                         }                        
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                     {
                         User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -183,7 +185,7 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.LicenseParameterLink:
-                        if(dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                        if(this.ePurpose == eDataOnHoldPurpose.Insert)
                         {
                           List<ParameterOfLicence> parameterOfLicences = JsonConvert.DeserializeObject<List<ParameterOfLicence>>(JsonConvert.SerializeObject(this.tEffectedData));
                           LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(_BllCommonLogic);
@@ -202,7 +204,7 @@ namespace LicensingERP.Logic.DTO.Class
                         }
                     break;
                 case eDataOnHoldCaseType.UserMenuPermission:
-                    if(dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if(this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         List<UserMenu> userMenus = JsonConvert.DeserializeObject<List<UserMenu>>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic userTypeLogic = new UserTypeLogic(_BllCommonLogic);
@@ -223,9 +225,8 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(userMenus);
                     }
                     break;
-
                 case eDataOnHoldCaseType.UserDashboardPermission:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         List<UserDashboard> userdashboard = JsonConvert.DeserializeObject<List<UserDashboard>>(JsonConvert.SerializeObject(this.tEffectedData));
                         DashboardAccessLogic dashboardAccessLogic = new DashboardAccessLogic(_BllCommonLogic);
@@ -244,35 +245,34 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.LicenseType:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
                 case eDataOnHoldCaseType.Client:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
-                        Client client = JsonConvert.DeserializeObject<Client>(JsonConvert.SerializeObject(this.tEffectedData));
+                        Client client = tEffectedData as Client;
+                        ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
+                        ClientCategory clientCategory = clientCategoryLogic.GetClientCategory(client.CategoryId);
+                        client.CategoryName = clientCategory.CategoryName;
+                        return JsonConvert.SerializeObject(client);
+                    }
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    {
+                        Client client = tEffectedData as Client;
                         ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
                         ClientCategory clientCategory = new ClientCategory();
                         clientCategory = clientCategoryLogic.GetClientCategory(client.CategoryId);
                         client.CategoryName = clientCategory.CategoryName;
                         return JsonConvert.SerializeObject(client);
                     }
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                     {
-                        Client client = JsonConvert.DeserializeObject<Client>(JsonConvert.SerializeObject(this.tEffectedData));
-                        ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
-                        ClientCategory clientCategory = new ClientCategory();
-                        clientCategory = clientCategoryLogic.GetClientCategory(client.CategoryId);
-                        client.CategoryName = clientCategory.CategoryName;
-                        return JsonConvert.SerializeObject(client);
-                    }
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                    {
-                        Client client = JsonConvert.DeserializeObject<Client>(JsonConvert.SerializeObject(this.tEffectedData));
+                        Client client = tEffectedData as Client;
                         ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
                         ClientCategory clientCategory = new ClientCategory();
                         clientCategory = clientCategoryLogic.GetClientCategory(client.CategoryId);
@@ -281,28 +281,28 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.ClientCategory:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
                 case eDataOnHoldCaseType.Parameter:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                         return JsonConvert.SerializeObject(parameter);
                     }                        
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                         return JsonConvert.SerializeObject(parameter);
                     }
                        
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
@@ -310,15 +310,15 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.Product:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eDataOnHoldPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
                 case eDataOnHoldCaseType.ProductFeatures:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         ProductFeatures productfeatures = JsonConvert.DeserializeObject<ProductFeatures>(JsonConvert.SerializeObject(this.tEffectedData));
                         ProductLogic productLogic = new ProductLogic(_BllCommonLogic);
@@ -328,7 +328,7 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.WFProcess:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         WfProcess wfprocess = JsonConvert.DeserializeObject<WfProcess>(JsonConvert.SerializeObject(this.tEffectedData));
                         LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(_BllCommonLogic);
@@ -338,7 +338,7 @@ namespace LicensingERP.Logic.DTO.Class
                     }
                     break;
                 case eDataOnHoldCaseType.WFAssign:
-                    if(dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                    if(this.ePurpose == eDataOnHoldPurpose.Insert)
                     {
                         WfProcessAssign wfProcessAssign = JsonConvert.DeserializeObject<WfProcessAssign>(JsonConvert.SerializeObject(this.tEffectedData));
                         //WfProcessLogic wfProcessLogic = new WfProcessLogic(_BllCommonLogic);

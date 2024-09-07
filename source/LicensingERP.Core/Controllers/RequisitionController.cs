@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using LicensingERP.Logic.BLL;
 using LicensingERP.Logic.Common;
 using LicensingERP.Logic.DTO.Class;
@@ -16,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace LicensingERP.Core.Controllers
 {
@@ -64,10 +59,8 @@ namespace LicensingERP.Core.Controllers
                     users = ULogic.GetUser(SessionPerson.UserId),
                     compareLList = new LicenceCompareLogic(BllCommonLogic).CompareLicenceDisplay(id)
                 };
-
                 return View(_licencetypeClientProduct);
             }
-
         }
 
         public PartialViewResult BindRestrictMetaData(int noOfLicence = 1)
@@ -112,7 +105,6 @@ namespace LicensingERP.Core.Controllers
         //    }
         //    return RedirectToAction("LicenseRequest", "Requisition", new { id = flag });
         //}
-
         //public ActionResult LicenseRequest()
         //{
         //    if (string.IsNullOrEmpty(id))
@@ -158,33 +150,29 @@ namespace LicensingERP.Core.Controllers
             request.UserId = SessionPerson.UserId;
             request.UserTypeId = SessionPerson.UserTypeId;
             request.RequestNo = GenericLogic.IstNow.TimeStamp().ToString("X");
-            //SessionPerson.
             RequestLogic requestLogic = new RequestLogic(BllCommonLogic);
             int result = requestLogic.Insert(request);
 
 
-            #region MAil Config
-            List<User> users = new MailUserListLogic(BllCommonLogic).MailUserRequisition(SessionPerson.UserTypeId);
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);
-            var Config = builder.Build();
+            #region Mail Config
+            //List<User> users = new MailUserListLogic(BllCommonLogic).MailUserRequisition(SessionPerson.UserTypeId);
+            //var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);
+            //var Config = builder.Build();
 
-            Email emailConfig = new Email();
+            //Email emailConfig = new Email();
 
-            emailConfig.Domain = Config.GetSection("Email").GetSection("Domain").Value;
-            emailConfig.Port = Int32.Parse(Config.GetSection("Email").GetSection("Port").Value);
-            emailConfig.UserName = Config.GetSection("Email").GetSection("UserName").Value;
-            emailConfig.Password = Config.GetSection("Email").GetSection("Password").Value;
-            emailConfig.FromEmail = Config.GetSection("Email").GetSection("FromEmail").Value;
+            //emailConfig.Domain = Config.GetSection("Email").GetSection("Domain").Value;
+            //emailConfig.Port = Int32.Parse(Config.GetSection("Email").GetSection("Port").Value);
+            //emailConfig.UserName = Config.GetSection("Email").GetSection("UserName").Value;
+            //emailConfig.Password = Config.GetSection("Email").GetSection("Password").Value;
+            //emailConfig.FromEmail = Config.GetSection("Email").GetSection("FromEmail").Value;
 
-            foreach (User user in users)
-            {
-                emailConfig.To = user.Email;
-                new Mailsending().SendMailToUser(emailConfig);
-            }
+            //foreach (User user in users)
+            //{
+            //    emailConfig.To = user.Email;
+            //    new Mailsending().SendMailToUser(emailConfig);
+            //}
             #endregion
-
-
-
 
             return Json(result);
         }
