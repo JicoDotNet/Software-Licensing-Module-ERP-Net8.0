@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.Class
 {
-    public class RequestStatus : Request, IRequestStatus
+    public class RequestStatus : RequisitionRequest, IRequestStatus
     {
         public bool? IsApproved { get; set; }
         public DateTime ApproveRejectDate { get; set; }

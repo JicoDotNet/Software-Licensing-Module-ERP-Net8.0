@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.Class
 {
-    public class FollowUp : Request, IUserType, ISession, IActivity, IStatus, IIdentity, IRequestClaim
+    public class FollowUp : RequisitionRequest, IUserType, ISession, IActivity, IStatus, IIdentity, IRequestClaim
     {
         public DateTime ClaimDate { get; set; }
         public DateTime AssignDate { get; set; }

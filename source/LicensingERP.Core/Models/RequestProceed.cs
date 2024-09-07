@@ -8,7 +8,7 @@ namespace LicensingERP.Models
 {
     public class RequestProceed
     {
-        public Request LicenseRequest { get; set; }
+        public RequisitionRequest LicenseRequest { get; set; }
         public List<WfState> WfStates { get; set; }
         public List<RequestAcknowledgement> RequestAcknowledgements { get; set; }
     }

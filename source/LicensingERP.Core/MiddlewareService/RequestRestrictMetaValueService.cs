@@ -36,6 +36,8 @@ public class RequestRestrictMetaValueService : IRequestRestrictMetaValueService
 
     public RequestRestrictsMeta GetRestrictMetaValues()
     {
+        foreach(RequestRestrictMeta requestRestrictMeta in _restrictMetaValues)
+            requestRestrictMeta.Name = requestRestrictMeta?.Name?.Trim().Replace(" ", "");
         return _restrictMetaValues;
     }
 }

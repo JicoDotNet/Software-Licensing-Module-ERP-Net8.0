@@ -45,7 +45,6 @@
 
     };
     $.fn.resetAutosize = function (options) {
-        // alert(JSON.stringify(options));
         var minWidth = $(this).data('minwidth') || options.minInputWidth || $(this).width(),
             maxWidth = $(this).data('maxwidth') || options.maxInputWidth || ($(this).closest('.tagsinput').width() - options.inputPadding),
             val = '',
@@ -54,7 +53,7 @@
                 position: 'absolute',
                 top: -9999,
                 left: -9999,
-                width: 'auto',
+                width: '100%',
                 fontSize: input.css('fontSize'),
                 fontFamily: input.css('fontFamily'),
                 fontWeight: input.css('fontWeight'),
@@ -70,7 +69,8 @@
         input.data('minwidth', minWidth);
         input.data('maxwidth', maxWidth);
         input.data('tester_id', testerId);
-        input.css('width', minWidth);
+        input.css('width', "100%");
+        input.css({ "background-color": "#e8e8e8"});
     };
 
     $.fn.addTag = function (value, options) {
@@ -251,6 +251,7 @@
 
                 $(data.holder).bind('click', data, function (event) {
                     $(event.data.fake_input).focus();
+                    $(event.data.fake_input).css({ "width": "100%" });
                 });
 
                 $(data.fake_input).bind('focus', data, function (event) {

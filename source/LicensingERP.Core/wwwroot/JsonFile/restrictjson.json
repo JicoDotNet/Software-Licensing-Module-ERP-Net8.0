@@ -6,32 +6,32 @@
   },
   {
     "Id": 1,
-    "Name": "Param 1",
+    "Name": "Restrict1",
     "IsActive": true
   },
   {
     "Id": 2,
-    "Name": "Param 2",
+    "Name": "Restrict2",
     "IsActive": true
   },
   {
     "Id": 3,
-    "Name": "Param 3",
+    "Name": "Restrict3",
     "IsActive": true
   },
   {
     "Id": 4,
-    "Name": "Param 4",
+    "Name": "Restrict4",
     "IsActive": true
   },
   {
     "Id": 5,
-    "Name": "Param 5",
+    "Name": "Restrict5",
     "IsActive": true
   },
   {
     "Id": 6,
-    "Name": "Param 6",
+    "Name": "Restrict6",
     "IsActive": true
   }
 ]

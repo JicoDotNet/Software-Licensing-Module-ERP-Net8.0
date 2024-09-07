@@ -138,9 +138,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="CompanyAddress">Company Address <span style="color:red">&#42;</span></label>
-                                        <textarea name="CompanyAddress" class="form-control" placeholder="Enter Company Address" required>
-                                         @if (Model.Client != null) { <text> @Model.Client.CompanyAddress </text>  }              
-                                                            </textarea>
+                                        <textarea name="CompanyAddress" class="form-control" placeholder="Enter Company Address" required>@if (Model.Client != null) { <text> @Model.Client.CompanyAddress </text>  }</textarea>
                                     </div>
                                 </div>
                             </div>

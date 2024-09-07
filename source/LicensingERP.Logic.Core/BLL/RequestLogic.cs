@@ -15,7 +15,7 @@ namespace LicensingERP.Logic.BLL
     {
         public RequestLogic(sCommonDto CommonObj) : base(CommonObj) { }
 
-        public int Insert(Request request)
+        public int Insert(RequisitionRequest request)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
             NameValuePairs nvp = new NameValuePairs
@@ -48,7 +48,7 @@ namespace LicensingERP.Logic.BLL
             return RequestId;
         }
 
-        public List<Request> GetRequests(int UserId, int UserTypeId)
+        public List<RequisitionRequest> GetRequests(int UserId, int UserTypeId)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -59,10 +59,10 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_UserId", UserId),
                 new NameValuePair("p_QueryType", "ALL")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, NameValuePairs).ToList<Request>();
+            return mySqlDBAccess.GetData(StoreProcedure.GetRequest, NameValuePairs).ToList<RequisitionRequest>();
         }
 
-        public Request GetRequest(int RequestId, int UserId, int UserTypeId, bool idAdmin = false)
+        public RequisitionRequest GetRequest(int RequestId, int UserId, int UserTypeId, bool idAdmin = false)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -74,7 +74,7 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_QueryType", "SINGLE")
             };
             DataSet dataSet = mySqlDBAccess.GetDataSet(StoreProcedure.GetRequest, NameValuePairs);
-            Request request = dataSet.Tables[0].ToList<Request>().FirstOrDefault();
+            RequisitionRequest request = dataSet.Tables[0].ToList<RequisitionRequest>().FirstOrDefault();
             request.RequestParameters = dataSet.Tables[1].ToList<RequestParameter>();
             request.RequestRestricts = dataSet.Tables[2].ToList<RequestRestrict>();
             request.RequestFeatures = dataSet.Tables[3].ToList<RequestFeature>();
@@ -195,7 +195,7 @@ namespace LicensingERP.Logic.BLL
             return mySqlDBAccess.InsertUpdateDeleteReturnInt(StoreProcedure.SetFollowUp, NameValuePairs);
         }
 
-        public List<Request> AdminRequisitionList()
+        public List<RequisitionRequest> AdminRequisitionList()
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
             NameValuePairs NameValuePairs = new NameValuePairs
@@ -203,7 +203,7 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_RequestId",0),
                 new NameValuePair("p_QueryType", "ONLYADMIN")
             };
-            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs).ToList<Request>();
+            return mySqlDBAccess.GetData(StoreProcedure.AdminRequisitionList, NameValuePairs).ToList<RequisitionRequest>();
         }
 
         public RequisitionClaim GetRequisitionClaimDetails(int RequisitionId)

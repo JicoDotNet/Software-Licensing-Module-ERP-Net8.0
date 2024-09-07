@@ -318,11 +318,11 @@
 @section BodyScript{
     <script type="text/javascript">
         function ShowData(e) {
+            debugger;
             $('#modal .modal-body').html(ModelBindWithJson($(e).data('bind')));
             $("#modal").modal({ backdrop: 'static', keyboard: false });
         }
         function ApproveData(e, Id) {
-
             $('#approve #tableJasonData').html(ModelBindWithJson($(e).data('bind')));
             $('#approve form').attr('action', ($('#approve form').attr('action') + '/' + Id));
             $("#approve").modal({ backdrop: 'static', keyboard: false });
@@ -334,6 +334,7 @@
         }
 
         function ModelBindWithJson(myObj) {
+            debugger;
             var txt = '';
             var i = 0;
             txt += "<table style='width: 100%;'><tr><th>Name</th><th>Value</th></tr>"
@@ -346,7 +347,6 @@
                     else
                         if (Array.isArray(myObj)) {
                             if ("Menu" in myObj[x]) {
-                                //console.log(myObj[x]);
                                 if (i == 1) {
                                     txt += "<tr><td>User Group Name</td><td>" + myObj[x].Usertype + "</td></tr>";
                                     txt += "<tr><td>Menu  Name</td><td>" + myObj[x].Menu + "</td></tr>";
@@ -376,8 +376,6 @@
 
                                 }
                             }
-                            
-                           
                         }
                         else {
                             if (myObj[x] != null)

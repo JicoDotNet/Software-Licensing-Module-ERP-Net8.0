@@ -42,45 +42,18 @@
                     @using (Html.BeginForm("Manage", "Form", new { id = ((Model.parameter != null) ? Model.parameter.Id.ToString() : "") }, FormMethod.Post, null, new { autocomplete = "off" }))
                     {
                         <div class="card-body">
-
-                            @*<div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="RequestName">License Type <span style="color:red">&#42;</span></label>
-                                            <select class="form-control select2" style="width: 100%;" name="RequestName" required>
-                                                <option value="" selected>-- Please Select--</option>
-                                                @foreach (LicenceType LT in Model.LicenceType)
-                                                {
-                                                    <option value="@LT.Id">@LT.TypeName</option>
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="ClientName">Client Name<span style="color:red">&#42;</span></label>
-                                            <select class="form-control select2" style="width: 100%;" name="ClientId" required>
-                                                <option value="" selected>-- Please Select--</option>
-                                                @foreach (Client CL in Model.Client)
-                                                {
-                                                    <option value="@CL.Id">@CL.ClientName</option>
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div><hr />*@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="FieldName">Parameter Name <span style="color:red">&#42;</span></label>
                                         <input type="text" name="FieldName"
                                                @if (Model.parameter != null) { <text> value="@Model.parameter.FieldName" </text> }
-                                               class="form-control" id="parameterid" placeholder="Enter Field Name" required>
+                                               class="form-control" id="parameterid" placeholder="Enter Field Name" required />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="Required">Required <span style="color:red">&#42;</span></label>
+                                        <label for="Required">Required/Optional Parameter <span style="color:red">&#42;</span></label>
                                         <select class="form-control" style="width: 100%;" name="IsRequired" required>
                                             <option selected value="">-- Please Select--</option>
                                             @if (Model.parameter != null)
@@ -106,7 +79,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="Datatype">Datatype <span style="color:red">&#42;</span></label>
+                                        <label for="Datatype">Datatype of Parameter <span style="color:red">&#42;</span></label>
                                         <select class="form-control" style="width: 100%;" name="DataType" onchange="return ListDataCall();" required>
                                             <option value="" selected>-- Please Select--</option>
                                             @foreach (eDataType p in Enum.GetValues(typeof(eDataType)))
@@ -182,23 +155,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Parameter p in Model.parameters)
+                                @foreach (Parameter param in Model.parameters)
                                 {
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-sm btn-primary" href="@Url.Action("Manage", "Form", new { id = p.Id })">
-                                            <i class="fas fa-pen pull-right"></i>
-                                            Edit
-                                        </a> /
-                                        <button onclick="Deactivate(@p.Id)" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt pull-right"></i> Deactivate
-                                        </button>
-                                    </td>
-                                    <td>@p.FieldName</td>
-                                    <td>@((p.IsRequired) ? "Yes" : "No")</td>
-                                    <td>@(EnumHelper<eDataType>.GetDisplayValue(((eDataType)Convert.ToInt32(p.DataType))))</td>
-                                    <td>@p.Fieldlength</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="@Url.Action("Manage", "Form", new { id = param.Id })">
+                                                <i class="fas fa-pen pull-right"></i>
+                                                Edit
+                                            </a> /
+                                            <button onclick="Deactivate(@param.Id)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt pull-right"></i> Deactivate
+                                            </button>
+                                        </td>
+                                        <td>@param.FieldName</td>
+                                        <td>@((param.IsRequired) ? "Yes" : "No")</td>
+                                        <td>@(EnumHelper<eDataType>.GetDisplayValue(((eDataType)Convert.ToInt32(param.DataType))))</td>
+                                        <td>@param.Fieldlength</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -211,19 +184,17 @@
 <div id="div_opn"></div>
 @section BodyScript{
     <script src="~/js/tagInput.js"></script>
-    <script>
+    <script type="text/javascript">
         $(document).ready(function () {
             $('#idTag').tagsInput({
                 width: 'auto',
                 height: '90px',
                 defaultText: 'Meta Data'
-            });
-            $("#idTag_tag").width('100%');
+            });            
             $("#parameterid").blur(function () {
                 var parameter = $("#parameterid").val();
                 var a = parameter.split(" ").join("");
                 document.getElementById("parameterid").value = a;
-                //alert(a);
             });
         });
         function ListDataCall() {
@@ -244,13 +215,7 @@
             }
 
         }
-
-        //function hidelist() {
-        //    $('#ListMetaData').hide();
-        //}
-        //hidelist();
-    </script>
-    <script type="text/javascript">
+    
         function Deactivate(id) {
             $("#div_opn").load("@Url.Action("Deactivate", "Form")/" + id);
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.Interface
 {
-    public interface IRequest
+    public interface IRequisitionRequest
     {
         int ClientId { get; set; }
         int LicenceTypeId { get; set; }

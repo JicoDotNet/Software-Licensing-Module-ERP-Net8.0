@@ -11,7 +11,7 @@ using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
-    public class DataOnHoldLogic<T> : ConnectionString
+    public class DataOnHoldLogic<T> : ConnectionString where T : class
     {
         T DataOnHoldDynamicObj;
 
@@ -110,7 +110,7 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_QueryType", "FORUSER")
             };
             List<DataOnHold<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<DataOnHold<T>>();
-            foreach(DataOnHold<T> dataOnHold in dataOnHolds)
+            foreach (DataOnHold<T> dataOnHold in dataOnHolds)
             {
                 dataOnHold.ToObject();
             }
@@ -130,7 +130,7 @@ namespace LicensingERP.Logic.BLL
             List<DataOnHold<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<DataOnHold<T>>();
             foreach (DataOnHold<T> dataOnHold in dataOnHolds)
             {
-                dataOnHold.ToObject();
+dataOnHold.ToObject();
             }
             return dataOnHolds.FirstOrDefault();
         }
