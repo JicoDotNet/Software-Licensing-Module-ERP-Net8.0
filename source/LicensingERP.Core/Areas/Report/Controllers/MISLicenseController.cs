@@ -73,7 +73,7 @@ namespace LicensingERP.Core.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult TAT([FromBody]Request request)
+        public PartialViewResult TAT([FromBody]RequisitionRequest request)
         {
             List<RequestStatus> global = new TurnAroundTimeLogic(BllCommonLogic).Calculate(request.RequestNo);
             return PartialView("_PartialTATView", global);

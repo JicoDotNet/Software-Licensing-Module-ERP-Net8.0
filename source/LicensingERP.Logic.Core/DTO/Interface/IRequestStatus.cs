@@ -7,7 +7,7 @@ namespace LicensingERP.Logic.DTO.Interface
     /// <summary>
     /// tbl_request_status
     /// </summary>
-    public interface IRequestStatus : IRequest
+    public interface IRequestStatus : IRequisitionRequest
     {
         bool? IsApproved { get; set; }
         DateTime ApproveRejectDate { get; set; }

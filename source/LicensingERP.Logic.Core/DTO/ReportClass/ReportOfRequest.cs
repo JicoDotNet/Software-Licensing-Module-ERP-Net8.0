@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.ReportClass
 {
-    public class ReportOfRequest : Request, IRequestClaim, IDateParameter
+    public class ReportOfRequest : RequisitionRequest, IRequestClaim, IDateParameter
     {
 
         public DateTime ClaimDate { get; set; }

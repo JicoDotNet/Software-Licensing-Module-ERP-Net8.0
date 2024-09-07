@@ -1,4 +1,4 @@
-﻿@model List<Request>
+﻿@model List<RequisitionRequest>
 @{
     ViewData["Title"] = "Pending";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -58,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Request request in Model)
+                    @foreach (RequisitionRequest request in Model)
                     {
                         <tr>
                             <td>@request.RequestNo <br> <small>Requested On: <i>@request.RequestDate.ToString("MMMM-dd-yyyy, ddd")</i></small></td>

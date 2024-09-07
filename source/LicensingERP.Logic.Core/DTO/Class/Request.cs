@@ -8,7 +8,7 @@ using System.Text;
 /// </summary>
 namespace LicensingERP.Logic.DTO.Class
 {
-    public class Request : IRequest, IUser, IClient, ILicenceType, IProduct, ISession, IActivity, IIdentity, IStatus
+    public class RequisitionRequest : IRequisitionRequest, IUser, IClient, ILicenceType, IProduct, ISession, IActivity, IIdentity, IStatus
     {
         public string UserName { get; set; }
 

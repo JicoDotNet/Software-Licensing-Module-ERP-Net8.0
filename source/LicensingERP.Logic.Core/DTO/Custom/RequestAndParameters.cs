@@ -9,6 +9,6 @@ namespace LicensingERP.Logic.DTO.Custom
     public class RequestAndParameters
     {
         public IReadOnlyList<Parameter> Parameters { get; set; }
-        public Request Request { get; set; }
+        public RequisitionRequest Request { get; set; }
     }
 }

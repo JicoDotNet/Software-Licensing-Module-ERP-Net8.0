@@ -33,7 +33,7 @@ namespace LicensingERP.Core.Controllers
             //{
             //    dynamicFieldMaster.ListData = null;
             //}
-            parameter.FieldName = parameter.FieldName.Replace(" ", "");
+            parameter.FieldName = parameter.FieldName?.Trim().Replace(" ", "");
             if (parameter.Fieldlength == null)
                 parameter.Fieldlength = null;
             int result;

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace LicensingERP.Core.Controllers
 {
@@ -33,7 +34,7 @@ namespace LicensingERP.Core.Controllers
 
         public IActionResult Index()
         {
-            if(id == null)
+            if (id == null)
             {
                 LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(BllCommonLogic);
                 ClientLogic clientLogic = new ClientLogic(BllCommonLogic);
@@ -66,7 +67,7 @@ namespace LicensingERP.Core.Controllers
 
                 return View(_licencetypeClientProduct);
             }
-           
+
         }
 
         public PartialViewResult BindRestrictMetaData(int noOfLicence = 1)
@@ -135,7 +136,7 @@ namespace LicensingERP.Core.Controllers
 
         [HttpGet]
         public JsonResult GetWFStatus()
-        {            
+        {
             return Json(new WfStateLogic(BllCommonLogic)
                 .GetWfState(SessionPerson.UserTypeId, Convert.ToInt32(id), true).FirstOrDefault());
         }
@@ -152,7 +153,7 @@ namespace LicensingERP.Core.Controllers
         [HttpPost]
         public JsonResult SubmitRequest([FromBody] object requestObject)
         {
-            Request request = JsonConvert.DeserializeObject<Request>(requestObject.ToString());
+            RequisitionRequest request = JsonConvert.DeserializeObject<RequisitionRequest>(requestObject.ToString());
             request.ToDateObject();
             request.UserId = SessionPerson.UserId;
             request.UserTypeId = SessionPerson.UserTypeId;
@@ -166,7 +167,7 @@ namespace LicensingERP.Core.Controllers
             List<User> users = new MailUserListLogic(BllCommonLogic).MailUserRequisition(SessionPerson.UserTypeId);
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);
             var Config = builder.Build();
-            
+
             Email emailConfig = new Email();
 
             emailConfig.Domain = Config.GetSection("Email").GetSection("Domain").Value;
@@ -191,25 +192,25 @@ namespace LicensingERP.Core.Controllers
         public ActionResult AdminProceed(ByPassRequisitionClaim byPass)
         {
             bool result = new RequestLogic(BllCommonLogic).ClaimUserExits(Convert.ToInt32(id));
-            if(result)
+            if (result)
             {
-                int flag = new RequestLogic(BllCommonLogic).Claim(Convert.ToInt32(id), byPass.BUserId, byPass.BNextUserTypeId,true);
+                int flag = new RequestLogic(BllCommonLogic).Claim(Convert.ToInt32(id), byPass.BUserId, byPass.BNextUserTypeId, true);
                 ReturnMessage = new ReturnObject
                 {
                     Status = true,
                     Message = "You have claimed this request Successfully !!"
                 };
             }
-            
+
             RequestProceed requestProceed = new RequestProceed
             {
                 LicenseRequest =
                 new RequestLogic(BllCommonLogic)
-                    .GetRequest(Convert.ToInt32(id), byPass.BUserId, byPass.BNextUserTypeId,true)
+                    .GetRequest(Convert.ToInt32(id), byPass.BUserId, byPass.BNextUserTypeId, true)
             };
             requestProceed.WfStates = new WfStateLogic(BllCommonLogic).GetWfState(byPass.BNextUserTypeId, requestProceed.LicenseRequest.LicenceTypeId, false);
             requestProceed.RequestAcknowledgements = new RequestAcknowledgementLogic(BllCommonLogic).GetDatas(Convert.ToInt32(id));
-           
+
             return View(requestProceed);
         }
         public ActionResult Pending()
@@ -221,9 +222,9 @@ namespace LicensingERP.Core.Controllers
                 else
                 {
                     RequisitionClaim requisition = new RequestLogic(BllCommonLogic).GetRequisitionClaimDetails(Convert.ToInt32(id));
-                   // SessionPerson.BUsertypeId = requisition.NextUserTypeId;
-                    return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), requisition.ClaimUserId, requisition.NextUserTypeId,true));
-                }                    
+                    // SessionPerson.BUsertypeId = requisition.NextUserTypeId;
+                    return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), requisition.ClaimUserId, requisition.NextUserTypeId, true));
+                }
             }
             else
             {
@@ -241,160 +242,34 @@ namespace LicensingERP.Core.Controllers
 
         public FileResult Download()
         {
-            XmlDownload xmlDownload = new XmlDownload(BllCommonLogic);
-            Request request = xmlDownload.GetDownloadData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
-
-            MemoryStream ms = new MemoryStream();
-            XmlWriterSettings xws = new XmlWriterSettings
+            try
             {
-                OmitXmlDeclaration = true,
-                Indent = true
-            };
+                XmlDownload xmlDownload = new XmlDownload(BllCommonLogic);
+                string RequestNo = "Empty";
+                MemoryStream memoryStreamOfLicense = xmlDownload.GetDownloadData(SessionPerson.UserId, SessionPerson.UserTypeId, 
+                    Convert.ToInt32(id), Convert.ToInt32(id2), out RequestNo);
 
-            List<XElement> FEATURESxmlList = new List<XElement>();
-            for (int i = 0; i < request.RequestFeatures.Count; i++)
-            {
-                FEATURESxmlList.Add(new XElement("Features" + (i + 1).ToString(), request.RequestFeatures[i].FeaturesName));
+
+                if (memoryStreamOfLicense != null)
+                    return File(memoryStreamOfLicense, "text/xml", RequestNo + "-" + id2 + ".lic");
+                else
+                    return File(new MemoryStream(), "text", "Error.log");
             }
-            List<XElement> PARAMxmlList = new List<XElement>();
-            for (int j = 0; j < request.RequestParameters.Count; j++)
+            catch (Exception ex)
             {
-                PARAMxmlList.Add(new XElement(request.RequestParameters[j].FieldName, request.RequestParameters[j].ParamValue));
-            }
-
-            using (XmlWriter xw = XmlWriter.Create(ms, xws))
-            {
-
-                XDocument doc = new XDocument(
-                 new XElement("xml",
-                  new XElement("LICENSETYPE", request.TypeName),
-                  new XElement("PRODUCT", request.ProductName),
-                  new XElement("RESTRICTTO", request.RequestRestricts[Convert.ToInt32(id2)].RestrictTo),
-                  new XElement("RESTRICTVAL", request.RequestRestricts[Convert.ToInt32(id2)].RestrictVal),
-                  new XElement("PARAM",
-                    PARAMxmlList
-                  ),
-                  new XElement("FEATURES",
-                    FEATURESxmlList
-                  )
-                 )
-                );
-                doc.WriteTo(xw);
-
-                #region Symmetric Cryptography
-
-                doc.Save(ms);
-                //string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                byte[] toEncryptArray = ms.ToArray();
-               // string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                string SecretKey = "$1234%&Key%Glob%"; // this is common key in java and .net
-                                                  //string SecretKey = "$1234%&Key%Glob%";
-
-                //string SecretKey = "$1234%&Key%";
-                byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
-
-                // string inputAsString = Encrypt(toEncryptArray, SecretKey);
-                //string inputAsString = Convert.ToBase64String(Encrypt(toEncryptArray, GetRijndaelManaged(SecretKey)));
-
-                #region Deprecated .. Not matching with Java Program
-                RijndaelManaged myRijndael = new RijndaelManaged();
-
-                myRijndael.Key = keyArray;
-                myRijndael.Mode = CipherMode.ECB;
-
-                myRijndael.Padding = PaddingMode.PKCS7;
-                // better lang support
-                ICryptoTransform cTransform = myRijndael.CreateEncryptor();
-                byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-
-                string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
-                ms = new MemoryStream();
-                #endregion
-                ms = new MemoryStream();
-                StreamWriter writer = new StreamWriter(ms);
-                writer.Write(inputAsString);
+                MemoryStream memoryStream = new MemoryStream();
+                StreamWriter writer = new StreamWriter(memoryStream);
+                writer.Write(JsonConvert.SerializeObject(ex, Newtonsoft.Json.Formatting.Indented));
                 writer.Flush();
-                ms.Position = 0;
-                return File(ms, "text/xml", request.RequestNo + "-" + id2 + ".lic");
-                #endregion
+                memoryStream.Position = 0;
+                return File(memoryStream, "text/plain", "Error.log");
             }
-
-            #region Symmetric Cryptography
-
-            //byte[] toEncryptArray = ms.ToArray();
-            //// string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-            ////string SecretKey = "$1234%&Key%"; // this is common key in java and .net
-            //string SecretKey = "asdfewrewqrss323";
-            //byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
-            //RijndaelManaged myRijndael = new RijndaelManaged();
-
-            //myRijndael.Key = keyArray;
-            //myRijndael.Mode = CipherMode.ECB;
-
-            //myRijndael.Padding = PaddingMode.PKCS7;
-            //// better lang support
-            //ICryptoTransform cTransform = myRijndael.CreateEncryptor();
-            //byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-
-            //string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
-            //ms = new MemoryStream();
-            
-            //StreamWriter writer = new StreamWriter(ms);
-            //writer.Write(inputAsString);
-            //writer.Flush();
-            //ms.Position = 0;
-            //return File(ms, "text/xml", request.RequestNo + "-" + id2 + ".xml");
-            #endregion
-
-
         }
-
-        #region Encryption Logic
-        // Encrypts plaintext using AES 128bit key and a Chain Block Cipher and returns a base64 encoded string
-        public string Encrypt(String plainText, String key)
-        {
-            var plainBytes = Encoding.UTF8.GetBytes(plainText);
-            return Convert.ToBase64String(Encrypt(plainBytes, GetRijndaelManaged(key)));
-        }
-        public string Decrypt(String encryptedText, String key)
-        {
-            var encryptedBytes = Convert.FromBase64String(encryptedText);
-            return Encoding.UTF8.GetString(Decrypt(encryptedBytes, GetRijndaelManaged(key)));
-        }
-        public byte[] Encrypt(byte[] plainBytes, RijndaelManaged rijndaelManaged)
-        {
-            return rijndaelManaged.CreateEncryptor()
-                .TransformFinalBlock(plainBytes, 0, plainBytes.Length);
-        }
-        public byte[] Decrypt(byte[] encryptedData, RijndaelManaged rijndaelManaged)
-        {
-            return rijndaelManaged.CreateDecryptor()
-                .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
-        }
-        public RijndaelManaged GetRijndaelManaged(String secretKey)
-        {
-            var keyBytes = new byte[16];
-            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-            Array.Copy(secretKeyBytes, keyBytes, Math.Min(keyBytes.Length, secretKeyBytes.Length));
-            return new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 128,
-                BlockSize = 128,
-                Key = keyBytes,
-                IV = keyBytes
-            };
-        }
-
-        #endregion
-
-
 
         [HttpPost]
         public ActionResult Claim()
         {
-            if(SessionPerson.UserId == 1)
+            if (SessionPerson.UserId == 1)
             {
                 ReturnMessage = new ReturnObject
                 {
@@ -459,7 +334,7 @@ namespace LicensingERP.Core.Controllers
 
         public ActionResult AcknowledgementDocsDownload()
         {
-            RequestAcknowledgement requestAcknowledgement = 
+            RequestAcknowledgement requestAcknowledgement =
                 new RequestAcknowledgementLogic(BllCommonLogic)
                 .GetDatas(Convert.ToInt32(id))
                 .Where(a => a.Id == Convert.ToInt32(id2))
@@ -471,7 +346,7 @@ namespace LicensingERP.Core.Controllers
         [HttpPost]
         public ActionResult Proceed(RequestAcknowledgement requestAcknowledgement, IFormFile FData)
         {
-            if(SessionPerson.UserId == 1)
+            if (SessionPerson.UserId == 1)
             {
                 requestAcknowledgement.UserId = requestAcknowledgement.BUserId;
                 requestAcknowledgement.UserTypeId = requestAcknowledgement.BNextUserTypeId;
@@ -487,7 +362,7 @@ namespace LicensingERP.Core.Controllers
                 requestAcknowledgement.RequestNo = new RequestLogic(BllCommonLogic)
                         .GetRequest(Convert.ToInt32(id), SessionPerson.UserId, SessionPerson.UserTypeId).RequestNo;
             }
-           
+
 
             if (FData != null)
             {
@@ -501,7 +376,7 @@ namespace LicensingERP.Core.Controllers
                 requestAcknowledgement.Description = "LicensingERP";
             }
 
-           
+
             int flag = new RequestAcknowledgementLogic(BllCommonLogic).Insert(requestAcknowledgement);
             if (flag > 0)
             {
@@ -512,8 +387,8 @@ namespace LicensingERP.Core.Controllers
                 };
                 return RedirectToAction("Pending", new { id = string.Empty });
             }
-            else if(flag == 0)
-                {
+            else if (flag == 0)
+            {
                 ReturnMessage = new ReturnObject
                 {
                     Status = false,
@@ -536,7 +411,7 @@ namespace LicensingERP.Core.Controllers
             {
                 return RedirectToAction("Proceed", new { id });
             }
-               
+
         }
 
         //[HttpPost]
@@ -550,7 +425,7 @@ namespace LicensingERP.Core.Controllers
         //    {
         //        return null;
         //    }
-           
+
         //}
 
         [HttpGet]
@@ -573,9 +448,8 @@ namespace LicensingERP.Core.Controllers
         [HttpPost]
         public JsonResult SendFollowUpMail([FromBody] FollowUp followUp)
         {
-            if(followUp.UserId == 0) //mail to user group
+            if (followUp.UserId == 0)
             {
-                
                 RequestLogic requestLogic = new RequestLogic(BllCommonLogic);
                 List<User> users = new MailUserListLogic(BllCommonLogic).MailUserRequisition(followUp.UserTypeId);
 
@@ -602,7 +476,7 @@ namespace LicensingERP.Core.Controllers
 
                 #region Save Follow Up record
 
-                
+
 
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
@@ -638,7 +512,7 @@ namespace LicensingERP.Core.Controllers
 
                 #region Save Follow Up record
 
-               
+
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
                 //fu.FollowUpDoneBy = SessionPerson.Email;
