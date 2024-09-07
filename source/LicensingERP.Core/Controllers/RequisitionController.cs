@@ -284,35 +284,35 @@ namespace LicensingERP.Core.Controllers
                 #region Symmetric Cryptography
 
                 doc.Save(ms);
-                string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                //// byte[] toEncryptArray = ms.ToArray();
-                ////// string toEncryptArray = Convert.ToBase64String(ms.ToArray());
-                //// string SecretKey = "$1234%&Key%Glob%"; // this is common key in java and .net
-                ////                                   //string SecretKey = "$1234%&Key%Glob%";
+                //string toEncryptArray = Convert.ToBase64String(ms.ToArray());
+                byte[] toEncryptArray = ms.ToArray();
+               // string toEncryptArray = Convert.ToBase64String(ms.ToArray());
+                string SecretKey = "$1234%&Key%Glob%"; // this is common key in java and .net
+                                                  //string SecretKey = "$1234%&Key%Glob%";
 
-                //// //string SecretKey = "$1234%&Key%";
-                //// byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
+                //string SecretKey = "$1234%&Key%";
+                byte[] keyArray = Encoding.UTF8.GetBytes(SecretKey);
 
-                //// // string inputAsString = Encrypt(toEncryptArray, SecretKey);
-                //// //string inputAsString = Convert.ToBase64String(Encrypt(toEncryptArray, GetRijndaelManaged(SecretKey)));
+                // string inputAsString = Encrypt(toEncryptArray, SecretKey);
+                //string inputAsString = Convert.ToBase64String(Encrypt(toEncryptArray, GetRijndaelManaged(SecretKey)));
 
-                //// #region Deprecated .. Not matching with Java Program
-                //// RijndaelManaged myRijndael = new RijndaelManaged();
+                #region Deprecated .. Not matching with Java Program
+                RijndaelManaged myRijndael = new RijndaelManaged();
 
-                //// myRijndael.Key = keyArray;
-                //// myRijndael.Mode = CipherMode.ECB;
+                myRijndael.Key = keyArray;
+                myRijndael.Mode = CipherMode.ECB;
 
-                //// myRijndael.Padding = PaddingMode.PKCS7;
-                //// // better lang support
-                //// ICryptoTransform cTransform = myRijndael.CreateEncryptor();
-                //// byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                myRijndael.Padding = PaddingMode.PKCS7;
+                // better lang support
+                ICryptoTransform cTransform = myRijndael.CreateEncryptor();
+                byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
-                //// string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
-                //// ms = new MemoryStream();
-                //// #endregion
-                //// ms = new MemoryStream();
+                string inputAsString = Convert.ToBase64String(resultArray, 0, resultArray.Length);
+                ms = new MemoryStream();
+                #endregion
+                ms = new MemoryStream();
                 StreamWriter writer = new StreamWriter(ms);
-                writer.Write(toEncryptArray);
+                writer.Write(inputAsString);
                 writer.Flush();
                 ms.Position = 0;
                 return File(ms, "text/xml", request.RequestNo + "-" + id2 + ".lic");
