@@ -1,9 +1,11 @@
-﻿using LicensingERP.Logic.DTO.Class;
+﻿using LicensingERP.Logic.Common;
+using LicensingERP.Logic.DTO.Class;
+using LicensingERP.Logic.DTO.SP;
 using LicensingERP.Logic.DTO.Interface;
-using DataAccess.MySQL.Net;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL.Audit
 {
@@ -21,22 +23,22 @@ namespace LicensingERP.Logic.BLL.Audit
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(() =>
                 {
-                    MySqlDBAccess mySqlDBAccess = new MySqlDBAccess(CommonObj.ConnectionString, CommandType.StoredProcedure);
+                    MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-                    nameValuePairs nvp = new nameValuePairs();
-                    nvp.Add(new nameValuePair("p_AbsoluteUri", this.AbsoluteUri));
-                    nvp.Add(new nameValuePair("p_MacAddress", this.MacAddress));
-                    nvp.Add(new nameValuePair("p_Action", this.Action));
-                    nvp.Add(new nameValuePair("p_Browser", this.Browser));
-                    nvp.Add(new nameValuePair("p_BrowserType", this.BrowserType));
-                    nvp.Add(new nameValuePair("p_BrowserVersion", this.BrowserVersion));
-                    nvp.Add(new nameValuePair("p_Controller", this.Controller));
-                    nvp.Add(new nameValuePair("p_DNS", this.DNS));
-                    nvp.Add(new nameValuePair("p_HttpVerbs", this.HttpVerbs));
-                    nvp.Add(new nameValuePair("p_IPAddress", this.IPAddress));
-                    nvp.Add(new nameValuePair("p_RouteId", this.RouteId));
-                    nvp.Add(new nameValuePair("p_SessionId", this.SessionId));
-                    nvp.Add(new nameValuePair("p_UserId", this.UserId));
+                    NameValuePairs nvp = new NameValuePairs();
+                    nvp.Add(new NameValuePair("p_AbsoluteUri", this.AbsoluteUri));
+                    nvp.Add(new NameValuePair("p_MacAddress", this.MacAddress));
+                    nvp.Add(new NameValuePair("p_Action", this.Action));
+                    nvp.Add(new NameValuePair("p_Browser", this.Browser));
+                    nvp.Add(new NameValuePair("p_BrowserType", this.BrowserType));
+                    nvp.Add(new NameValuePair("p_BrowserVersion", this.BrowserVersion));
+                    nvp.Add(new NameValuePair("p_Controller", this.Controller));
+                    nvp.Add(new NameValuePair("p_DNS", this.DNS));
+                    nvp.Add(new NameValuePair("p_HttpVerbs", this.HttpVerbs));
+                    nvp.Add(new NameValuePair("p_IPAddress", this.IPAddress));
+                    nvp.Add(new NameValuePair("p_RouteId", this.RouteId));
+                    nvp.Add(new NameValuePair("p_SessionId", this.SessionId));
+                    nvp.Add(new NameValuePair("p_UserId", this.UserId));
 
                     mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_Log", nvp);
                 });

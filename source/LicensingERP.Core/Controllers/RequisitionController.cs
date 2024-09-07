@@ -15,23 +15,33 @@ using LicensingERP.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace LicensingERP.Core.Controllers
 {
     [SessionAuthenticate]
     public class RequisitionController : BaseController
     {
-        public ActionResult Index()
+        private readonly IRequestRestrictMetaValueService _restrictMetaValueService;
+
+        public RequisitionController(
+            IAppSettingsService appSettingsService,
+            IRequestRestrictMetaValueService restrictMetaValueService) : base(appSettingsService)
+        {
+            _restrictMetaValueService = restrictMetaValueService;
+        }
+
+        public IActionResult Index()
         {
             if(id == null)
             {
-                // RequestLogic requestLogic = new RequestLogic(BllCommonLogic);
                 LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(BllCommonLogic);
                 ClientLogic clientLogic = new ClientLogic(BllCommonLogic);
                 ProductLogic productLogic = new ProductLogic(BllCommonLogic);
                 UserLogic ULogic = new UserLogic(BllCommonLogic);
                 _LicencetypeClientProduct _licencetypeClientProduct = new _LicencetypeClientProduct
                 {
+                    restrictMetaData = _restrictMetaValueService.GetRestrictMetaValues(),
                     licenceType = licenceTypeLogic.GetLicenceType(),
                     client = clientLogic.GetClients(),
                     product = productLogic.GetProuct(),
@@ -55,10 +65,24 @@ namespace LicensingERP.Core.Controllers
                 };
 
                 return View(_licencetypeClientProduct);
-
-                //return View();
             }
            
+        }
+
+        public PartialViewResult BindRestrictMetaData(int noOfLicence = 1)
+        {
+            RequestRestrictsMeta requestRestrictMetas = _restrictMetaValueService.GetRestrictMetaValues();
+            IList<RequestRestrictsMeta> requestRestrictMet = new List<RequestRestrictsMeta>();
+            for (int i = 0; i < noOfLicence; i++)
+            {
+                requestRestrictMet.Add(requestRestrictMetas);
+            }
+            return PartialView("_PartialRestrictMetaData", requestRestrictMet);
+        }
+
+        public JsonResult GetRestrictMetaData()
+        {
+            return Json(_restrictMetaValueService.GetRestrictMetaValues());
         }
 
         //[HttpPost]
@@ -126,8 +150,9 @@ namespace LicensingERP.Core.Controllers
         }
 
         [HttpPost]
-        public JsonResult SubmitRequest([FromBody] Request request)
+        public JsonResult SubmitRequest([FromBody] object requestObject)
         {
+            Request request = JsonConvert.DeserializeObject<Request>(requestObject.ToString());
             request.ToDateObject();
             request.UserId = SessionPerson.UserId;
             request.UserTypeId = SessionPerson.UserTypeId;
@@ -198,8 +223,7 @@ namespace LicensingERP.Core.Controllers
                     RequisitionClaim requisition = new RequestLogic(BllCommonLogic).GetRequisitionClaimDetails(Convert.ToInt32(id));
                    // SessionPerson.BUsertypeId = requisition.NextUserTypeId;
                     return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), requisition.ClaimUserId, requisition.NextUserTypeId,true));
-                }
-                    
+                }                    
             }
             else
             {
@@ -208,7 +232,6 @@ namespace LicensingERP.Core.Controllers
                 else
                     return View("SinglePending", new RequestLogic(BllCommonLogic).GetRequest(Convert.ToInt32(id), SessionPerson.UserId, SessionPerson.UserTypeId));
             }
-
         }
 
         public ActionResult Status()
@@ -216,7 +239,7 @@ namespace LicensingERP.Core.Controllers
             return View(new RequestLogic(BllCommonLogic).GetRequests(SessionPerson.UserId));
         }
 
-        public ActionResult Download()
+        public FileResult Download()
         {
             XmlDownload xmlDownload = new XmlDownload(BllCommonLogic);
             Request request = xmlDownload.GetDownloadData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
@@ -516,19 +539,20 @@ namespace LicensingERP.Core.Controllers
                
         }
 
-        [HttpPost]
-        public PartialViewResult GetCompareList([FromBody] Request request)
-        {
-            if (request != null)
-            {
-                return PartialView("_PartialCompare", new LicenceCompareLogic(BllCommonLogic).CompareLicenceGet(request.ClientId, request.LicenceTypeId));
-            }
-            else
-            {
-                return null;
-            }
+        //[HttpPost]
+        //public PartialViewResult GetCompareList([FromBody] Request request)
+        //{
+        //    if (request != null)
+        //    {
+        //        return PartialView("_PartialCompare", new LicenceCompareLogic(BllCommonLogic).CompareLicenceGet(request.ClientId, request.LicenceTypeId));
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
            
-        }
+        //}
+
         [HttpGet]
         public ActionResult DisplayCompareLicence()
         {
@@ -582,7 +606,7 @@ namespace LicensingERP.Core.Controllers
 
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
-                fu.FollowUpDoneBy = SessionPerson.Email;
+                //fu.FollowUpDoneBy = SessionPerson.Email;
 
                 RequestLogic logic = new RequestLogic(BllCommonLogic);
                 int flag = logic.InsertFollowUp(fu);
@@ -617,7 +641,7 @@ namespace LicensingERP.Core.Controllers
                
                 FollowUp fu = new FollowUp();
                 fu.RequestNo = followUp.RequestNo;
-                fu.FollowUpDoneBy = SessionPerson.Email;
+                //fu.FollowUpDoneBy = SessionPerson.Email;
 
                 RequestLogic logic = new RequestLogic(BllCommonLogic);
                 int flag = logic.InsertFollowUp(fu);

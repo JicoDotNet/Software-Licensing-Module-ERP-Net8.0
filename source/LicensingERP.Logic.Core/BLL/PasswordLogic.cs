@@ -41,7 +41,7 @@ namespace LicensingERP.Logic.BLL
 
         public int SetPassword(Password password, bool IsChangeable = false)
         {
-            #region Crypto Password
+            #region Encrypt Password
             password.Encrypt();
             #endregion
 
@@ -53,7 +53,6 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_PasswordHash", password.PasswordHash),
                 new NameValuePair("p_ActivationDate", GenericLogic.IstNow),
                 new NameValuePair("p_PasswordSalt", password.PasswordSalt),
-                //new NameValuePair("p_PasswordText", password.PasswordText),
                 new NameValuePair("p_IsChangeable", IsChangeable),
 
                 new NameValuePair("p_SessionId", CommonObj.SessionId),

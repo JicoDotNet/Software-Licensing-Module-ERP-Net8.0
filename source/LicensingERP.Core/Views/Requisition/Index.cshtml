@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section HeadCss{
+@section HeadCss {
     <style type="text/css">
         .error {
             color: red;
@@ -58,12 +58,14 @@
                                                value="@GenericLogic.IstNow.ToString("dd-MMMM-yyyy")" class="form-control" name="RequestDate" placeholder="Enter Request Date" required>
                                     </div>
                                 </div>
+                                <!--
                                 <div class="col-md-4" style="margin-top: 30px;">
                                     <div class="form-group">
                                         <button class="btn btn-success" onclick="Compare_fun();">Clone From</button>
                                         <button class="btn btn-success" onclick="Compare_fun();">Compare Previous</button>
                                     </div>
                                 </div>
+                                -->
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
@@ -85,7 +87,6 @@
                                                         {
                                                             <option value="@clientdata.Id"> @clientdata.ClientName</option>
                                                         }
-
                                                     }
                                                 }
                                             }
@@ -118,7 +119,6 @@
                                                         {
                                                             <option value="@types.Id"> @types.TypeName</option>
                                                         }
-
                                                     }
                                                 }
                                             }
@@ -137,19 +137,17 @@
                                     <div class="form-group">
                                         <label for="NumberOfLicense">Number Of License <span style="color:red">&#42;</span></label>
                                         <input type="number" class="form-control" oninput="Numberinput()"
-                                               @if (Model.compareLList != null) { if (Model.compareLList.licenceCompare != null) { <text> value="@Model.compareLList.licenceCompare.LicenceNo" </text>  }  }
-                                               name="LicenceNo" placeholder="Enter License Number" required>
-
-
+                                        @if (Model.compareLList != null)
+                                        {
+                                            if (Model.compareLList.licenceCompare != null)
+                                            {
+                                                <text> value="@Model.compareLList.licenceCompare.LicenceNo" </text>
+                                            }
+                                        }
+                                        name="LicenceNo" placeholder="Enter License Number" required>
                                     </div>
-
-
                                 </div>
-
-
                             </div>
-
-
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -186,11 +184,6 @@
                                                 <span class="fas fa-plus">Add</span>
                                             </button>
                                         </th>
-                                        @*<th >
-                                                <a href="#" class="btn btn-success">
-                                                    <span class="fas fa-minus"></span>
-                                                </a>
-                                            </th>*@
                                     </tr>
                                 </thead>
                                 <tbody id="u">
@@ -199,59 +192,28 @@
                                         int i = 1; int lic = Convert.ToInt32(Model.compareLList.licenceCompare.LicenceNo);
                                         if (Model.compareLList.requestRestricts.Count > 0)
                                         {
-                                           
                                             foreach (RequestRestrict restrict in Model.compareLList.requestRestricts)
                                             {
-                                                
                                                 if (i <= lic)
                                                 {
                                                     <tr id="@i">
                                                         <td>
-                                                            <select class="form-control" id=e@(i) name=selectdta@(i) required>
-                                                                <option value="">--Please Select--</option>
-                                                                @if (restrict.RestrictTo == "CPU SERIAL NUMBER")
+                                                            <select class="form-control" id="e@(i)" name="selectdta@(i)" required>
+                                                                @foreach (RequestRestrictMeta restrictMetaData in Model.restrictMetaData)
                                                                 {
-                                                                    <option value="CPU SERIAL NUMBER" selected>CPU SERIAL NUMBER</option>
-                                                                    <option value="NO OF CORES">NO OF CORES</option>
-                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
-                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
-                                                                    <option value="MAC ID">MAC ID</option>
+                                                                    if (restrictMetaData.Id == null)
+                                                                    {
+                                                                        <option value="">@restrictMetaData.Name</option>
+                                                                    }
+                                                                    else{
+                                                                        @if (restrictMetaData.Name == restrict.RestrictTo){
+                                                                            <option value="@restrictMetaData.Name" selected>@restrictMetaData.Name</option>
+                                                                        }
+                                                                        else{
+                                                                            <option value="@restrictMetaData.Name">@restrictMetaData.Name</option>
+                                                                        }
+                                                                    }
                                                                 }
-
-                                                                @if (restrict.RestrictTo == "NO OF CORES")
-                                                                {
-                                                                    <option value="NO OF CORES" selected>NO OF CORES</option>
-                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
-                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
-                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
-                                                                    <option value="MAC ID">MAC ID</option>
-                                                                }
-
-                                                                @if (restrict.RestrictTo == "NO OF SOCKET")
-                                                                {
-                                                                    <option value="NO OF SOCKET" selected>NO OF SOCKET</option>
-                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
-                                                                    <option value="NO OF CORES">NO OF CORES</option>
-                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
-                                                                    <option value="MAC ID">MAC ID</option>
-                                                                }
-                                                                @if (restrict.RestrictTo == "HDD SERIAL NUMBER")
-                                                                {
-                                                                    <option value="HDD SERIAL NUMBER" selected>HDD SERIAL NUMBER</option>
-                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
-                                                                    <option value="NO OF CORES">NO OF CORES</option>
-                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
-                                                                    <option value="MAC ID">MAC ID</option>
-                                                                }
-                                                                @if (restrict.RestrictTo == "MAC ID")
-                                                                {
-                                                                    <option value="MAC ID" selected>MAC ID</option>
-                                                                    <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
-                                                                    <option value="NO OF CORES">NO OF CORES</option>
-                                                                    <option value="NO OF SOCKET">NO OF SOCKET</option>
-                                                                    <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
-                                                                }
-                                                                
                                                             </select>
                                                         </td>
                                                         <td>
@@ -300,8 +262,11 @@
                                                         <label for="License Type">@parameter.FieldName</label>
                                                         <input type="text" maxlength="@parameter.Fieldlength" class="form-control"
                                                                name="@parameter.Id" placeholder="@parameter.FieldName"
-                                                               @if (parameter.IsRequired) { <text> required </text> }
-                                                               value="@parameter.ParamValue" />
+                                                        @if (parameter.IsRequired)
+                                                        {
+                                                            <text> required </text>
+                                                        }
+                                                        value="@parameter.ParamValue" />
                                                     </div>
                                                 </div>
                                             }
@@ -313,7 +278,10 @@
                                                         <input type="number" maxlength="@parameter.Fieldlength" class="form-control"
                                                                onblur="this.value = parseFloat(this.value);"
                                                                name="@parameter.Id" placeholder="@parameter.FieldName"
-                                                               @if (parameter.IsRequired) { <text> required </text> } value="@parameter.ParamValue" />
+                                                        @if (parameter.IsRequired)
+                                                        {
+                                                            <text> required </text>
+                                                        } value="@parameter.ParamValue" />
                                                     </div>
                                                 </div>
                                             }
@@ -328,7 +296,10 @@
                                                                data-inputmask-inputformat="dd/mm/yyyy"
                                                                data-mask=""
                                                                value="@parameter.ParamValue"
-                                                               @if (parameter.IsRequired) { <text> required </text> } />
+                                                        @if (parameter.IsRequired)
+                                                        {
+                                                            <text> required </text>
+                                                        } />
                                                     </div>
                                                 </div>
                                             }
@@ -337,9 +308,6 @@
 
                                 }
                             </div>
-                           
-
-                            
                         </div>
                     </div>
                     <div class="card">
@@ -416,19 +384,19 @@
                                             </ul>
                                         </div>
                                         @*<div class="card-footer">
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
-                                                        <label class="form-check-label">Select All</label>
-                                                    </div>
-                                                </div>
-                                            </div>*@@*<div class="card-footer">
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
-                                                    <label class="form-check-label"></label>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
+                                        <label class="form-check-label">Select All</label>
+                                        </div>
+                                        </div>
+                                        </div>*@@*<div class="card-footer">
+                                        <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" name="Select" type="checkbox" id="ckbCheckAll1">
+                                        <label class="form-check-label"></label>
+                                        </div>
+                                        </div>
                                         </div>*@
                                     </div>
                                 </div>
@@ -437,7 +405,7 @@
                         <div class="card-footer" id="button">
                             @*@if (Model.compareLList != null)
                             {
-                                <button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
+                            <button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>
                             }*@
 
                         </div>
@@ -448,7 +416,6 @@
     </div>
 </section>
 <div id="e">
-
 </div>
 <div class="modal fade" id="myModal">
     <div class="modal-dialog modal-lg">
@@ -471,7 +438,7 @@
     </div>
 </div>
 <!-- /.content -->
-@section BodyScript{
+@section BodyScript {
     <!-- Content Header (Page header) -->
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
@@ -479,18 +446,17 @@
         <tr id="{{RowId}}">
             <td>
                 <select class="form-control select2" id="e{{RowId}}" name="selectdta{{RowId}}" required>
-                    @*<option value="">--Please Select--</option>
-                        <option value="CPU SERIAL NUMBER">CPU SERIAL NUMBER</option>
-                        <option value="NO OF CORES">NO OF CORES</option>
-                        <option value="NO OF SOCKET">NO OF SOCKET</option>
-                        <option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option>
-                        <option value="MAC ID">MAC ID</option>*@
-                    <option value=""></option>
-                    <option value="CPU SERIAL NUMBER"></option>
-                    <option value="NO OF CORES"></option>
-                    <option value="NO OF SOCKET"></option>
-                    <option value="HDD SERIAL NUMBER"></option>
-                    <option value="MAC ID"></option>
+                    @foreach (RequestRestrictMeta val in Model.restrictMetaData)
+                    {
+                        if (val.Id is null)
+                        {
+                            <option value=""></option>
+                        }
+                        else
+                        {
+                            <option value="@val.Name"></option>
+                        }
+                    }
                 </select>
             </td>
             <td>
@@ -515,11 +481,11 @@
                 success: function (data) {
                     var htmlF = '';
                     for (var i = 0; i < data.features.length; i++) {
-                        htmlF += '<li>'+
-                            '<div class="d-inline ml-2">'+
-                            '<input type="checkbox" class="checkBoxClass1" value = "' + data.features[i].id + '" name = "features" id = "' + data.features[i].id + '" >'+
-                            '</div>'+
-                            '<span class="text">' + data.features[i].featuresName + '</span>'+
+                        htmlF += '<li>' +
+                            '<div class="d-inline ml-2">' +
+                            '<input type="checkbox" class="checkBoxClass1" value = "' + data.features[i].id + '" name = "features" id = "' + data.features[i].id + '" >' +
+                            '</div>' +
+                            '<span class="text">' + data.features[i].featuresName + '</span>' +
                             '</li >';
                     }
                     $('#features_list').html(htmlF);
@@ -533,24 +499,23 @@
 
         function PrepareRestrictDDL(row_val) {
             var html = "";
-            $.getJSON("/JsonFile/restrictjson.json", function (data) {
 
-                $.each(data, function (index, value) {
-                    //  debugger;
-                    if (index == 0) {
-                        html += '<option value ="">' + value.Name + '</option>';
+            $.ajax({
+                url: '@Url.Action("GetRestrictMetaData", "Requisition")',
+                type: 'GET',
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].id == null) {
+                            html += '<option value ="">' + data[i].name + '</option>';
+                        } else {
+                            html += '<option value ="' + data[i].name + '">' + data[i].name + '</option>';
+                        }
                     }
-                    else {
-                        html += '<option value ="' + value.Name + '">' + value.Name + '</option>';
-                    }
-
-                    console.log(value.Name);
-                    //console.log(index);
-                });
-                //alert(html);
-                //RestrictOptionList = html;
-                document.getElementById('e' + row_val).innerHTML = html;
-
+                    document.getElementById('e' + row_val).innerHTML = html;
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading partial view:', error);
+                }
             });
         }
 
@@ -564,7 +529,7 @@
                     //debugger;
                     var single_tr = $('#templateOfNumberOfLicense').html();
                     //var op = PrepareRestrictDDL();
-                   // single_tr = $('select').html(RestrictOptionList);
+                    // single_tr = $('select').html(RestrictOptionList);
 
                     //debugger;
                     single_tr = single_tr.replace(/{{RowId}}/g, i);
@@ -574,7 +539,7 @@
                     tbl_tr += single_tr;
                 }
             }
-           $("#u").html(tbl_tr);
+            $("#u").html(tbl_tr);
         }
         function del_row(data) {
             var text_value = parseInt($('input[name="LicenceNo"]').val());
@@ -582,30 +547,24 @@
             $("#" + data).remove();
         }
         function add_row() {
-            //debugger;
-            //var node = "<tr><td>hrll</td><td>hhckcyhc</td></tr>";
-            //var a = document.getElementById("u").append(node); alert(a);
             var text_value = parseInt($('input[name="LicenceNo"]').val());
             text_value = isNaN(text_value) ? 0 : text_value;
             $('input[name="LicenceNo"]').val(parseInt(text_value + 1));
             var newid = parseInt($('input[name="LicenceNo"]').val());
-            var htmlda = '<tr id = '+newid+'>' +
-                            '<td> <select class="form-control select2" id="e' + newid + '" name="selectdta' + newid + '" required>' +
-                            '<option value="">--Please Select--</option>< option value = "CPU SERIAL NUMBER" > CPU SERIAL NUMBER</option><option value="NO OF CORES">NO OF CORES</option><option value="NO OF SOCKET">NO OF SOCKET</option><option value="HDD SERIAL NUMBER">HDD SERIAL NUMBER</option><option value="MAC ID">MAC ID</option>' +
-                            '</select>' +
-                            '</td>' +
-                            '<td><input type="text" name="textdata' + newid + '" class="form-control" required></td>' +
-                            '<td><a onclick="del_row(' + newid + ')" class="btn btn-success"><i class="fas fa-minus"></i></a></td>' +
-                '</tr>';
-            tableBody = $("table tbody");
-            tableBody.append(htmlda);
-            // var single_tr = $('#templateOfNumberOfLicense').html();
-           // //alert(single_tr);
-           // single_tr = single_tr.replace(/{{RowId}}/g, parseInt(text_value + 1));
-           // PrepareRestrictDDL(parseInt(text_value + 1));
-           // var row_data = document.getElementById("u").innerHTML;
-           // row_data += single_tr;
-           //$("#u").html(row_data);
+            var htmlda = '';
+            $.ajax({
+                url: '@Url.Action("BindRestrictMetaData", "Requisition")',
+                type: 'GET',
+                data: { noOfLicence: newid },
+                success: function (data) {
+                    htmlda = data;
+                    tableBody = $("table tbody");
+                    tableBody.html(htmlda);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading partial view:', error);
+                }
+            });
         }
         function LicenseTypeOnChange() {
             if ($('select[name="LicenseTypeId"]').val() != null) {
@@ -634,7 +593,7 @@
             }
         }
 
-        function change_fun(_LicenseTypeId){
+        function change_fun(_LicenseTypeId) {
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("GetParameter", "Requisition")",
@@ -692,8 +651,7 @@
             var restricdata = [];
             var featuredata = [];
             var parameter = [];
-            for ( i = 1; i <= LicenceNo; i++)
-            {
+            for (i = 1; i <= LicenceNo; i++) {
                 var selctval = $('select[name="selectdta' + i + '"]').val();
                 var textvail = $('input[name="textdata' + i + '"]').val();
                 if (selctval != null && textvail != null) {
@@ -736,109 +694,104 @@
                 //    RequestFeatures: featuredata,
                 //    RequestParameters: parameter
                 //}));
-                 $.ajax({
-                type: "POST",
-                url: "@Url.Action("SubmitRequest", "Requisition")",
-                data: JSON.stringify({
-                    ClientId: ClientId,
-                    LicenceTypeId: LicenseTypeId,
-                    LicenceNo: LicenceNo,
-                    ExpDay: ExpDay,
-                    ExpMonth: ExpMonth,
-                    ExpYear: ExpYear,
-                    ProductId: ProductId,
-                    RequestRestricts: restricdata,
-                    RequestFeatures: featuredata,
-                    RequestParameters: parameter
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    toastr.success('Data saved!!');
-                    window.location.href = '@Url.Action("Status", "Requisition")';
-                }
-            });
-           }
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SubmitRequest", "Requisition")",
+                    data: JSON.stringify({
+                        ClientId: ClientId,
+                        LicenceTypeId: LicenseTypeId,
+                        LicenceNo: LicenceNo,
+                        ExpDay: ExpDay,
+                        ExpMonth: ExpMonth,
+                        ExpYear: ExpYear,
+                        ProductId: ProductId,
+                        RequestRestricts: restricdata,
+                        RequestFeatures: featuredata,
+                        RequestParameters: parameter
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        toastr.success('Data saved!!');
+                        window.location.href = '@Url.Action("Status", "Requisition")';
+                    }
+                });
+            }
         }
 
 
 
     </script>
-}
-<script>
-    function Compare_fun()
-    {
+
+    <script type="text/javascript">
+        function Compare_fun() {
             var ClientId = parseInt($('select[name="ClientId"]').val());
-        var LicenseTypeId = parseInt($('select[name="LicenseTypeId"]').val()); //alert(ClientId); alert(LicenseTypeId);
-        event.preventDefault();
-        debugger;
-        if (isNaN(ClientId) === false && isNaN(LicenseTypeId) === false) {
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("GetCompareList", "Requisition")",
-                data: JSON.stringify({
-                    ClientId: ClientId,
-                    LicenceTypeId: LicenseTypeId
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "html",
-                success: function (data) {
-                    if (data != null) {
-                        $("#myModal").modal("show");
-                        document.getElementById("div_opn").innerHTML = data;
-                        $('#myModal').modal({ backdrop: 'static', keyboard: false });
-                    }
-                    else {
-                        toastr.error('Either Client  or License Type  does not contain any value!!');
-                        setDefaultButton();
-                    }
-
-                }
-            });
-        }
-        else {
-            toastr.error('Either Client  or License Type  does not contain any value!!');
-            setDefaultButton();
-        }
-
-        }
-</script>
-<script type="text/javascript">
-    $(function () {
-        $('[data-mask]').inputmask();
-    });
-</script>
-
-@if(Model.compareLList != null)
-{
-    <text>
-        <script>
-       function LicenseTypeOnChange()
-        {
-            if ($('select[name="LicenseTypeId"]').val() != null)
-            {
-                var LicenseTypeId = $('select[name="LicenseTypeId"]').val();
-                if (LicenseTypeId == "" || LicenseTypeId == undefined || LicenseTypeId == null)
-                    LicenseTypeId = 0;
+            var LicenseTypeId = parseInt($('select[name="LicenseTypeId"]').val()); 
+            event.preventDefault();
+            debugger;
+            if (isNaN(ClientId) === false && isNaN(LicenseTypeId) === false) {
                 $.ajax({
-                    type: "GET",
-                    url: "@Url.Action("GetWFStatus", "Requisition", new { id = string.Empty })" + "/" + LicenseTypeId,
+                    type: "POST",
+                    url: "@Url.Action("GetCompareList", "Requisition")",
+                    data: JSON.stringify({
+                        ClientId: ClientId,
+                        LicenceTypeId: LicenseTypeId
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
                     success: function (data) {
-                        if (data == null) {
-                            $('#button').html('<div class="card bg-danger"><div class="card-body">Work Flow in not defined for this License and/or your Group</div></div>');
+                        if (data != null) {
+                            $("#myModal").modal("show");
+                            document.getElementById("div_opn").innerHTML = data;
+                            $('#myModal').modal({ backdrop: 'static', keyboard: false });
                         }
-                        else if (data.isPositive) {
-                            $('#button').html('<button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>');
+                        else {
+                            toastr.error('Either Client  or License Type  does not contain any value!!');
+                            setDefaultButton();
                         }
-                    },
-                    error: function (response) {
-                        console.log(response.responseText);
+
                     }
                 });
             }
+            else {
+                toastr.error('Either Client  or License Type  does not contain any value!!');
+                setDefaultButton();
+            }
+
         }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-mask]').inputmask();
+        });
+    </script>
+    @if (Model.compareLList != null)
+    {
+        <script type="text/javascript">
+            function LicenseTypeOnChange() {
+                if ($('select[name="LicenseTypeId"]').val() != null) {
+                    var LicenseTypeId = $('select[name="LicenseTypeId"]').val();
+                    if (LicenseTypeId == "" || LicenseTypeId == undefined || LicenseTypeId == null)
+                        LicenseTypeId = 0;
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("GetWFStatus", "Requisition", new { id = string.Empty })" + "/" + LicenseTypeId,
+                        success: function (data) {
+                            if (data == null) {
+                                $('#button').html('<div class="card bg-danger"><div class="card-body">Work Flow in not defined for this License and/or your Group</div></div>');
+                            }
+                            else if (data.isPositive) {
+                                $('#button').html('<button type="submit" id="btn_chang" name="submit" class="btn btn-success"><i class="fas fa-save"></i> Submit</button>');
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response.responseText);
+                        }
+                    });
+                }
+            }
             LicenseTypeOnChange();
         </script>
-
-    </text>
+    }
 }
+

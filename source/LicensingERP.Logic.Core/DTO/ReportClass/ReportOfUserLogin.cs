@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.ReportClass
 {
-    public class ReportOfUserLogin : ISession, IActivity, ILogin, IDateParameter
+    public class ReportOfUserLogin : ISession, IActivity, ILoginUserName, IDateParameter
     {
         public string SessionId { get; set;}
 

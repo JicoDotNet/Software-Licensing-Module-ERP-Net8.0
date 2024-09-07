@@ -1,19 +1,17 @@
 ﻿using LicensingERP.Logic.BLL;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.Model.Class;
+using LicensingERP.Models;
 using LicensingERP.StateManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace LicensingERP.Controllers
 {
-    public class AccountController : BaseController
+    public class AccountController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
-        // GET: Account
         public IActionResult Index()
         {
             return View();
@@ -33,12 +31,24 @@ namespace LicensingERP.Controllers
             {
                 List<MenuGroup> menuLists = new MenuAccessLogic(BllCommonLogic).GetMenuForUser(loginCredentials.UserTypeId);
 
-                SessionManagement.SetSession(this.HttpContext.Session, menuLists, "Menu");
-                SessionManagement.SetSession(this.HttpContext.Session, loginCredentials, "User");
-                if(!loginCredentials.IsChangeable)
-                    return RedirectToAction("Index", "Home");
+                AuthticateCredential credential = new AuthticateCredential
+                {
+                    UserId = loginCredentials.UserId,
+                    FullName = loginCredentials.FullName,
+                    UserName = loginCredentials.UserName,
+                    UserTypeId = loginCredentials.UserTypeId,
+                    Email = loginCredentials.Email,
+                };
+
+                this.HttpContext.SetCookie(credential, "User");
+                this.HttpContext.SetSession(menuLists, "Menu");
+
+                if (!loginCredentials.IsChangeable)
+                    TempData["Url"] = Url.Action("Index", "Home");
                 else
-                    return RedirectToAction("ResetPassword", "Profile");
+                    TempData["Url"] = Url.Action("ResetPassword", "Profile");
+
+                return RedirectToAction("OAuth", "Account");
             }
             else
             {
@@ -51,10 +61,21 @@ namespace LicensingERP.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult OAuth()
+        {
+            if (TempData["Url"] != null)
+            {
+                RedirectModels models = new RedirectModels { _redirectUrl = TempData["Url"]?.ToString() };
+                return View(models);
+            }
+            else
+                return RedirectToAction("Index");
+        }
+
         [SessionAuthenticate]
         public ActionResult Menu()
         {
-            List<MenuGroup> menuLists = SessionManagement.GetSession<List<MenuGroup>>(this.HttpContext.Session, "Menu");
+            List<MenuGroup> menuLists = this.HttpContext.GetSession<List<MenuGroup>>("Menu");
             return PartialView("_PartialMenu", menuLists);
         }
 

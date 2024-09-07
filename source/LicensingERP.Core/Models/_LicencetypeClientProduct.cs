@@ -9,6 +9,7 @@ namespace LicensingERP.Models
 {
     public class _LicencetypeClientProduct
     {
+        public RequestRestrictsMeta restrictMetaData { get; set; }
         public IReadOnlyList<LicenceType> licenceType { get; set; }
         public IReadOnlyList<Client> client { get; set; }
         public IReadOnlyList<Product> product { get; set; }

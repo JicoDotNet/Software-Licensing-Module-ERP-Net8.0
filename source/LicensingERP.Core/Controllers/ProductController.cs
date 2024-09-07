@@ -12,7 +12,7 @@ using LicensingERP.Logic.Enumeration;
 namespace LicensingERP.Controllers
 {
     [SessionAuthenticate]
-    public class ProductController : BaseController
+    public class ProductController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Product
         public ActionResult Index()

@@ -9,6 +9,9 @@ namespace LicensingERP.Logic.DTO.Class
         IUserType, IUser, IWfState,
         ISession, IActivity, IIdentity, IStatus
     {
+        public string UserName { get; set; }
+
+
         public int RequestId { get; set; }
         public string RequestNo { get; set; }
         public int UserId { get; set; }

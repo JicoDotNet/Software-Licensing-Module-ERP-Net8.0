@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace LicensingERP.Logic.DTO.Interface
 {
-    public interface ILogin
+    public interface IRequestRestrictMeta
     {
-        string UserName { get; set; }
+        int? Id { get; set; }
+        string Name { get; set; }   // - RestrictTo
+        bool IsActive { get; set; }
     }
+
+    
 }

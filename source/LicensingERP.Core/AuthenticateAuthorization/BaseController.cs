@@ -10,28 +10,39 @@ using System.IO;
 using LicensingERP.Logic.DTO.SP;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Mvc
 {
     public abstract class BaseController : Controller
     {
-        private string _ConnectionString;
-        ActionExecutingContext _filteringContext;
-        ActionExecutedContext _filteredContext;
+        //--- Property
+        private readonly IAppSettingsService _appSettingsService;
 
-        public BaseController()
+        public string controller { get; set; }
+        public string action { get; set; }
+        public string id { get; set; }
+        public string id2 { get; set; }
+
+        public AuthticateCredential SessionPerson { get; private set; }
+        public string SessionID { get; private set; }
+
+        public ReturnObject ReturnMessage { get; set; }
+        public sCommonDto BllCommonLogic { get; private set; }
+
+        private string _ConnectionString;
+        private ActionExecutingContext _filteringContext;
+        private ActionExecutedContext _filteredContext;
+
+        public BaseController(IAppSettingsService appSettingsService)
         {
-            var Config = GetConfiguration();
-            _ConnectionString = Config.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
+            _appSettingsService = appSettingsService;
+
+            _ConnectionString = _appSettingsService.GetSetting("ConnectionStrings.MySqlConnection");
 
             Email email = new Email();
-            email.Domain = Config.GetSection("Email").GetSection("Domain").Value;
-        }
-        private IConfigurationRoot GetConfiguration()
-        {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", false, true);
-            return builder.Build();
-        }        
+            email.Domain = _appSettingsService.GetSetting("Email.SMTP");
+        }     
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -59,13 +70,14 @@ namespace Microsoft.AspNetCore.Mvc
                 };
                 SessionPerson = null;
                 
-                if (SessionManagement.SessionAvailable<LoginCredentials>(filterContext.HttpContext.Session, "User"))
+                if (filterContext.HttpContext.CookieAvailable<AuthticateCredential>("User"))
                 {
-                    SessionPerson = SessionManagement.GetSession<LoginCredentials>(filterContext.HttpContext.Session, "User");
+                    //SessionPerson = SessionManagement.GetSession<AuthticateCredential>(filterContext.HttpContext.Session, "User");
+                    SessionPerson = filterContext.HttpContext.GetCookie<AuthticateCredential>("User");
                 }
 
-                ReturnMessage = SessionManagement.GetSession<ReturnObject>(filterContext.HttpContext.Session, "ReturnMessage");
-                SessionManagement.RemoveSession<ReturnObject>(filterContext.HttpContext.Session, "ReturnMessage");
+                ReturnMessage = filterContext.HttpContext.GetSession<ReturnObject>("ReturnMessage");
+                filterContext.HttpContext.RemoveSession<ReturnObject>("ReturnMessage");
 
                 #endregion
 
@@ -94,16 +106,6 @@ namespace Microsoft.AspNetCore.Mvc
                 }
                 #endregion
 
-                #region Menu
-                //if (((SessionManagement.GetSession<List<MenuGroup>>(filterContext.HttpContext.Session, "Menu") != null)?
-                //    SessionManagement.GetSession<List<MenuGroup>>(filterContext.HttpContext.Session, "Menu")
-                //    .Where(a => a.Controller == this.controller && a.ActionResult == this.action).Where(a => a.IsDisplayable).Count(): -1) > 0)
-                //{
-                //    MenuGroup activeMenu = new MenuGroup { Controller = this.controller, ActionResult = this.action };
-                //    SessionManagement.SetSession(filterContext.HttpContext.Session, activeMenu, "ActiveMenu");
-                //}                
-                #endregion
-
                 #region View Bag for Rezor View
                 ViewBag.controller = this.controller;
                 ViewBag.action = this.action;
@@ -129,10 +131,10 @@ namespace Microsoft.AspNetCore.Mvc
             _filteredContext = filterContext;
             #endregion
 
-            TempData.Put<ReturnObject>("ReturnMessage", ReturnMessage);
-            TempData.Put<LoginCredentials>("SessionPerson", SessionPerson);
+            TempData.Put("ReturnMessage", ReturnMessage);
+            TempData.Put("SessionPerson", SessionPerson);
             if(ReturnMessage != null)
-                SessionManagement.SetSession(filterContext.HttpContext.Session, ReturnMessage, "ReturnMessage");
+                filterContext.HttpContext.SetSession(ReturnMessage, "ReturnMessage");
             base.OnActionExecuted(filterContext);
         }
 
@@ -146,7 +148,8 @@ namespace Microsoft.AspNetCore.Mvc
         public void AbandonSession()
         {
             _filteringContext.HttpContext.Session.Clear();
-            _filteringContext.HttpContext.Session.Remove("User");
+            _filteringContext.HttpContext.DeleteCookie("User");
+            _filteringContext.HttpContext.RemoveSession<List<MenuGroup>>("Menu");
             
             if (_filteringContext.HttpContext.Request.Cookies["ASP.NET_SessionId"] != null)
             {
@@ -168,68 +171,6 @@ namespace Microsoft.AspNetCore.Mvc
 
             //return context.Request.ServerVariables["REMOTE_ADDR"];
             return "LOCAL";
-        }
-        
-        //[DllImport("Iphlpapi.dll")]
-        //private static extern int SendARP(Int32 dest, Int32 host, ref Int64 mac, ref Int32 length);
-        //[DllImport("Ws2_32.dll")]
-        //private static extern Int32 inet_addr(string ip);
-        //public string GetClientMac(HttpContextBase context)
-        //{
-        //    try
-        //    {
-        //        string userip = context.Request.UserHostAddress;
-        //        string strClientIP = context.Request.UserHostAddress.ToString().Trim();
-        //        Int32 ldest = inet_addr(strClientIP);
-        //        Int32 lhost = inet_addr("");
-        //        Int64 macinfo = new Int64();
-        //        Int32 len = 6;
-        //        int res = SendARP(ldest, 0, ref macinfo, ref len);
-        //        string mac_src = macinfo.ToString("X");
-        //        if (mac_src == "0")
-        //        {
-        //            return null;
-        //        }
-
-        //        while (mac_src.Length < 12)
-        //        {
-        //            mac_src = mac_src.Insert(0, "0");
-        //        }
-
-        //        string mac_dest = "";
-
-        //        for (int i = 0; i < 11; i++)
-        //        {
-        //            if (0 == (i % 2))
-        //            {
-        //                if (i == 10)
-        //                {
-        //                    mac_dest = mac_dest.Insert(0, mac_src.Substring(i, 2));
-        //                }
-        //                else
-        //                {
-        //                    mac_dest = "-" + mac_dest.Insert(0, mac_src.Substring(i, 2));
-        //                }
-        //            }
-        //        }
-        //        return mac_dest;
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        return err.Message;
-        //    }
-        //}
-
-        //--- Property
-        public string controller { get; set; }
-        public string action { get; set; }
-        public string id { get; set; }
-        public string id2 { get; set; }
-
-        public LoginCredentials SessionPerson { get; private set; }
-        public string SessionID { get; private set; }
-
-        public ReturnObject ReturnMessage { get; set; }
-        public sCommonDto BllCommonLogic { get; private set; }
+        }        
     }
 }

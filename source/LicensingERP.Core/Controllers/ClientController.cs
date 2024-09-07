@@ -15,9 +15,8 @@ namespace LicensingERP.Controllers
     /// Client display and Edit in single Method using Models 
     /// </summary>
     [SessionAuthenticate]
-    public class ClientController : BaseController
+    public class ClientController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
-        // GET: Client
         public ActionResult Index()
         {
             ClientLogic client_data = new ClientLogic(BllCommonLogic);

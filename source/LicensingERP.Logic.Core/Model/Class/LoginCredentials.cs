@@ -4,7 +4,7 @@ using LicensingERP.Logic.Model.Interface;
 
 namespace LicensingERP.Logic.Model.Class
 {
-    public class LoginCredentials : ILogin,
+    public class LoginCredentials : ILoginUserName,
         IUser,
         IUserType,
         IStatus

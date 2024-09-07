@@ -85,8 +85,6 @@
                         <tr>
                             <th>Display Text</th>
                             <th>Icon</th>
-                            <th>Status</th>
-                            <th>Is Displayable</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,34 +93,11 @@
                             <tr>
                                 <td>@MG.DisplayText</td>
                                 <td>@MG.Icon</td>
-
-                                <td>
-                                    @if (MG.IsActive)
-                                    {
-                                        <span class="right badge badge-success">Active</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="right badge badge-danger">Inactive</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (MG.IsDisplayable)
-                                    {
-                                        <span class="right badge badge-success">Yes</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="right badge badge-danger">No</span>
-                                    }
-                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <!-- /.card-body -->
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
-<!-- /.content -->

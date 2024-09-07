@@ -39,10 +39,12 @@ namespace LicensingERP.Logic.Encryption
         public string Decrypt(string input)
         {
             byte[] inputArray = Convert.FromBase64String(input);
-            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(_Key);
-            tripleDES.Mode = CipherMode.ECB;
-            tripleDES.Padding = PaddingMode.PKCS7;
+            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider
+            {
+                Key = UTF8Encoding.UTF8.GetBytes(_Key),
+                Mode = CipherMode.ECB,
+                Padding = PaddingMode.PKCS7
+            };
             ICryptoTransform cTransform = tripleDES.CreateDecryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
             tripleDES.Clear();

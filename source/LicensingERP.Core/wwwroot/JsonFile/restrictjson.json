@@ -1,32 +1,37 @@
 [
   {
-    "Id": 0,
+    "Id": null,
     "Name": "--Please Select--",
     "IsActive": true
   },
   {
     "Id": 1,
-    "Name": "CPU SERIAL NUMBER",
+    "Name": "Param 1",
     "IsActive": true
   },
   {
     "Id": 2,
-    "Name": "NO OF CORES",
+    "Name": "Param 2",
     "IsActive": true
   },
   {
     "Id": 3,
-    "Name": "NO OF SOCKET",
+    "Name": "Param 3",
     "IsActive": true
   },
   {
     "Id": 4,
-    "Name": "HDD SERIAL NUMBER",
+    "Name": "Param 4",
     "IsActive": true
   },
   {
     "Id": 5,
-    "Name": "MAC ID",
+    "Name": "Param 5",
+    "IsActive": true
+  },
+  {
+    "Id": 6,
+    "Name": "Param 6",
     "IsActive": true
   }
 ]

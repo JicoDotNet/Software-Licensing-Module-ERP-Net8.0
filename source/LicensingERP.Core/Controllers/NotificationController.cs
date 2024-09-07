@@ -11,7 +11,7 @@ using System.Web;
 namespace LicensingERP.Controllers
 {
     [SessionAuthenticate]
-    public class NotificationController : BaseController
+    public class NotificationController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         // GET: Notification
         public ActionResult Index()

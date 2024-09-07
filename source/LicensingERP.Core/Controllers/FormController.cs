@@ -11,7 +11,7 @@ using LicensingERP.Logic.Enumeration;
 
 namespace LicensingERP.Core.Controllers
 {
-    public class FormController : BaseController
+    public class FormController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
         public ActionResult Manage()
         {

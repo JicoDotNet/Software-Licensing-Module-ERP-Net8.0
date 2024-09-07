@@ -1,0 +1,20 @@
+﻿@model List<RequestRestrictsMeta>
+@{
+    int i = 1;
+}
+@foreach (RequestRestrictsMeta val in Model)
+{
+    <tr id="@i">
+        <td>
+            <select class="form-control select2" id="e@i" name="selectdta@i" required>
+                @foreach(RequestRestrictMeta s in val)
+                {
+                    <option value="">@s.Name</option>
+                }
+            </select>
+        </td>
+        <td><input type="text" name="textdata@i" class="form-control" required></td>
+        <td><a onclick="del_row('@i')" class="btn btn-success"><i class="fas fa-minus"></i></a></td>
+    </tr>
+    @(i++)
+}
