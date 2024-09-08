@@ -127,37 +127,25 @@ CREATE TABLE tbl_mc_data_on_hold (
 -- tbl_menu_group
 DROP TABLE IF EXISTS tbl_menu_group;
 CREATE TABLE tbl_menu_group (
-  Id INT(11) NOT NULL AUTO_INCREMENT,
-  Icon VARCHAR(50) NOT NULL,
-  DisplayText VARCHAR(50) NOT NULL,
-  IsActive TINYINT(1) NOT NULL,
-  IsDisplayable BIT(1) NOT NULL,
-  TransactionDate DATETIME NOT NULL,
-  SessionId VARCHAR(100) NOT NULL,
+  Id int NOT NULL AUTO_INCREMENT,
+  Icon varchar(50) NOT NULL,
+  DisplayText varchar(50) NOT NULL,
   PRIMARY KEY (Id)
 );
 
 -- tbl_menu_list
 DROP TABLE IF EXISTS tbl_menu_list;
 CREATE TABLE tbl_menu_list (
-  Id INT(11) NOT NULL AUTO_INCREMENT,
-  MenuGroupId INT(11) DEFAULT NULL,
-  Icon VARCHAR(50) DEFAULT NULL,
-  DisplayText VARCHAR(50) DEFAULT NULL,
-  Controller VARCHAR(50) DEFAULT NULL,
-  ActionResult VARCHAR(50) DEFAULT NULL,
-  HasRouteId BIT(1) DEFAULT NULL,
-  RouteId VARCHAR(50) DEFAULT NULL,
-  QueryString VARCHAR(100) DEFAULT NULL,
-  HttpType VARCHAR(50) DEFAULT NULL,
-  IsReport BIT(1) DEFAULT NULL,
-  IsActive BIT(1) DEFAULT NULL,
-  IsDisplayable BIT(1) DEFAULT NULL,
-  IsForAdmin BIT(1) DEFAULT NULL,
-  Description VARCHAR(100) DEFAULT NULL,
-  TransactionDate DATETIME DEFAULT NULL,
-  SessionId VARCHAR(100) DEFAULT NULL,
-  IsForWorkflow BIT(1) DEFAULT NULL,
+  Id int NOT NULL AUTO_INCREMENT,
+  MenuGroupId int DEFAULT NULL,
+  Icon varchar(50) DEFAULT NULL,
+  DisplayText varchar(50) DEFAULT NULL,
+  Controller varchar(50) DEFAULT NULL,
+  ActionResult varchar(50) DEFAULT NULL,
+  IsReport bit(1) DEFAULT NULL,
+  IsForAdmin bit(1) DEFAULT NULL,
+  IsForWorkflow bit(1) DEFAULT NULL,
+  Description varchar(100) DEFAULT NULL,
   PRIMARY KEY (Id)
 );
 

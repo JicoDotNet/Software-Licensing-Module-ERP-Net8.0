@@ -774,11 +774,12 @@ $$
 --
 -- Create procedure `sp_set_menu_list`
 --
-CREATE PROCEDURE sp_set_menu_list(IN P_Id INT, IN p_MenuGroupId INT, IN p_Icon VARCHAR(50), IN p_DisplayText VARCHAR(50), IN p_Controller VARCHAR(50), IN p_ActionResult VARCHAR(50), IN p_RouteId VARCHAR(50), IN p_QueryString VARCHAR(100), IN p_HttpType VARCHAR(50), IN p_IsActive BIT(1), IN p_IsDisplayable BIT(1), IN p_IsForAdmin BIT(1), IN p_Description VARCHAR(100), IN p_SessionId VARCHAR(100), IN p_IsForWorkflow BIT(1), IN p_QueryType VARBINARY(20))
+CREATE PROCEDURE sp_set_menu_list(IN P_Id INT, IN p_MenuGroupId INT, IN p_Icon VARCHAR(50), IN p_DisplayText VARCHAR(50), IN p_Controller VARCHAR(50), 
+IN p_ActionResult VARCHAR(50), IN p_IsForAdmin BIT, IN p_Description VARCHAR(100), IN p_IsForWorkflow BIT, IN p_QueryType VARBINARY(20))
 BEGIN
   IF p_QueryType='INSERT' THEN
-INSERT INTO tbl_menu_list (MenuGroupId, Icon, DisplayText, Controller, ActionResult, RouteId, QueryString, HttpType, IsActive, IsDisplayable, IsForAdmin, Description, SessionId, IsForWorkflow, TransactionDate)
-  VALUES (p_MenuGroupId, p_Icon, p_DisplayText, p_Controller, p_ActionResult, p_RouteId, p_QueryString, p_HttpType, p_IsActive, p_IsDisplayable, p_IsForAdmin, p_Description, p_SessionId, p_IsForWorkflow, NOW());
+INSERT INTO tbl_menu_list (MenuGroupId, Icon, DisplayText, Controller, ActionResult, IsForAdmin, Description, IsForWorkflow)
+  VALUES (p_MenuGroupId, p_Icon, p_DisplayText, p_Controller, p_ActionResult, p_IsForAdmin, p_Description, p_IsForWorkflow);
 END IF;
 END
 $$
@@ -786,30 +787,28 @@ $$
 --
 -- Create procedure `sp_set_menu_group`
 --
-CREATE PROCEDURE sp_set_menu_group(IN p_Id INT, IN p_Icon VARCHAR(50), IN p_DisplayText VARCHAR(50), IN p_IsActive BIT(1), IN p_IsDisplayable BIT(1), IN p_SessionId VARCHAR(100), IN p_QueryType VARCHAR(20))
-  SQL SECURITY INVOKER
+CREATE PROCEDURE sp_set_menu_group(IN p_Id INT, IN p_Icon VARCHAR(50), IN p_DisplayText VARCHAR(50), IN p_QueryType VARCHAR(20))
+    SQL SECURITY INVOKER
 BEGIN
 
 IF p_QueryType ='INSERT' THEN
 
-INSERT INTO tbl_menu_group (Icon, DisplayText, IsActive, IsDisplayable, SessionId, TransactionDate)
-  VALUES (p_Icon, p_DisplayText, p_IsActive, p_IsDisplayable, p_SessionId, NOW());
+INSERT INTO tbl_menu_group (Icon, DisplayText)
+  VALUES (p_Icon, p_DisplayText);
 
 ELSEIF p_QueryType = 'UPDATE' THEN
 
 UPDATE tbl_menu_group
 SET Icon = p_Icon,
-    DisplayText = p_DisplayText,
-    IsActive = p_IsActive,
-    IsDisplayable = p_IsDisplayable
+    DisplayText = p_DisplayText
 WHERE Id = p_Id;
 
 
-ELSEIF p_QueryType = 'INACTIVE' THEN
-
-UPDATE tbl_menu_group
-SET IsActive = p_IsActive
-WHERE Id = p_Id;
+-- ELSEIF p_QueryType = 'INACTIVE' THEN
+-- 
+-- UPDATE tbl_menu_group
+-- SET IsActive = p_IsActive
+-- WHERE Id = p_Id;
 
 
 END IF;
@@ -1339,49 +1338,62 @@ $$
 --
 -- Create procedure `sp_Get_WF_State`
 --
-CREATE PROCEDURE sp_Get_WF_State(IN p_UserTypeId INT(11), IN p_LicenceTypeId INT(11), IN p_OueryType VARCHAR(20))
+CREATE PROCEDURE sp_Get_WF_State(IN p_RequestId INT, IN p_UserId INT, IN p_UserTypeId INT, IN p_SessionId VARCHAR(100), IN p_QueryType VARCHAR(20))
 BEGIN
-  IF p_OueryType = 'ALL' THEN
+	IF p_QueryType ='XML' THEN
+INSERT INTO tbl_xml_download (UserId, UserTypeId, RequestId, RequestNo, IsActive, SessionId, TransactionDate)
+  VALUES (p_UserId, p_UserTypeId, p_RequestId, (SELECT RequestNo FROM tbl_request WHERE Id = p_RequestId), 1, p_SessionId, NOW());
+
 SELECT
-  *
-FROM tbl_s_state
-WHERE IsActive = 1;
-ELSEIF p_OueryType = 'FORWFFIRST' THEN
+  tbl_request.Id,
+  tbl_request.RequestNo,
+  tbl_client.ClientName,
+  tbl_licence_type.TypeName,
+  tbl_product.ProductName,
+  tbl_request.RequestDate,
+  tbl_request.LicenceNo,
+  fn_Get_UserFullName(tbl_request.UserId) AS FullName
+FROM tbl_request
+  LEFT JOIN tbl_request_status
+    ON tbl_request.Id = tbl_request_status.RequestId
+
+  INNER JOIN tbl_client
+    ON tbl_request.ClientId = tbl_client.Id
+
+  INNER JOIN tbl_licence_type
+    ON tbl_request.LicenceTypeId = tbl_licence_type.Id
+
+  INNER JOIN tbl_product
+    ON tbl_request.ProductId = tbl_product.Id
+
+WHERE tbl_request.Id = p_RequestId
+AND tbl_request_status.IsApproved = 1;
+--         ---
+
+
 SELECT
-  tbl_s_state.*
-FROM tbl_s_state
-  INNER JOIN tbl_wf_process_assign
-    ON tbl_s_state.Id = tbl_wf_process_assign.StateId
-  INNER JOIN tbl_wf_process
-    ON tbl_wf_process.Id = tbl_wf_process_assign.WFProcessId
-WHERE LicenceTypeId = p_LicenceTypeId
-AND tbl_s_state.IsActive = 1
-AND tbl_wf_process_assign.IsActive = 1
-AND tbl_wf_process.IsInitial = 1
-AND (tbl_s_state.IsPositive = 1
-AND IsNegative = 0
-AND IsHold = 0)
-AND tbl_wf_process_assign.FromUserTypeId = p_UserTypeId;
-ELSEIF p_OueryType = 'FORWFNEXT' THEN
+  tbl_request_parameter.ParamValue,
+  tbl_parameters.FieldName
+FROM tbl_request_parameter
+  INNER JOIN tbl_parameters
+    ON tbl_request_parameter.ParamId = tbl_parameters.Id
+WHERE RequestId = p_RequestId;
+
 SELECT
-  tbl_s_state.*
-FROM tbl_s_state
-  INNER JOIN tbl_wf_process_assign
-    ON tbl_s_state.Id = tbl_wf_process_assign.StateId
-  INNER JOIN tbl_wf_process
-    ON tbl_wf_process.Id = tbl_wf_process_assign.WFProcessId
-WHERE LicenceTypeId = p_LicenceTypeId
-AND tbl_s_state.IsActive = 1
-AND tbl_wf_process_assign.IsActive = 1
-AND tbl_wf_process_assign.FromUserTypeId = p_UserTypeId
-UNION
+  Id,
+  RestrictTo,
+  RestrictVal
+FROM tbl_request_restrict
+WHERE RequestId = p_RequestId;
+
 SELECT
-  tbl_s_state.*
-FROM tbl_s_state
-WHERE IsActive = 1
-AND IsPositive = 0
-AND IsNegative = 1
-AND IsHold = 0;
+  tbl_product_features.FeaturesName
+FROM tbl_request_features
+  INNER JOIN tbl_product
+    ON tbl_request_features.ProductId = tbl_product.Id
+  INNER JOIN tbl_product_features
+    ON tbl_request_features.FeaturesId = tbl_product_features.Id
+WHERE RequestId = p_RequestId;
 END IF;
 END
 $$
@@ -1389,7 +1401,7 @@ $$
 --
 -- Create procedure `sp_Get_wf_process_assign`
 --
-CREATE PROCEDURE sp_Get_wf_process_assign(IN p_LicenceTypeId INT(11), IN p_QueryType VARCHAR(20))
+CREATE PROCEDURE sp_Get_wf_process_assign(IN p_LicenceTypeId INT, IN p_QueryType VARCHAR(20))
 BEGIN
 	IF p_QueryType ='ALL' THEN
 SELECT
@@ -1474,7 +1486,7 @@ $$
 --
 -- Create procedure `sp_Get_wf_process`
 --
-CREATE PROCEDURE sp_Get_wf_process(IN p_QueryType VARCHAR(20))
+CREATE PROCEDURE sp_Get_wf_process(IN p_QueryType VARCHAR(20), IN p_Id int)
 BEGIN
 	IF p_QueryType ='ALL' THEN
 SELECT
@@ -1490,6 +1502,22 @@ FROM tbl_wf_process AS Process
   INNER JOIN tbl_licence_type AS Licence
     ON Process.LicenceTypeId = Licence.Id
 WHERE Process.IsActive = 1;
+
+ELSEIF p_QueryType ='ONE' THEN
+SELECT
+  Process.Id,
+  Process.ProcessName,
+  Process.ProcessCode,
+  Process.IsInitial,
+  Process.IsEnd,
+  Process.Description,
+  Process.LicenceTypeId,
+  Licence.TypeName
+FROM tbl_wf_process AS Process
+  INNER JOIN tbl_licence_type AS Licence
+    ON Process.LicenceTypeId = Licence.Id
+WHERE Process.IsActive = 1 AND Process.Id = p_Id;
+
 END IF;
 END
 $$
@@ -1519,9 +1547,8 @@ $$
 CREATE PROCEDURE sp_Get_usermenu(IN p_QueryType VARCHAR(255), IN p_UserId INT)
 BEGIN
   IF p_QueryType = 'ALL' THEN
-SELECT
-  *
-FROM tbl_usermenu;
+SELECT * FROM tbl_usermenu;
+
 ELSEIF p_QueryType = 'FORUSER' THEN
 SELECT
   tbl_menu_list.Id,
@@ -1530,32 +1557,20 @@ SELECT
   tbl_menu_list.Controller,
   tbl_menu_list.MenuGroupId,
   tbl_menu_list.ActionResult,
-  tbl_menu_list.HasRouteId,
   tbl_menu_list.IsReport,
-  tbl_menu_list.RouteId,
-  tbl_menu_list.QueryString,
-  tbl_menu_list.HttpType,
-  tbl_menu_list.IsActive,
-  tbl_menu_list.IsDisplayable,
   tbl_menu_list.IsForAdmin,
-  tbl_menu_list.Description,
   tbl_menu_list.IsForWorkflow
 FROM tbl_menu_list
   INNER JOIN tbl_usermenu
     ON tbl_menu_list.Id = tbl_usermenu.MenuId
 WHERE tbl_usermenu.UserTypeId = p_UserId
 AND tbl_usermenu.IsActive = 1
-AND tbl_menu_list.IsActive = 1
 ORDER BY tbl_menu_list.MenuGroupId, tbl_menu_list.Id;
 
-SELECT
-  *
-FROM tbl_menu_group;
+SELECT * FROM tbl_menu_group;
 
 ELSEIF p_QueryType = 'FORUSERTYPE' THEN
-SELECT
-  *
-FROM tbl_usermenu
+SELECT * FROM tbl_usermenu
 WHERE UserTypeId = p_UserId
 AND IsActive = 1;
 END IF;
@@ -1926,8 +1941,7 @@ ELSEIF p_QueryType = 'ASSIGN' THEN
 SELECT
   *
 FROM tbl_menu_list
-WHERE IsActive = 1
-AND IsForAdmin = 0
+WHERE IsForAdmin = 0
 AND IsForWorkflow = 0;
 END IF;
 END
