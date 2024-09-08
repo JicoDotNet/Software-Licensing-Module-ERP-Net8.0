@@ -1903,7 +1903,7 @@ CREATE PROCEDURE sp_Get_Password(IN p_UserId INT(11))
 BEGIN
 SELECT
   *
-FROM tbl_Password
+FROM tbl_password
 WHERE UserId = p_UserId
 AND IsActive = 1;
 END
@@ -2240,12 +2240,3 @@ $$
 
 DELIMITER ;
 
--- 
--- Restore previous SQL mode
--- 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-
--- 
--- Enable foreign keys
--- 
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

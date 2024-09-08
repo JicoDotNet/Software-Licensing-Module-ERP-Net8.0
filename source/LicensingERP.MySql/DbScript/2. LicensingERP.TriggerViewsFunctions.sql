@@ -166,11 +166,6 @@ SELECT
   tbl_menu_list.Controller AS Controller,
   tbl_menu_list.MenuGroupId AS MenuGroupId,
   tbl_menu_list.ActionResult AS ActionResult,
-  tbl_menu_list.RouteId AS RouteId,
-  tbl_menu_list.QueryString AS QueryString,
-  tbl_menu_list.HttpType AS HttpType,
-  tbl_menu_list.IsActive AS IsActive,
-  tbl_menu_list.IsDisplayable AS IsDisplayable,
   tbl_menu_list.IsForAdmin AS IsForAdmin,
   tbl_menu_list.Description AS Description,
   tbl_menu_list.IsForWorkflow AS IsForWorkflow
