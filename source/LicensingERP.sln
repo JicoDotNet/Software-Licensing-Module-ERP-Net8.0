@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicensingERP.Core", "Licens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.MySql", "DataAccess.MySql\DataAccess.MySql.csproj", "{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LicensingERP.MySql", "LicensingERP.MySql\LicensingERP.MySql.sqlproj", "{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensingERP.MySql", "LicensingERP.MySql\LicensingERP.MySql.csproj", "{35DC4274-6141-4F3E-A1E4-110890E7E79B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +29,10 @@ Global
 		{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D71BA82-82BA-44DC-A29C-C7B74E9BA83F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{119D9CDA-A5FE-4C0F-B796-DE88CDAE82BD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{35DC4274-6141-4F3E-A1E4-110890E7E79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35DC4274-6141-4F3E-A1E4-110890E7E79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35DC4274-6141-4F3E-A1E4-110890E7E79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35DC4274-6141-4F3E-A1E4-110890E7E79B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
