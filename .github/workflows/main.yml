@@ -1,0 +1,41 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET 8 CI
+
+on:
+  push:
+    branches:
+      - master                   # Specific branch (main)
+      - 'feature/*'             # Any branch that starts with 'feature/'
+      - 'release/*'             # Any branch that starts with 'release/'
+  pull_request:
+    branches:
+      - master                   # Trigger on pull requests to the main branch
+      - 'feature/*'             # PRs to feature branches
+      - 'release/*'             # PRs to release branches
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup .NET Core SDK 8.0
+      - name: Set up .NET 8.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'  # Use .NET 8.0 SDK
+
+      - name: Restore dependencies
+        run: dotnet restore ./src/LicensingERP.sln
+
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore ./src/LicensingERP.sln
+
+      #- name: Build project
+        #run: dotnet build --no-restore
+    
