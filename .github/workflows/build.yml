@@ -4,6 +4,7 @@
 name: .NET 8 CI
 
 on:
+  workflow_dispatch:  # This allows manual triggering
   push:
     branches:
       - master                   # Specific branch (main)
