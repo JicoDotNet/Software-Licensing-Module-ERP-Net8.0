@@ -2109,7 +2109,7 @@ $$
 --
 -- Create procedure `sp_Get_DashboardData`
 --
-CREATE PROCEDURE sp_Get_DashboardData(IN p_QueryType VARCHAR(50), IN p_ClientId INT(11))
+CREATE PROCEDURE sp_Get_DashboardData(IN p_QueryType VARCHAR(50), IN p_ClientId INT(11), IN p_Id INT(11))
 BEGIN
     IF p_QueryType = 'DASHBOARDLIST' THEN
 SELECT
