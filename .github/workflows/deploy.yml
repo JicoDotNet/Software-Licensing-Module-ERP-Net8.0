@@ -46,12 +46,11 @@ jobs:
 
       - name: Inject Connection String
         run: |
-          # Replace the connection string in appsettings.json
           jq --arg connString "${{ secrets.MYSQL_DB_CONNECTION_STRING }}" \
              '.ConnectionStrings.MySqlConnection = $connString' \
              ./publish/appsettings.json > ./publish/appsettings.tmp.json \
           && mv ./publish/appsettings.tmp.json ./publish/appsettings.json
-        env:
+              env:
           MYSQL_DB_CONNECTION_STRING: ${{ secrets.MYSQL_DB_CONNECTION_STRING }}
 
       - name: Print appsettings.json 2
