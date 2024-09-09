@@ -6,9 +6,8 @@ env:
   DOTNET_VERSION: '8'                 # set this to the .NET Core version to use
 
 on:
-  workflow_dispatch:  # This allows manual triggering
   push:
-    branches: [ "main" ]  # Adjust this if your default branch is different
+    branches: [ "master" ]
 
 permissions:
   contents: read
