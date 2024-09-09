@@ -52,5 +52,5 @@ jobs:
           category: 'security'
 
       # Upload CodeQL results (optional, for viewing in the Security tab)
-      - name: Upload CodeQL results
-        uses: github/codeql-action/upload-results@v2
+      #- name: Upload CodeQL results
+      #  uses: github/codeql-action/upload-results@v2
