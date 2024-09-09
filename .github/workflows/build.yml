@@ -7,14 +7,16 @@ on:
   workflow_dispatch:  # This allows manual triggering
   push:
     branches:
-      - master                   # Specific branch (main)
-      - 'feature/*'             # Any branch that starts with 'feature/'
-      - 'release/*'             # Any branch that starts with 'release/'
+      - master                      # Specific branch (master)
+      - develop                     # Specific branch (develop)
+      - 'feature/*'                 # Any branch that starts with 'feature/'
+      - 'release/*'                 # Any branch that starts with 'release/'
   pull_request:
     branches:
-      - master                   # Trigger on pull requests to the main branch
-      - 'feature/*'             # PRs to feature branches
-      - 'release/*'             # PRs to release branches
+      - master                      # Trigger on pull requests to the master branch
+      - develop                     # Trigger on pull requests to the develop branch
+      - 'feature/*'                 # PRs to feature branches
+      - 'release/*'                 # PRs to release branches
 
 jobs:
   build:
