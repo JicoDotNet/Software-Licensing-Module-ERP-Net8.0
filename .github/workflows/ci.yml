@@ -31,9 +31,11 @@ jobs:
           dotnet-version: '8.0.x'  # Use .NET 8.0 SDK
 
       - name: Restore dependencies
+        working-directory: ./src/LicensingERP.Core
         run: dotnet restore
 
       - name: Build project
+        working-directory: ./src/LicensingERP.Core
         run: dotnet build --configuration Release --no-restore
 
     #- name: Build project
