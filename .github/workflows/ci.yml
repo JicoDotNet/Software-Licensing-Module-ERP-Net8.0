@@ -6,12 +6,12 @@ name: .NET 8 CI
 on:
   push:
     branches:
-      - main                   # Specific branch (main)
+      - master                   # Specific branch (main)
       - 'feature/*'             # Any branch that starts with 'feature/'
       - 'release/*'             # Any branch that starts with 'release/'
   pull_request:
     branches:
-      - main                   # Trigger on pull requests to the main branch
+      - master                   # Trigger on pull requests to the main branch
       - 'feature/*'             # PRs to feature branches
       - 'release/*'             # PRs to release branches
 
@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-		# Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -31,11 +30,9 @@ jobs:
         with:
           dotnet-version: '8.0.x'  # Use .NET 8.0 SDK
 
-	  # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-  	  # Build the project
       - name: Build project
         run: dotnet build --configuration Release --no-restore
 
