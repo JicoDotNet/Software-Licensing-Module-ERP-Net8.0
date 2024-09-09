@@ -39,15 +39,13 @@ jobs:
       - name: Build project
         run: dotnet build --configuration Release --no-restore ./src/LicensingERP.sln
         
-       # Add CodeQL initialization
       - name: Set up CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: 'csharp'
 
-      # Perform CodeQL analysis
-      - name: Build project for CodeQL
-        run: dotnet build --configuration Release --no-restore ./src/LicensingERP.sln
+      - name: List CodeQL databases
+        run: ls -l /home/runner/work/_temp/codeql_databases/
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
