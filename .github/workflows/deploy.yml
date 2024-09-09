@@ -1,4 +1,4 @@
-name: .NET 8 CD AzureWebApp 
+name: .NET 8 CD AzureWebApp
 
 env:
   AZURE_WEBAPP_NAME: Software-Licensing-Module-ERP    # set this to the name of your Azure Web App
@@ -8,7 +8,7 @@ env:
 on:
   workflow_dispatch:  # This allows manual triggering
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]  # Adjust this if your default branch is different
 
 permissions:
   contents: read
@@ -38,6 +38,9 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
 
+      - name: Check jq Version
+        run: jq --version
+
       - name: Inject Connection String
         run: |
           # Replace the connection string in appsettings.json
@@ -45,15 +48,15 @@ jobs:
              '.ConnectionStrings.MySqlConnection = $connString' \
              ./publish/appsettings.json > ./publish/appsettings.tmp.json \
           && mv ./publish/appsettings.tmp.json ./publish/appsettings.json
-        # Ensure jq is installed
         env:
           MYSQL_DB_CONNECTION_STRING: ${{ secrets.MYSQL_DB_CONNECTION_STRING }}
+
+      - name: Print appsettings.json
+        run: cat ./publish/appsettings.json
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-            app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-            publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-            package: ./publish
-
-  
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: ./publish
