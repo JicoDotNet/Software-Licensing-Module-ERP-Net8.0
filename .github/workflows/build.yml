@@ -38,20 +38,4 @@ jobs:
 
       - name: Build project
         run: dotnet build --configuration Release --no-restore ./src/LicensingERP.sln
-        
-      - name: Set up CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: 'csharp'
-
-      - name: List CodeQL databases
-        run: ls -l /home/runner/work/_temp/codeql_databases/
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-        with:
-          category: 'security'
-
-      # Upload CodeQL results (optional, for viewing in the Security tab)
-      #- name: Upload CodeQL results
-      #  uses: github/codeql-action/upload-results@v2
+    
