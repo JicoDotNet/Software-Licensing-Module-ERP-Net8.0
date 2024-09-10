@@ -18,7 +18,7 @@ namespace LicensingERP.Logic.DTO.Interface
         string PasswordText { get; set; }
         bool IsChangeable { get; set; }
 
-        void Encrypt();
-        void Decrypt();
+        void Encrypt(string DefaultEncryptionKey);
+        void Decrypt(string DefaultEncryptionKey);
     }
 }

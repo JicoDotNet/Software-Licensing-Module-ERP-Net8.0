@@ -2,7 +2,7 @@
 {
     public interface ICryptoEngine
     {
-        string Encrypt(string input);
-        string Decrypt(string input);
+        string Encrypt(string inputText);
+        string Decrypt(string encryptedText);
     }
 }

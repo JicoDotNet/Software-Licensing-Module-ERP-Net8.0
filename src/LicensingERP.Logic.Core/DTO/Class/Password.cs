@@ -19,17 +19,17 @@ namespace LicensingERP.Logic.DTO.Class
         public string SessionId { get; set; }
         public bool IsActive { get; set; }
 
-        public void Encrypt()
+        public void Encrypt(string DefaultEncryptionKey)
         {
             this.PasswordSalt = GenericLogic.StringGenerate();
             CryptoEngine cryptoEngine = new CryptoEngine(this.PasswordSalt);
             this.PasswordHash = cryptoEngine.Encrypt(this.PasswordText);
-            this.PasswordSalt = new CryptoEngine().Encrypt(this.PasswordSalt);            
+            this.PasswordSalt = new CryptoEngine(DefaultEncryptionKey).Encrypt(this.PasswordSalt);            
             this.PasswordText = null;
         }
-        public void Decrypt()
+        public void Decrypt(string DefaultEncryptionKey)
         {
-            this.PasswordSalt = new CryptoEngine().Decrypt(this.PasswordSalt);
+            this.PasswordSalt = new CryptoEngine(DefaultEncryptionKey).Decrypt(this.PasswordSalt);
             CryptoEngine cryptoEngine = new CryptoEngine(this.PasswordSalt);
             this.PasswordText = cryptoEngine.Decrypt(this.PasswordHash);
             this.PasswordHash = null;

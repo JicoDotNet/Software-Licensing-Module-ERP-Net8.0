@@ -42,7 +42,7 @@ namespace LicensingERP.Logic.BLL
         public int SetPassword(Password password, bool IsChangeable = false)
         {
             #region Encrypt Password
-            password.Encrypt();
+            password.Encrypt(CommonObj.DefaultEncryptionKey);
             #endregion
 
             MySqlDbAccess DAobj = new MySqlDbAccess(CommonObj.ConnectionString);
@@ -74,7 +74,7 @@ namespace LicensingERP.Logic.BLL
             if (password != null)
             {
                 #region Decrypt Password
-                password.Decrypt();
+                password.Decrypt(CommonObj.DefaultEncryptionKey);
                 #endregion
 
                 return password;

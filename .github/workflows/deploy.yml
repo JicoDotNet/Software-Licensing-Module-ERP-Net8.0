@@ -45,6 +45,15 @@ jobs:
           && mv ./publish/appsettings.tmp.json ./publish/appsettings.json
         env:
           MYSQL_DB_CONNECTION_STRING: ${{ secrets.MYSQL_DB_CONNECTION_STRING }}
+          
+      - name: Inject Default Encryption Key
+        run: |
+          jq --arg encryptionKey "${{ secrets.DEFAULT_ENCRYPTION_KEY }}" \
+             '.DefaultEncryptionKey = $encryptionKey' \
+             ./publish/appsettings.json > ./publish/appsettings.tmp.json \
+          && mv ./publish/appsettings.tmp.json ./publish/appsettings.json
+        env:
+          DEFAULT_ENCRYPTION_KEY: ${{ secrets.DEFAULT_ENCRYPTION_KEY }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
