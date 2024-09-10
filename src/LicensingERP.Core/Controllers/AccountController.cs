@@ -40,7 +40,7 @@ namespace LicensingERP.Controllers
                     Email = loginCredentials.Email,
                 };
 
-                this.HttpContext.SetCookie(credential, "User");
+                this.HttpContext.SetCookie(credential, "User", BllCommonLogic.DefaultEncryptionKey);
                 this.HttpContext.SetSession(menuLists, "Menu");
 
                 if (!loginCredentials.IsChangeable)

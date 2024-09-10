@@ -8,12 +8,12 @@ namespace LicensingERP.StateManagement
 {
     public static class CookieManagement
     {
-        public static bool SetCookie<T>(this HttpContext context, T cookieObject, string cookieKey) where T : new()
+        public static bool SetCookie<T>(this HttpContext context, T cookieObject, string cookieKey, string DefaultEncryptionKey) where T : new()
         {
             if (context != null && cookieObject != null)
             {
                 context.Response.Cookies.Append(cookieKey,
-                    new CryptoEngine().Encrypt(JsonConvert.SerializeObject(cookieObject)),
+                    new CryptoEngine(DefaultEncryptionKey).Encrypt(JsonConvert.SerializeObject(cookieObject)),
                     new CookieOptions
                     {
                         Expires = GenericLogic.IstNow.AddDays(6),
@@ -26,13 +26,13 @@ namespace LicensingERP.StateManagement
             return false;
         }
 
-        public static T GetCookie<T>(this HttpContext context, string cookieKey) where T : new()
+        public static T GetCookie<T>(this HttpContext context, string cookieKey, string DefaultEncryptionKey) where T : new()
         {
             if (context != null)
             {
                 if (context.Request.Cookies.TryGetValue(cookieKey, out string cookieValue))
                 {
-                    return JsonConvert.DeserializeObject<T>(new CryptoEngine().Decrypt(cookieValue));
+                    return JsonConvert.DeserializeObject<T>(new CryptoEngine(DefaultEncryptionKey).Decrypt(cookieValue));
                 }
             }
             return default;

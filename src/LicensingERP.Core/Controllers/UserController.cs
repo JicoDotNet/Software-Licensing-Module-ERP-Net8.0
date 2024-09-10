@@ -53,7 +53,7 @@ namespace LicensingERP.Controllers
                 #endregion
                 #region Maker Checker
                 /* -- Password Encrypt -- */
-                user.Password = new CryptoEngine().Encrypt(user.Password);
+                user.Password = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Encrypt(user.Password);
                     /* -- End -- */
                     DataOnHold<UserPassword> dataOnHold = new DataOnHold<UserPassword>(BllCommonLogic)
                     {

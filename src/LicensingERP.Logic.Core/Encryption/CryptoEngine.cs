@@ -1,54 +1,92 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 
 namespace LicensingERP.Logic.Encryption
 {
-    public class CryptoEngine: ICryptoEngine
+    public class CryptoEngine : ICryptoEngine
     {
-        private const string _DefaultKey = "Licensing-ERP-15";
-
-        private string _Key;
-        public CryptoEngine(string Key = null)
+        private string encryptionKey;
+        public CryptoEngine(string _Key)
         {
-            if (string.IsNullOrEmpty(Key))
+            if (_Key.Length != 32)
             {
-                _Key = _DefaultKey;
-            }
-            else if(Key.Length != 16)
-            {
-                throw new Exception("Key Should be 16 digit chars");
+                throw new Exception("Key Should be 32 digit chars");
             }
             else
             {
-                _Key = Key;
+                this.encryptionKey = _Key;
             }
         }
-        public string Encrypt(string input)
+        public string Encrypt(string inputText)
         {
-            byte[] inputArray = UTF8Encoding.UTF8.GetBytes(input);
-            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(_Key);
-            tripleDES.Mode = CipherMode.ECB;
-            tripleDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = tripleDES.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-            tripleDES.Clear();
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
-        public string Decrypt(string input)
-        {
-            byte[] inputArray = Convert.FromBase64String(input);
-            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider
+            byte[] keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
+            // Ensure the key is 32 bytes (256-bit encryption)
+            if (keyBytes.Length != 32)
             {
-                Key = UTF8Encoding.UTF8.GetBytes(_Key),
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.PKCS7
-            };
-            ICryptoTransform cTransform = tripleDES.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);
-            tripleDES.Clear();
-            return UTF8Encoding.UTF8.GetString(resultArray);
+                Array.Resize(ref keyBytes, 32);
+            }
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = keyBytes;
+                aes.GenerateIV(); // Generate a random IV
+                byte[] iv = aes.IV;
+
+                using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        ms.Write(iv, 0, iv.Length); // Write the IV at the beginning of the stream
+                        using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                        {
+                            using (var sw = new StreamWriter(cs))
+                            {
+                                sw.Write(inputText);
+                            }
+                        }
+
+                        byte[] encrypted = ms.ToArray();
+                        return Convert.ToBase64String(encrypted);
+                    }
+                }
+            }
+        }
+
+        public string Decrypt(string encryptedText)
+        {
+            byte[] keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
+            // Ensure the key is 32 bytes (256-bit encryption)
+            if (keyBytes.Length != 32)
+            {
+                Array.Resize(ref keyBytes, 32);
+            }
+
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = keyBytes;
+
+                byte[] iv = new byte[16];
+                Array.Copy(encryptedBytes, 0, iv, 0, iv.Length);
+                aes.IV = iv;
+
+                using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    using (MemoryStream ms = new MemoryStream(encryptedBytes, 16, encryptedBytes.Length - 16))
+                    {
+                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader sr = new StreamReader(cs))
+                            {
+                                return sr.ReadToEnd();
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

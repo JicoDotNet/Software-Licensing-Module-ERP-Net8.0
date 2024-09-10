@@ -31,17 +31,13 @@ namespace Microsoft.AspNetCore.Mvc
         public sCommonDto BllCommonLogic { get; private set; }
 
         private string _ConnectionString;
+        private string _DefaultEncryptionKey;
         private ActionExecutingContext _filteringContext;
         private ActionExecutedContext _filteredContext;
 
         public BaseController(IAppSettingsService appSettingsService)
         {
             _appSettingsService = appSettingsService;
-
-            _ConnectionString = _appSettingsService.GetSetting("ConnectionStrings.MySqlConnection");
-
-            Email email = new Email();
-            email.Domain = _appSettingsService.GetSetting("Email.SMTP");
         }     
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -63,17 +59,17 @@ namespace Microsoft.AspNetCore.Mvc
                 this.SessionID = filterContext.HttpContext.Session.Id;
                 this.BllCommonLogic = new sCommonDto
                 {
-                    ConnectionString = _ConnectionString,
+                    ConnectionString = _appSettingsService.GetSetting("ConnectionStrings.MySqlConnection"),
                     SessionId = SessionID,// + "-#-" + Guid.NewGuid().ToString().Replace("-", "").ToUpper(),
                     TransactionDate = GenericLogic.IstNow,
-                    IsActive = true
+                    DefaultEncryptionKey = _appSettingsService.GetSetting("DefaultEncryptionKey"),
                 };
                 SessionPerson = null;
                 
                 if (filterContext.HttpContext.CookieAvailable<AuthticateCredential>("User"))
                 {
                     //SessionPerson = SessionManagement.GetSession<AuthticateCredential>(filterContext.HttpContext.Session, "User");
-                    SessionPerson = filterContext.HttpContext.GetCookie<AuthticateCredential>("User");
+                    SessionPerson = filterContext.HttpContext.GetCookie<AuthticateCredential>("User", BllCommonLogic.DefaultEncryptionKey);
                 }
 
                 ReturnMessage = filterContext.HttpContext.GetSession<ReturnObject>("ReturnMessage");
