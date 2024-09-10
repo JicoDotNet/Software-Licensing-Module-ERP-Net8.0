@@ -37,6 +37,12 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
 
+      - name: Check jq Version
+        run: jq --version
+
+      - name: Print appsettings.json 1
+        run: cat ./publish/appsettings.json
+
       - name: Inject Connection String
         run: |
           jq --arg connString "${{ secrets.MYSQL_DB_CONNECTION_STRING }}" \
@@ -54,6 +60,9 @@ jobs:
           && mv ./publish/appsettings.tmp.json ./publish/appsettings.json
         env:
           DEFAULT_ENCRYPTION_KEY: ${{ secrets.DEFAULT_ENCRYPTION_KEY }}
+
+      - name: Print appsettings.json 2
+        run: cat ./publish/appsettings.json
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
