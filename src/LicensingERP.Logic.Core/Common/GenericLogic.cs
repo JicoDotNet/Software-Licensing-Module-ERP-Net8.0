@@ -20,7 +20,7 @@
             }
         }
 
-        public static string StringGenerate(int lenght = 16)
+        public static string StringGenerate(int lenght = 32)
         {
             NameGenerator();
             Random random = new Random();

@@ -113,7 +113,6 @@ namespace LicensingERP
             services.AddSingleton<IAppSettingsService, AppSettingsService>();
             services.AddScoped<IRequestRestrictMetaValueService, RequestRestrictMetaValueService>();
 
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;

@@ -38,7 +38,7 @@ INSERT INTO tbl_menu_list(MenuGroupId, Icon, DisplayText, Controller, ActionResu
 (6, 'far fa-circle', 'XML Download', 'MISLicense', 'XMLDownload', True, False, 'XML Download Report', False);
 
 INSERT INTO tbl_password (UserId, PasswordHash, IsActive, ActivationDate, PasswordSalt, SessionId, TransactionDate, PasswordText, IsChangeable)
-VALUES  (1, 'E5zMwlEFWgE=', 1, NOW(),  'nCepJIH7bmBvjDjUeApq/CTv11EnhJDJ', 'DEVELOPER', NOW(), null, False);
+VALUES  (1, 'rKtOrO1VqO91aeiyo90Cu8rcOO63AFivR6BDSMv29pg=', 1, NOW(),  's2aVLJK1KNQkAvoNtBTqzzEFArU3ljwL1dIz0v1F+cDNcrG0fdImOuKh/SA/t8XGzqG2kdTUau+Hf3AWkQGv4w==', 'DEVELOPER', NOW(), null, False);
 
 INSERT INTO tbl_s_state(Name, IsPositive, IsNegative, IsHold, SessionId, IsActive, TransactionDate) VALUES
 ('Approved', True, False, False, 'DEVELOPER', True, NOW()),

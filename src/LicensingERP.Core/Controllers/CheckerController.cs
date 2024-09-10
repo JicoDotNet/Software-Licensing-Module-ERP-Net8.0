@@ -155,7 +155,7 @@ namespace LicensingERP.Core.Controllers
                     break;
                 case eDataOnHoldCaseType.User:
                     if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new UserLogic(BllCommonLogic).Insert((UserPassword)dataOnHold.GetT(), new Password { PasswordText = new CryptoEngine().Decrypt(((UserPassword)dataOnHold.GetT()).Password) });
+                        return new UserLogic(BllCommonLogic).Insert((UserPassword)dataOnHold.GetT(), new Password { PasswordText = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Decrypt(((UserPassword)dataOnHold.GetT()).Password) });
                     if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
                         return new UserLogic(BllCommonLogic).Update((User)dataOnHold.GetT());
                     if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
