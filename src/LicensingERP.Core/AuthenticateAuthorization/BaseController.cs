@@ -129,6 +129,7 @@ namespace Microsoft.AspNetCore.Mvc
 
             TempData.Put("ReturnMessage", ReturnMessage);
             TempData.Put("SessionPerson", SessionPerson);
+            TempData.Put("Version", _appSettingsService.GetSetting("Version"));
             if(ReturnMessage != null)
                 filterContext.HttpContext.SetSession(ReturnMessage, "ReturnMessage");
             base.OnActionExecuted(filterContext);
