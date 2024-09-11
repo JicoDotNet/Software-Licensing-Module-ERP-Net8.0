@@ -139,9 +139,12 @@
             @RenderBody()
         </div>
 
-        <footer class="main-footer" style="height:55px;">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 1.7.0
+        <footer class="main-footer text-sm">
+            <strong>Developed by <a href="https://github.com/JicoDotNet/Software-Licensing-Module-ERP-Net8.0" target="_blank">JicoDotNet</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> @(TempData.Get<object>("Version").ToString())
+                <small class="ml-2 text-success">Make in India</small>
             </div>
         </footer>
 
