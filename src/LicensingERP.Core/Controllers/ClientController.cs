@@ -34,7 +34,7 @@ namespace LicensingERP.Controllers
         [HttpPost]
         public ActionResult Index(Client client)
         {
-            client.CompanyAddress = client.CompanyAddress.Trim();
+            client.CompanyAddress = client?.CompanyAddress?.Trim();
             int flag = 0;
             if (string.IsNullOrEmpty(id))
             {

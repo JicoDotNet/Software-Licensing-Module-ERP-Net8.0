@@ -1,5 +1,4 @@
-﻿
-@model _Clients
+﻿@model _Clients
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -48,7 +47,9 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="ClientTypeId">Client Type <span style="color:red">&#42;</span></label>
-                                        <select class="form-control" name="CategoryId"   style="width:100%; @if (Model.Client != null) { <text> pointer-events: none; </text> }" required>
+                                        <select class="form-control" name="CategoryId" style="width:100%; @if (Model.Client != null) {
+                                    <text> pointer-events: none; </text>
+ }" required>
                                             <option value="" selected>--Please Select--</option>
                                             @foreach (ClientCategory clientCategory in Model.ClientCategories)
                                             {
@@ -75,70 +76,86 @@
                                     <div class="form-group">
                                         <label for="ClientName">Client Name <span style="color:red">&#42;</span></label>
                                         <input type="text" name="ClientName"
-                                                @if (Model.Client != null) { <text> value="@Model.Client.ClientName" </text>  }
-                                               class="form-control" placeholder="Enter Client Name"  required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ClientNumber">Mobile <span style="color:red">&#42;</span></label>
-                                        <input type="text" name="ClientNumber"  
-                                                 @if (Model.Client != null) { <text> value="@Model.Client.ClientNumber" </text>  }
-                                               class="form-control" placeholder="Enter Mobile Number"  pattern="[0-9]{1}[0-9]{9}" title="Only Phone Number"   maxlength="10" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ClientEmail">Email <span style="color:red">&#42;</span></label>
-                                        <input type="email" name="ClientEmail"
-                                                @if (Model.Client != null) { <text> value="@Model.Client.ClientEmail" </text>  }
-                                               class="form-control" placeholder="Enter Email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.ClientName" </text>
+                                        }
+                                        class="form-control" placeholder="Enter Client Name"  required />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="CompanyName">Company Name <span style="color:red">&#42;</span></label>
                                         <input type="text" name="CompanyName"
-                                                @if (Model.Client != null) { <text> value="@Model.Client.CompanyName" </text>  }
-                                               class="form-control" placeholder="Enter Company Name"  required>
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.CompanyName" </text>
+                                        }
+                                        class="form-control" placeholder="Enter Company Name"  required />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="CompanyNumber">Company Number <span style="color:red">&#42;</span></label>
-                                        <input type="text" name="CompanyNumber" 
-                                                @if (Model.Client != null) { <text> value="@Model.Client.CompanyNumber" </text>  }
-                                               class="form-control" placeholder="Enter Company Phone Number"  pattern="[0-9]{1}[0-9]{9}" title="Only Phone Number" maxlength="10" required>
+                                        <label for="ClientEmail">Client Email</label>
+                                        <input type="email" name="ClientEmail"
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.ClientEmail" </text>
+                                        }
+                                        class="form-control" placeholder="Enter Client Email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="CompanyEmail">Company Email <span style="color:red">&#42;</span></label>
+                                        <label for="CompanyNumber">Company Number </label>
+                                        <input type="text" name="CompanyNumber"
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.CompanyNumber" </text>
+                                        }
+                                        class="form-control" placeholder="Enter Company Phone Number"  pattern="[0-9]{1}[0-9]{9}" title="Only Phone Number" maxlength="10" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="CompanyEmail">Company Email</label>
                                         <input type="email" name="CompanyEmail"
-                                                 @if (Model.Client != null) { <text> value="@Model.Client.CompanyEmail" </text>  }
-                                               class="form-control" placeholder="Enter Company Email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.CompanyEmail" </text>
+                                        }
+                                        class="form-control" placeholder="Enter Company Email" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="GSTIN">GST No <span style="color:red">&#42;</span></label>
+                                        <label for="GSTIN">GST No</label>
                                         <input type="text" name="GSTIN"
-                                                @if (Model.Client != null) { <text> value="@Model.Client.GSTIN" </text>  }
-                                               class="form-control" placeholder="Enter GST Number" maxlength="15" required>
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.GSTIN" </text>
+                                        }
+                                        class="form-control" placeholder="Enter GST Number" maxlength="15" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="PANNo">PAN Card No <span style="color:red">&#42;</span></label>
-                                        <input type="text" name="PANNo" 
-                                                @if (Model.Client != null) { <text> value="@Model.Client.PANNo" </text>  }
-                                               class="form-control" placeholder="Enter PAN Card No" maxlength="10" required>
+                                        <label for="PANNo">PAN Card No</label>
+                                        <input type="text" name="PANNo"
+                                        @if (Model.Client != null)
+                                        {
+                                            <text> value="@Model.Client.PANNo" </text>
+                                        }
+                                        class="form-control" placeholder="Enter PAN Card No" maxlength="10" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="CompanyAddress">Company Address <span style="color:red">&#42;</span></label>
-                                        <textarea name="CompanyAddress" class="form-control" placeholder="Enter Company Address" required>@if (Model.Client != null) { <text> @Model.Client.CompanyAddress </text>  }</textarea>
+                                        <label for="CompanyAddress">Company Address</label>
+                                        <textarea name="CompanyAddress" class="form-control" placeholder="Enter Company Address">@if (Model.Client != null)
+                                            {
+                                                <text> @Model.Client.CompanyAddress </text>
+                                            }</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -171,9 +188,9 @@
                                     <th>Activity</th>
                                     <th>Client Type</th>
                                     <th>Name</th>
+                                    <th>Company Name</th>
                                     <th>Mobile</th>
                                     <th>Email</th>
-                                    <th>Company Name</th>
                                     <th>Company Address</th>
                                     <th>Company Number</th>
                                     <th>Company Email</th>
@@ -183,23 +200,23 @@
                             <tbody>
                                 @foreach (Client CL in Model.Clients)
                                 {
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-sm btn-primary" href="@Url.Action("Index", "Client", new { id = CL.Id })"><i class="fas fa-pen"></i> Edit</a> /
-                                        <button onclick="ClientDeactivate(@CL.Id)" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt pull-right"></i> Deactivate
-                                        </button>
-                                    </td>
-                                    <td>@CL.CategoryName</td>
-                                    <td>@CL.ClientName</td>
-                                    <td>@CL.ClientNumber</td>
-                                    <td>@CL.ClientEmail</td>
-                                    <td>@CL.CompanyName</td>
-                                    <td>@CL.CompanyAddress</td>
-                                    <td>@CL.CompanyNumber</td>
-                                    <td>@CL.CompanyEmail</td>
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="@Url.Action("Index", "Client", new { id = CL.Id })"><i class="fas fa-pen"></i> Edit</a> /
+                                            <button onclick="ClientDeactivate(@CL.Id)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt pull-right"></i> Deactivate
+                                            </button>
+                                        </td>
+                                        <td>@CL.CategoryName</td>
+                                        <td>@CL.ClientName</td>
+                                        <td>@CL.CompanyName</td>
+                                        <td>@CL.ClientNumber</td>
+                                        <td>@CL.ClientEmail</td>
+                                        <td>@CL.CompanyAddress</td>
+                                        <td>@CL.CompanyNumber</td>
+                                        <td>@CL.CompanyEmail</td>
 
-                                </tr>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -211,7 +228,7 @@
     </div>
 </section>
 <div id="div_opn"></div>
-@section BodyScript{
+@section BodyScript {
     <script type="text/javascript">
         function ClientDeactivate(id) {
             $("#div_opn").load("@Url.Action("ClientDeactivate", "Client")/" + id);

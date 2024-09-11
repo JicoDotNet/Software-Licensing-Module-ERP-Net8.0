@@ -12,9 +12,9 @@ namespace LicensingERP.Logic.Common
         {
             try
             {
-                //email.To = "waitforu00@gmail.com";// email.To;
-                email.Subject = "Test Subject";// email.Subject;
-                email.Body = "This is for testing";// email.Body;
+                email.To = email.To;
+                email.Subject = "Test Subject";
+                email.Body = "This is for testing";
 
                 email.Cc = "";
                 email.Bcc = "";
@@ -34,7 +34,9 @@ namespace LicensingERP.Logic.Common
                 smtp.UseDefaultCredentials = true;
                 smtp.EnableSsl = true;
                 smtp.Credentials = new System.Net.NetworkCredential(email.UserName, email.Password);
-                smtp.Send(mailMessage);
+
+                /*-- Mail Sending Pause --*/
+                //smtp.Send(mailMessage);
             }
             catch (Exception ex) { throw ex; }
         }

@@ -1,0 +1,147 @@
+﻿@model WorkflowAssign
+@{
+
+    ViewBag.Title = "Assign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section HeadCss {
+    <style type="text/css">
+        /* Style for the diagram container */
+        #myDiagramDiv {
+            width: 100%;
+            height: 500px;
+            border: 1px solid lightgray;
+        }
+    </style>
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Workflow Diagram</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Workflow")">Workflow</a></li>
+                    <li class="breadcrumb-item active">Diagram</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-danger">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="License Type">License Type</label>
+                            <select class="form-control select2" name="LicenceTypeId" required onchange="location.href = '@Url.Action("Assign","Workflow", new { id = string.Empty })' + '/' + this.value">
+                                <option value="" selected>-- Please Select--</option>
+                                @foreach (LicenceType LT in Model.licenceTypes)
+                                {
+                                    if (Model.licenceType != null)
+                                    {
+                                        if (Model.licenceType.Id == LT.Id)
+                                        {
+                                            <option value="@LT.Id" selected>@LT.TypeName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@LT.Id">@LT.TypeName</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@LT.Id">@LT.TypeName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="container">
+                            <h2 class="text-center">Workflow Diagram with Stages</h2>
+                            <!-- Diagram Container -->
+                            <div id="myDiagramDiv"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section BodyScript{
+    <!-- Include GoJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.3.13/go.js"></script>
+
+    <script>
+        // Sample JSON Data for Workflow Nodes and Links with different stages
+        var workflowData = {
+            "nodes": [
+                { "key": 1, "text": "Start", "color": "green", "shape": "Circle" },
+                { "key": 2, "text": "Decision", "color": "yellow", "shape": "RoundedRectangle" },
+                { "key": 3, "text": "Approved", "color": "lightgreen", "shape": "RoundedRectangle" },
+                { "key": 4, "text": "Rejected", "color": "lightcoral", "shape": "RoundedRectangle" },
+                { "key": 5, "text": "Transferred", "color": "lightblue", "shape": "RoundedRectangle" },
+                { "key": 6, "text": "End", "color": "red", "shape": "Circle" }
+            ],
+            "links": [
+                { "from": 1, "to": 2, "text": "Start", "color": "black" },
+                { "from": 2, "to": 3, "text": "Approve", "color": "green" },
+                { "from": 2, "to": 4, "text": "Reject", "color": "red" },
+                { "from": 2, "to": 5, "text": "Transfer", "color": "blue" },
+                { "from": 3, "to": 6, "text": "Approve", "color": "green" }
+            ]
+        };
+
+        // Initialize the diagram
+        function init() {
+            var $ = go.GraphObject.make;  // for conciseness in defining templates
+
+            // Create the Diagram
+            var myDiagram = $(go.Diagram, "myDiagramDiv",
+                {
+                    "undoManager.isEnabled": true  // enable undo & redo
+                });
+
+            // Define the Node template with additional attributes
+            myDiagram.nodeTemplate =
+                $(go.Node, "Auto",
+                    $(go.Shape,
+                        { strokeWidth: 0 },
+                        new go.Binding("figure", "shape"),  // Bind shape attribute
+                        new go.Binding("fill", "color")),  // Bind color attribute
+                    $(go.TextBlock,
+                        { margin: 8 },
+                        new go.Binding("text", "text"))  // Bind text attribute
+                );
+
+            // Define the Link template with color binding
+            myDiagram.linkTemplate =
+                $(go.Link,
+                    { routing: go.Link.AvoidsNodes, curve: go.Link.JumpOver },
+                    $(go.Shape, new go.Binding("stroke", "color")),  // Bind color attribute to link
+                    $(go.Shape, { toArrow: "Standard" }, new go.Binding("stroke", "color")),  // Bind arrow color
+                    $(go.TextBlock,  // Text label for the link
+                        { segmentOffset: new go.Point(1, -10) },
+                        new go.Binding("text", "text"))
+                );
+
+            // Load the diagram model from JSON data
+            myDiagram.model = new go.GraphLinksModel(
+                workflowData.nodes,
+                workflowData.links
+            );
+        }
+
+        // Call the init function on page load
+        window.onload = init;
+    </script>
+}

@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Workflow Process</h1>
+                <h1>Workflow Process Define</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -80,8 +80,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="Description">Description<span style="color:red">&#42;</span></label>
-                                    <textarea name="Description" class="form-control" placeholder="Enter Description" required></textarea>
+                                    <label for="Description">Description</label>
+                                    <textarea name="Description" class="form-control" placeholder="Enter Description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -103,8 +103,8 @@
                             <thead>
                                 <tr>
                                     <th>License Type</th>
-                                    <th>Process Code</th>
                                     <th>Process Name</th>
+                                    <th>Process Code</th>
                                     <th>Initial Procdess</th>
                                     <th>End Process</th>
                                     <th>Description</th>
@@ -115,8 +115,8 @@
                                 {
                                     <tr>
                                         <td>@WFPro.TypeName</td>
-                                        <td>@WFPro.ProcessCode</td>
                                         <td>@WFPro.ProcessName</td>
+                                        <td>@WFPro.ProcessCode</td>
                                         <td>
                                             @if (WFPro.IsInitial)
                                             {

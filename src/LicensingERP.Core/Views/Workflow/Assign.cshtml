@@ -85,7 +85,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="FormUserTypeId">From User <span style="color:red">&#42;</span></label>
+                                    <label for="FormUserTypeId">From User Group <span style="color:red">&#42;</span></label>
                                     <select class="form-control select2" style="width: 100%;" name="FormUserTypeId" required>
                                         <option value="">-- Please Select--</option>
                                         @foreach (UserType userType in Model.userTypes)
@@ -97,7 +97,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="ToUserTypeId"> To User  </label>
+                                    <label for="ToUserTypeId">To User Group</label>
                                     <select class="form-control select2" style="width: 100%;" name="ToUserTypeId" >
                                         <option value="">-- Please Select--</option>
                                         @foreach (UserType userType in Model.userTypes)
@@ -135,7 +135,7 @@
                                         From User
                                     </th>
                                     <th>
-                                        Process
+                                        Process/Code
                                     </th>
                                     <th>
                                         State

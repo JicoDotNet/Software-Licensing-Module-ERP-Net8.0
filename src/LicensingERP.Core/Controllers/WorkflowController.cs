@@ -100,7 +100,7 @@ namespace LicensingERP.Controllers
                     wfAssigns = new WfProcessAssignLogic(BllCommonLogic).GetWfProcessAssigns(Convert.ToInt32(id)).ToList(),
                     userTypes = new UserTypeLogic(BllCommonLogic).GetUserType(),
                     wfProcesses = new WfProcessLogic(BllCommonLogic).GetWfProcess().Where(a => a.LicenceTypeId == Convert.ToInt32(id)).ToList(),
-                    state = new WfStateLogic(BllCommonLogic).GetWfState().Where(a => a.IsPositive || (a.IsHold && a.IsNegative)).ToList(),
+                    state = new WfStateLogic(BllCommonLogic).GetWfState(),//.Where(a => a.IsPositive || (a.IsHold)).ToList(),
                     licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
                 };
                 WorkAssignViewModel.licenceType = WorkAssignViewModel.licenceTypes
@@ -108,6 +108,7 @@ namespace LicensingERP.Controllers
             }
             return View(WorkAssignViewModel);
         }
+
         [HttpPost]
         public ActionResult Assign(WfProcessAssign WFAsn)
         {
@@ -149,6 +150,16 @@ namespace LicensingERP.Controllers
 
 
             return RedirectToAction("Assign");
+        }
+
+        public ActionResult Diagram()
+        {
+            WorkflowAssign WorkAssignViewModel;
+            WorkAssignViewModel = new WorkflowAssign
+            {
+                licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType()
+            };
+            return View("Diagram", WorkAssignViewModel);
         }
 
         [HttpGet]

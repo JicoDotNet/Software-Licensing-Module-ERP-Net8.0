@@ -318,7 +318,6 @@
 @section BodyScript{
     <script type="text/javascript">
         function ShowData(e) {
-            debugger;
             $('#modal .modal-body').html(ModelBindWithJson($(e).data('bind')));
             $("#modal").modal({ backdrop: 'static', keyboard: false });
         }
@@ -334,7 +333,6 @@
         }
 
         function ModelBindWithJson(myObj) {
-            debugger;
             var txt = '';
             var i = 0;
             txt += "<table style='width: 100%;'><tr><th>Name</th><th>Value</th></tr>"
