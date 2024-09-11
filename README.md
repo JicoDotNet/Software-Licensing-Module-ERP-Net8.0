@@ -61,8 +61,7 @@
 ## Usage
 
 ### Screenshots
-![Dashboard Screenshot](link-to-screenshot)  
-![Reports Screenshot](link-to-screenshot)  
+![image](https://github.com/user-attachments/assets/bf7a7166-7259-4070-a6b8-f4a361cede46)
 
 ## Demo
 A live demo of the application can be accessed 
