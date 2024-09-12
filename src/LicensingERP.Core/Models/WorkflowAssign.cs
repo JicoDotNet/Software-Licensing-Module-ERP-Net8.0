@@ -16,5 +16,6 @@ namespace LicensingERP.Models
 
         public IReadOnlyList<LicenceType> licenceTypes { get; set; }
         public LicenceType licenceType { get; set; }
+        public WorkflowDiagram wfDiagram { get; set; }
     }
 }

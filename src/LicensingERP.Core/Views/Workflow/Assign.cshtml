@@ -27,7 +27,7 @@
             {
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="License Type">License Type</label>
                                 <select class="form-control select2" name="LicenceTypeId" required onchange="location.href = '@Url.Action("Assign","Workflow", new { id = string.Empty })' + '/' + this.value">
@@ -51,6 +51,12 @@
                                         }
                                     }
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <div class="text-right mt-3">
+                                <a href="@Url.Action("Diagram", "Workflow", new { id = string.Empty })" class="btn btn-outline-primary"><i class="fas fa-project-diagram"></i> Workflow Diagram</a>
                             </div>
                         </div>
                     </div>
@@ -85,8 +91,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="FormUserTypeId">From User Group <span style="color:red">&#42;</span></label>
-                                    <select class="form-control select2" style="width: 100%;" name="FormUserTypeId" required>
+                                    <label for="FromUserTypeId">From User Group <span style="color:red">&#42;</span></label>
+                                    <select class="form-control select2" style="width: 100%;" name="FromUserTypeId" required>
                                         <option value="">-- Please Select--</option>
                                         @foreach (UserType userType in Model.userTypes)
                                         {
@@ -132,7 +138,7 @@
                                         License
                                     </th>
                                     <th>
-                                        From User
+                                        From <br />User Group
                                     </th>
                                     <th>
                                         Process/Code
@@ -141,13 +147,13 @@
                                         State
                                     </th>
                                     <th>
-                                        To User
+                                        To <br />User Group
                                     </th>
                                     <th>
-                                        Starting
+                                        Starting Point
                                     </th>
                                     <th>
-                                        Ending
+                                        Ending Point
                                     </th>
                                     <th>
                                         Activation Date
@@ -164,51 +170,51 @@
                                     {
                                         <text> style="background-color: #daa520;" </text>
                                     }>
-                                            <td>
+                                                <td>
                                             @wfAssign.TypeName
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @wfAssign.FromUserTypeName
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @wfAssign.ProcessName - @wfAssign.ProcessCode
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @wfAssign.Name
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @wfAssign.ToUserTypeName
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @if (wfAssign.IsInitial && wfAssign.IsPositive)
                                             {
-                                                        <span class="right badge badge-success">Yes</span>
+                                                                <span class="right badge badge-success">Yes</span>
                                             }
                                             else
                                             {
-                                                        <span class="right badge badge-danger">No</span>
+                                                                <span class="right badge badge-danger">No</span>
                                             }
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @if (wfAssign.IsEnd && wfAssign.IsPositive)
                                             {
-                                                        <span class="right badge badge-success">Yes</span>
+                                                                <span class="right badge badge-success">Yes</span>
                                             }
                                             else
                                             {
-                                                        <span class="right badge badge-danger">No</span>
+                                                                <span class="right badge badge-danger">No</span>
                                             }
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @wfAssign.ActivityStartDate.ToDisplayDateString()
-                                            </td>
-                                            <td>
+                                                </td>
+                                                <td>
                                             @if (wfAssign.ActivityEndDate > new DateTime(2019, 1, 1))
                                             {
                                                 <text> @wfAssign.ActivityEndDate.ToString() </text>
                                             }
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                 }
                             </tbody>
                         </table>
@@ -222,15 +228,15 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            $('select[name="FormUserTypeId"]').change(function (e) {
+            $('select[name="FromUserTypeId"]').change(function (e) {
                 var UserTypeId = $(this).val();
                 $('select[name="ToUserTypeId"] option').removeAttr('disabled');
                 $('select[name="ToUserTypeId"] option[value=' + UserTypeId + ']').attr('disabled', 'disabled');
             });
             $('select[name="ToUserTypeId"]').change(function (e) {
                 var UserTypeId = $(this).val();
-                $('select[name="FormUserTypeId"] option').removeAttr('disabled');
-                $('select[name="FormUserTypeId"] option[value=' + UserTypeId + ']').attr('disabled', 'disabled');
+                $('select[name="FromUserTypeId"] option').removeAttr('disabled');
+                $('select[name="FromUserTypeId"] option[value=' + UserTypeId + ']').attr('disabled', 'disabled');
             });
         });
 

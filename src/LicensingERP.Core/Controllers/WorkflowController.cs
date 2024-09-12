@@ -1,11 +1,14 @@
 ﻿using LicensingERP.Logic.BLL;
 using LicensingERP.Logic.DTO.Class;
+using LicensingERP.Logic.DTO.Custom;
 using LicensingERP.Logic.Enumeration;
 using LicensingERP.Logic.Model.Class;
 using LicensingERP.Models;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Math.EC.Rfc8032;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -113,7 +116,7 @@ namespace LicensingERP.Controllers
             {
                 WorkAssignViewModel = new WorkflowAssign
                 {
-                    wfAssigns = new WfProcessAssignLogic(BllCommonLogic).GetWfProcessAssigns(Convert.ToInt32(id)).ToList(),
+                    wfAssigns = new WfProcessAssignLogic(BllCommonLogic).GetWfProcessAssigns(Convert.ToInt32(id)),
                     userTypes = new UserTypeLogic(BllCommonLogic).GetUserType(),
                     wfProcesses = new WfProcessLogic(BllCommonLogic).GetWfProcess().Where(a => a.LicenceTypeId == Convert.ToInt32(id)).ToList(),
                     state = new WfStateLogic(BllCommonLogic).GetWfState(),//.Where(a => a.IsPositive || (a.IsHold)).ToList(),
@@ -181,6 +184,7 @@ namespace LicensingERP.Controllers
                 WorkAssignViewModel = new WorkflowAssign
                 {
                     licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
+                    wfDiagram = new WfProcessAssignLogic(BllCommonLogic).GetWfProcessAssignDiagram(Convert.ToInt32(id)),
                 };
                 WorkAssignViewModel.licenceType = WorkAssignViewModel.licenceTypes
                     .Where(a => a.Id == Convert.ToInt32(id)).FirstOrDefault();

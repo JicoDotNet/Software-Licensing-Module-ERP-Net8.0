@@ -23,7 +23,7 @@ namespace LicensingERP.Logic.BLL
             {
                 new NameValuePair("p_WFProcessId", wfProcessAssign.WFProcessId),
                 new NameValuePair("p_StateId", wfProcessAssign.StateId),
-                new NameValuePair("p_FromUserTypeId", wfProcessAssign.FormUserTypeId),
+                new NameValuePair("p_FromUserTypeId", wfProcessAssign.FromUserTypeId),
                 new NameValuePair("p_ToUserTypeId", wfProcessAssign.ToUserTypeId),
                 new NameValuePair("p_ActivityStartDate", GenericLogic.IstNow),
                 new NameValuePair("p_SessionId", CommonObj.SessionId),
@@ -51,7 +51,105 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_QueryType", "FORLICENSE"),
                 new NameValuePair("p_LicenceTypeId", LicenceTypeId)
             };
-            return mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, NameValuePairs).ToList<WfAssign>();
+            List<WfAssign> wfAssigns = mySqlDBAccess.GetData(StoreProcedure.GetWFProcessAssign, NameValuePairs).ToList<WfAssign>();
+            return wfAssigns;
+        }
+
+        public WorkflowDiagram GetWfProcessAssignDiagram(int LicenceTypeId)
+        {
+            List<WfAssign> wfAssigns = GetWfProcessAssigns(LicenceTypeId);
+            WorkflowDiagram diagram = new WorkflowDiagram();
+            List<node> nodes = new List<node>
+                {
+                    new node
+                    {
+                        key = -1,
+                        text = "Start",
+                        color = eNodeColors.lightgreen.ToString(),
+                        shape = "Circle"
+                    },
+                    new node
+                    {
+                        key = 0,
+                        text = "End",
+                        color = eNodeColors.lightcoral.ToString(),
+                        shape = "Circle"
+                    }
+                };
+            List<link> links = new List<link>();
+
+            WfAssign wfAssign = wfAssigns?.FirstOrDefault(a => a.IsInitial);
+            if (wfAssign != null)
+            {
+                links.Add(new link
+                {
+                    from = -1,
+                    to = wfAssign.FromUserTypeId,
+                    color = eLinkColors.green.ToString(),
+                    text = "Starting"
+                });
+            }
+            foreach (WfAssign item in wfAssigns)
+            {
+                if (nodes.FirstOrDefault(a => a.key == item.FromUserTypeId) == null)
+                {
+                    nodes.Add(
+                        new node
+                        {
+                            key = item.FromUserTypeId,
+                            text = item.FromUserTypeName,
+                            color = eNodeColors.lightblue.ToString(),
+                            shape = "Diamond"
+                        }
+                    );
+                }
+                if (nodes.FirstOrDefault(a => a.key == item.ToUserTypeId) == null)
+                {
+                    nodes.Add(
+                        new node
+                        {
+                            key = item.ToUserTypeId,
+                            text = item.ToUserTypeName,
+                            color = eNodeColors.lightblue.ToString(),
+                            shape = "Diamond"
+                        }
+                    );
+                }
+                if (item.ToUserTypeId == 0)
+                {
+                    links.Add(new link
+                    {
+                        from = item.FromUserTypeId,
+                        to = 0,
+                        text = "Ending " + (item.IsPositive ? "[Approved]" : item.IsNegative ? "[Rejected]" : "[Unknown]"),
+                        color = item.IsPositive ? eLinkColors.green.ToString() : item.IsNegative ? eLinkColors.red.ToString() : "yellow",
+                    });
+                }
+                else
+                {
+                    links.Add(new link
+                    {
+                        from = item.FromUserTypeId,
+                        to = item.ToUserTypeId,
+                        text = item.ProcessName + " [" + item.Name + "]",
+                        color = (item.IsPositive && !item.IsHold) ? eLinkColors.green.ToString() : (item.IsNegative && !item.IsHold) ? eLinkColors.red.ToString() : (item.IsNegative && item.IsHold) ? eLinkColors.blue.ToString() : "yellow",
+                    });
+                }
+            }
+            diagram.nodes = nodes.ToArray();
+            if (diagram.nodes.Length > 0)
+            {
+                links.Add(new link
+                {
+                    color = eLinkColors.blue.ToString(),
+                    from = -1,
+                    to = 0,
+                    text = "[No Workflow Defined]"
+                });
+            }
+            diagram.links = links.ToArray();
+
+            return diagram;
         }
     }
 }
