@@ -39,7 +39,7 @@ namespace LicensingERP.Controllers
         public ActionResult Index(UserPassword user)
         {
             int UserId;
-            user.Address = user.Address.Trim();
+            user.Address = user?.Address?.Trim();
             #region  Change Requriment 03/12/2019
             user.Email = user.Email + user.UserName;
             user.UserName = user.Email;
@@ -416,7 +416,7 @@ namespace LicensingERP.Controllers
         //    return Json(Url.Action("Permission1", "User", new { id = "View" }));
         //}
 
-        public ActionResult Index1()
+        public ActionResult Details()
         {
             UserTypeLogic usertypeLogic = new UserTypeLogic(BllCommonLogic);
             UserLogic userLogic = new UserLogic(BllCommonLogic);

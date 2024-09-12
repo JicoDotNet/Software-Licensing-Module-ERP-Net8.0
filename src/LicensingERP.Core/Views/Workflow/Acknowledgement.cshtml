@@ -88,10 +88,11 @@
                                             <option value="30">30</option>
                                             <option value="31">31</option>
                                         </select>
-                                        <select id="cmbYearDate" style="width:28%; display:initial;" class="form-control" name="ActivityStartDateYear" onchange="setDay(cmbYearDate,cmbMonthDate,cmbDayDate)">
-                                            
-                                            <option value="2019">2019</option>
-                                            <option value="2020">2020</option>
+                                        <select id="cmbYearDate" style="width:28%; display:initial;" class="form-control" name="ActivityStartDateYear" onchange="setDay(cmbYearDate,cmbMonthDate,cmbDayDate)">                                            
+                                            @for(int year = 2019; year <= GenericLogic.IstNow.Year + 1; year++)
+                                            {
+                                                <option value="@year">@year</option>
+                                            }
                                         </select>
                                     </span>
                                 </div>
@@ -148,9 +149,10 @@
                                             <option value="31">31</option>
                                         </select>
                                         <select id="cmbYearDate" style="width:28%; display:initial;" class="form-control" name="ActivityEndDateYear" onchange="setDay(cmbYearDate,cmbMonthDate,cmbDayDate)">
-                                            
-                                            <option value="2019">2019</option>
-                                            <option value="2020">2020</option>
+                                            @for (int year = 2019; year <= GenericLogic.IstNow.Year + 1; year++)
+                                            {
+                                                <option value="@year">@year</option>
+                                            }
                                         </select>
                                     </span>
                                 </div>
@@ -175,14 +177,9 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     }
-                    <!-- /.card-body -->
                 </div>
-
             </div>
-            <!--/.col (left) -->
-            <!-- left column -->
             <div class="col-md-12">
-                <!-- /.card -->
                 <div class="card card-danger">
                     <div class="card-header bg-cyan">
                         <h3 class="card-title">View Acknowledgement</h3>
@@ -202,12 +199,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
                 </div>
             </div>
-            <!--/.col (left) -->
         </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
-<!-- /.content -->

@@ -43,7 +43,7 @@ INSERT INTO tbl_dashboard (PartialViewName, Description, SortOrder, DivCssClass,
 
 INSERT INTO tbl_menu_group(Icon, DisplayText) VALUES
 ('fa fa-user', 'User Management'),
-('fas fa-hourglass', 'Workflow Authoring'),
+('fas fa-hourglass', 'Workflow Design'),
 ('fab fa-buromobelexperte', 'Master'),
 ('fas fa-satellite-dish', 'Requisition'),
 ('fas fa-chart-bar', 'MIS User Report'),

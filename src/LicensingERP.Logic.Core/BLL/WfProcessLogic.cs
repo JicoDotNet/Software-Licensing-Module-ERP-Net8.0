@@ -45,6 +45,10 @@ namespace LicensingERP.Logic.BLL
             };
             return mySqlDBAccess.GetData(StoreProcedure.GetWFProcess, NameValuePairs).ToList<WfProcessLicence>();
         }
+        public List<WfProcessLicence> GetWfProcess(int LicenceTypeId)
+        {
+            return GetWfProcess().Where(a => a.LicenceTypeId == LicenceTypeId).ToList();
+        }
         public WfProcess GetIdByWFProcess(int Id)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);

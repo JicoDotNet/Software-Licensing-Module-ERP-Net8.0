@@ -451,7 +451,7 @@ CREATE TABLE tbl_wf_process (
   ProcessCode VARCHAR(50) NOT NULL,
   IsInitial BIT(1) NOT NULL,
   IsEnd BIT(1) NOT NULL,
-  Description VARCHAR(1000) NOT NULL,
+  Description VARCHAR(1000),
   SessionId VARCHAR(100) NOT NULL,
   TransactionDate DATETIME NOT NULL,
   IsActive BIT(1) NOT NULL,

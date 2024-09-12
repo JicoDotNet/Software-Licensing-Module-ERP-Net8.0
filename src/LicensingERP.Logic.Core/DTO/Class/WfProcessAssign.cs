@@ -11,7 +11,7 @@ namespace LicensingERP.Logic.DTO.Class
     {
         public int WFProcessId { get; set; }
         public int StateId { get; set; }
-        public int FormUserTypeId { get; set; }
+        public int FromUserTypeId { get; set; }
         public int ToUserTypeId { get; set; }
         public DateTime ActivityStartDate { get; set; }
         public DateTime ActivityEndDate { get; set; }

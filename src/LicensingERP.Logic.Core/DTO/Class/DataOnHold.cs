@@ -343,7 +343,7 @@ namespace LicensingERP.Logic.DTO.Class
                         WfProcessAssign wfProcessAssign = JsonConvert.DeserializeObject<WfProcessAssign>(JsonConvert.SerializeObject(this.tEffectedData));
                         //WfProcessLogic wfProcessLogic = new WfProcessLogic(_BllCommonLogic);
                         //UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
-                        UserType fromUsertype = new UserTypeLogic(_BllCommonLogic).GetUserType(wfProcessAssign.FormUserTypeId);
+                        UserType fromUsertype = new UserTypeLogic(_BllCommonLogic).GetUserType(wfProcessAssign.FromUserTypeId);
                         UserType touser = new UserTypeLogic(_BllCommonLogic).GetUserType(wfProcessAssign.ToUserTypeId);
                         WfProcess wfProcess = new WfProcessLogic(_BllCommonLogic).GetIdByWFProcess(wfProcessAssign.WFProcessId);
                         if(wfProcessAssign.StateId == 1)

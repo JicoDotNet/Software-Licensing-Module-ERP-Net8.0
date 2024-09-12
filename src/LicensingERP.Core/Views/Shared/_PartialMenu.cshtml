@@ -58,7 +58,14 @@
 </nav>
 
 <script type="text/javascript">
-    var currentHref = location.pathname;
+    var page = '@ViewBag.Page';
+    var currentHref = '';
+    if (page == '') {
+        currentHref = location.pathname;
+    }
+    else {
+        currentHref = page;
+    }
     var matches = currentHref.match(/\d+/g);
     if (matches != null) {
         mstring = currentHref.replace(/\d+/g, '');
