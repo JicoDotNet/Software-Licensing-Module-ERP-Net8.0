@@ -98,7 +98,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="ToUserTypeId">To User Group</label>
-                                    <select class="form-control select2" style="width: 100%;" name="ToUserTypeId" >
+                                    <select class="form-control select2" style="width: 100%;" name="ToUserTypeId">
                                         <option value="">-- Please Select--</option>
                                         @foreach (UserType userType in Model.userTypes)
                                         {
@@ -111,11 +111,11 @@
                     }
                 </div>
                 @if (Model.licenceType != null)
-                {                    
+                {
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success"> <i class="fas fa-save"></i> Submit</button>
                     </div>
-                }        
+                }
             }
         </div>
         <div class="row">
@@ -160,52 +160,55 @@
                             <tbody>
                                 @foreach (WfAssign wfAssign in Model.wfAssigns)
                                 {
-                                    <tr @if (!wfAssign.IsActive) { <text> style="background-color: #daa520;" </text> }>
-                                        <td>
+                                    <tr @if (!wfAssign.IsActive)
+                                    {
+                                        <text> style="background-color: #daa520;" </text>
+                                    }>
+                                            <td>
                                             @wfAssign.TypeName
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @wfAssign.FromUserTypeName
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @wfAssign.ProcessName - @wfAssign.ProcessCode
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @wfAssign.Name
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @wfAssign.ToUserTypeName
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @if (wfAssign.IsInitial && wfAssign.IsPositive)
                                             {
-                                                <span class="right badge badge-success">Yes</span>
+                                                        <span class="right badge badge-success">Yes</span>
                                             }
                                             else
                                             {
-                                                <span class="right badge badge-danger">No</span>
+                                                        <span class="right badge badge-danger">No</span>
                                             }
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @if (wfAssign.IsEnd && wfAssign.IsPositive)
                                             {
-                                                <span class="right badge badge-success">Yes</span>
+                                                        <span class="right badge badge-success">Yes</span>
                                             }
                                             else
                                             {
-                                                <span class="right badge badge-danger">No</span>
+                                                        <span class="right badge badge-danger">No</span>
                                             }
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @wfAssign.ActivityStartDate.ToDisplayDateString()
-                                        </td>
-                                        <td>
+                                            </td>
+                                            <td>
                                             @if (wfAssign.ActivityEndDate > new DateTime(2019, 1, 1))
                                             {
                                                 <text> @wfAssign.ActivityEndDate.ToString() </text>
                                             }
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                 }
                             </tbody>
                         </table>
@@ -216,7 +219,7 @@
     </div>
 </section>
 @section BodyScript
-    {
+{
     <script type="text/javascript">
         $(document).ready(function () {
             $('select[name="FormUserTypeId"]').change(function (e) {
@@ -230,7 +233,7 @@
                 $('select[name="FormUserTypeId"] option[value=' + UserTypeId + ']').attr('disabled', 'disabled');
             });
         });
-    
+
         $(document).ready(function () {
             $('#AssignView').DataTable({
                 dom: 'lBfrtip',

@@ -7,7 +7,7 @@
 @section HeadCss {
     <style type="text/css">
         /* Style for the diagram container */
-        #myDiagramDiv {
+        #wfDiagramDiv {
             width: 100%;
             height: 500px;
             border: 1px solid lightgray;
@@ -32,52 +32,59 @@
 </section>
 <section class="content">
     <div class="container-fluid">
-        <div class="card card-danger">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="License Type">License Type</label>
-                            <select class="form-control select2" name="LicenceTypeId" required onchange="location.href = '@Url.Action("Assign","Workflow", new { id = string.Empty })' + '/' + this.value">
-                                <option value="" selected>-- Please Select--</option>
-                                @foreach (LicenceType LT in Model.licenceTypes)
-                                {
-                                    if (Model.licenceType != null)
-                                    {
-                                        if (Model.licenceType.Id == LT.Id)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="License Type">License Type</label>
+                                    <select class="form-control select2" name="LicenceTypeId" required onchange="location.href = '@Url.Action("Diagram", "Workflow", new { id = string.Empty })' + '/' + this.value">
+                                        <option value="" selected>-- Please Select--</option>
+                                        @foreach (LicenceType LT in Model.licenceTypes)
                                         {
-                                            <option value="@LT.Id" selected>@LT.TypeName</option>
+                                            if (Model.licenceType != null)
+                                            {
+                                                if (Model.licenceType.Id == LT.Id)
+                                                {
+                                                    <option value="@LT.Id" selected>@LT.TypeName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@LT.Id">@LT.TypeName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@LT.Id">@LT.TypeName</option>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <option value="@LT.Id">@LT.TypeName</option>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <option value="@LT.Id">@LT.TypeName</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="container">
-                            <h2 class="text-center">Workflow Diagram with Stages</h2>
-                            <!-- Diagram Container -->
-                            <div id="myDiagramDiv"></div>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @if (Model.licenceType != null)
+            {
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
+                        <div class="card-header">
+                            <h5 class="card-title m-0">Workflow Diagram for @Model.licenceType.TypeName</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="wfDiagramDiv"></div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>
 
-@section BodyScript{
+@section BodyScript {
     <!-- Include GoJS Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.3.13/go.js"></script>
 
@@ -106,7 +113,7 @@
             var $ = go.GraphObject.make;  // for conciseness in defining templates
 
             // Create the Diagram
-            var myDiagram = $(go.Diagram, "myDiagramDiv",
+            var myDiagram = $(go.Diagram, "wfDiagramDiv",
                 {
                     "undoManager.isEnabled": true  // enable undo & redo
                 });
@@ -141,7 +148,8 @@
             );
         }
 
-        // Call the init function on page load
-        window.onload = init;
+        if ($('#wfDiagramDiv').length == 1) {
+            window.onload = init();
+        }        
     </script>
 }

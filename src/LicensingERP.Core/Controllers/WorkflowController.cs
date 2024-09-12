@@ -14,16 +14,30 @@ namespace LicensingERP.Controllers
     [SessionAuthenticate]
     public class WorkflowController(IAppSettingsService appSettingsService) : BaseController(appSettingsService)
     {
-        // GET: Workflow
         public ActionResult Index()
         {
             return View(new WfProcessLicenceType
             {
-                //licenceTypeLogic = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
-                licenceType = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
+                licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
                 wfprocess = new WfProcessLogic(BllCommonLogic).GetWfProcess()
             });
         }
+
+        [HttpGet]
+        public PartialViewResult BindWFProcess()
+        {
+            WfProcessLicenceType model = new WfProcessLicenceType();
+            if (string.IsNullOrEmpty(id))
+            {
+                model.wfprocess = new WfProcessLogic(BllCommonLogic).GetWfProcess();
+            }
+            else
+            {
+                model.wfprocess = new WfProcessLogic(BllCommonLogic).GetWfProcess(Convert.ToInt32(id));
+            }
+            return PartialView("_PartialWFProcessGrid", model);
+        }
+
         [HttpPost]
         public ActionResult Index(WfProcess WFProcess)
         {
@@ -78,10 +92,12 @@ namespace LicensingERP.Controllers
             //}
             return RedirectToAction("Index");
         }
+
         public ActionResult Acknowledgement()
         {
             return View();
         }
+
         public ActionResult Assign()
         {
             WorkflowAssign WorkAssignViewModel;
@@ -147,18 +163,28 @@ namespace LicensingERP.Controllers
                 };
             }
 
-
-
             return RedirectToAction("Assign");
         }
 
         public ActionResult Diagram()
         {
             WorkflowAssign WorkAssignViewModel;
-            WorkAssignViewModel = new WorkflowAssign
+            if (string.IsNullOrEmpty(id))
             {
-                licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType()
-            };
+                WorkAssignViewModel = new WorkflowAssign
+                {
+                    licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
+                };
+            }
+            else
+            {
+                WorkAssignViewModel = new WorkflowAssign
+                {
+                    licenceTypes = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(),
+                };
+                WorkAssignViewModel.licenceType = WorkAssignViewModel.licenceTypes
+                    .Where(a => a.Id == Convert.ToInt32(id)).FirstOrDefault();
+            }
             return View("Diagram", WorkAssignViewModel);
         }
 
