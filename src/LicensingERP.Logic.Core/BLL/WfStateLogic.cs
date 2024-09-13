@@ -22,7 +22,7 @@ namespace LicensingERP.Logic.BLL
             {
                 new NameValuePair("p_UserTypeId", null),
                 new NameValuePair("p_LicenceTypeId", null),
-                new NameValuePair("p_OueryType", "ALL")
+                new NameValuePair("p_QueryType", "ALL")
             };
             return mySqlDBAccess.GetData(StoreProcedure.GetWfState, NameValuePairs).ToList<WfState>();
         }
@@ -34,7 +34,7 @@ namespace LicensingERP.Logic.BLL
             {
                 new NameValuePair("p_UserTypeId", UserTypeId),
                 new NameValuePair("p_LicenceTypeId", LicenceTypeId),
-                new NameValuePair("p_OueryType", ForFirstRequisition? "FORWFFIRST" : "FORWFNEXT")
+                new NameValuePair("p_QueryType", ForFirstRequisition? "FORWFFIRST" : "FORWFNEXT")
             };
             return mySqlDBAccess.GetData(StoreProcedure.GetWfState, NameValuePairs).ToList<WfState>();
         }

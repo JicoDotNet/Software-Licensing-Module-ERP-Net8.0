@@ -16,7 +16,7 @@
         {
             get
             {
-                return "MMM-dd-yyyy, hh:mm:ss tt, ddd";
+                return "dd-MMM-yyyy, hh:mmtt";
             }
         }
 

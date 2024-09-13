@@ -318,7 +318,6 @@
 @section BodyScript{
     <script type="text/javascript">
         function ShowData(e) {
-            debugger;
             $('#modal .modal-body').html(ModelBindWithJson($(e).data('bind')));
             $("#modal").modal({ backdrop: 'static', keyboard: false });
         }
@@ -334,14 +333,13 @@
         }
 
         function ModelBindWithJson(myObj) {
-            debugger;
             var txt = '';
             var i = 0;
             txt += "<table style='width: 100%;'><tr><th>Name</th><th>Value</th></tr>"
             
             for (x in myObj) {
                 i++;
-                if (x == 'TransactionDate' || x == 'WFProcessId' || x == 'StateId' || x == 'FormUserTypeId' || x == 'ToUserTypeId' || x == 'ActivityStartDate' || x == 'ActivityEndDate'  || x == 'CreatedBy' || x == 'SessionId' || x == 'ProductId' || x == 'IsActive' || x == 'Id' || x == 'Password' || x == 'UserTypeId' || x == 'CategoryId' || x == 'NumberOfLicence' || x == 'IsScalingEligible' || x == 'LicenceTypeId') { console.log('Not Showing!'); }
+                if (x == 'TransactionDate' || x == 'WFProcessId' || x == 'StateId' || x == 'FromUserTypeId' || x == 'ToUserTypeId' || x == 'ActivityStartDate' || x == 'ActivityEndDate'  || x == 'CreatedBy' || x == 'SessionId' || x == 'ProductId' || x == 'IsActive' || x == 'Id' || x == 'Password' || x == 'UserTypeId' || x == 'CategoryId' || x == 'NumberOfLicence' || x == 'IsScalingEligible' || x == 'LicenceTypeId') { console.log('Not Showing!'); }
                 else
                     if (x == 'Id' && myObj[x] == 0) { console.log('Not Showing!'); }
                     else

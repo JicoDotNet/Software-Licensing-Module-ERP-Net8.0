@@ -10,6 +10,6 @@ namespace LicensingERP.Models
     public class WfProcessLicenceType
     {
         public IReadOnlyList<WfProcessLicence> wfprocess { get; set; }
-        public IReadOnlyList<LicenceType> licenceType { get; set; }
+        public IReadOnlyList<LicenceType> licenceTypes { get; set; }
     }
 }

@@ -1338,62 +1338,49 @@ $$
 --
 -- Create procedure `sp_Get_WF_State`
 --
-CREATE PROCEDURE sp_Get_WF_State(IN p_RequestId INT, IN p_UserId INT, IN p_UserTypeId INT, IN p_SessionId VARCHAR(100), IN p_QueryType VARCHAR(20))
+CREATE PROCEDURE sp_Get_WF_State(IN p_UserTypeId INT(11), IN p_LicenceTypeId INT(11), IN p_QueryType VARCHAR(20))
 BEGIN
-	IF p_QueryType ='XML' THEN
-INSERT INTO tbl_xml_download (UserId, UserTypeId, RequestId, RequestNo, IsActive, SessionId, TransactionDate)
-  VALUES (p_UserId, p_UserTypeId, p_RequestId, (SELECT RequestNo FROM tbl_request WHERE Id = p_RequestId), 1, p_SessionId, NOW());
-
+  IF p_QueryType = 'ALL' THEN
 SELECT
-  tbl_request.Id,
-  tbl_request.RequestNo,
-  tbl_client.ClientName,
-  tbl_licence_type.TypeName,
-  tbl_product.ProductName,
-  tbl_request.RequestDate,
-  tbl_request.LicenceNo,
-  fn_Get_UserFullName(tbl_request.UserId) AS FullName
-FROM tbl_request
-  LEFT JOIN tbl_request_status
-    ON tbl_request.Id = tbl_request_status.RequestId
-
-  INNER JOIN tbl_client
-    ON tbl_request.ClientId = tbl_client.Id
-
-  INNER JOIN tbl_licence_type
-    ON tbl_request.LicenceTypeId = tbl_licence_type.Id
-
-  INNER JOIN tbl_product
-    ON tbl_request.ProductId = tbl_product.Id
-
-WHERE tbl_request.Id = p_RequestId
-AND tbl_request_status.IsApproved = 1;
---         ---
-
-
+  *
+FROM tbl_s_state
+WHERE IsActive = 1;
+ELSEIF p_QueryType = 'FORWFFIRST' THEN
 SELECT
-  tbl_request_parameter.ParamValue,
-  tbl_parameters.FieldName
-FROM tbl_request_parameter
-  INNER JOIN tbl_parameters
-    ON tbl_request_parameter.ParamId = tbl_parameters.Id
-WHERE RequestId = p_RequestId;
-
+  tbl_s_state.*
+FROM tbl_s_state
+  INNER JOIN tbl_wf_process_assign
+    ON tbl_s_state.Id = tbl_wf_process_assign.StateId
+  INNER JOIN tbl_wf_process
+    ON tbl_wf_process.Id = tbl_wf_process_assign.WFProcessId
+WHERE LicenceTypeId = p_LicenceTypeId
+AND tbl_s_state.IsActive = 1
+AND tbl_wf_process_assign.IsActive = 1
+AND tbl_wf_process.IsInitial = 1
+AND (tbl_s_state.IsPositive = 1
+AND IsNegative = 0
+AND IsHold = 0)
+AND tbl_wf_process_assign.FromUserTypeId = p_UserTypeId;
+ELSEIF p_QueryType = 'FORWFNEXT' THEN
 SELECT
-  Id,
-  RestrictTo,
-  RestrictVal
-FROM tbl_request_restrict
-WHERE RequestId = p_RequestId;
-
+  tbl_s_state.*
+FROM tbl_s_state
+  INNER JOIN tbl_wf_process_assign
+    ON tbl_s_state.Id = tbl_wf_process_assign.StateId
+  INNER JOIN tbl_wf_process
+    ON tbl_wf_process.Id = tbl_wf_process_assign.WFProcessId
+WHERE LicenceTypeId = p_LicenceTypeId
+AND tbl_s_state.IsActive = 1
+AND tbl_wf_process_assign.IsActive = 1
+AND tbl_wf_process_assign.FromUserTypeId = p_UserTypeId
+UNION
 SELECT
-  tbl_product_features.FeaturesName
-FROM tbl_request_features
-  INNER JOIN tbl_product
-    ON tbl_request_features.ProductId = tbl_product.Id
-  INNER JOIN tbl_product_features
-    ON tbl_request_features.FeaturesId = tbl_product_features.Id
-WHERE RequestId = p_RequestId;
+  tbl_s_state.*
+FROM tbl_s_state
+WHERE IsActive = 1
+AND IsPositive = 0
+AND IsNegative = 1
+AND IsHold = 0;
 END IF;
 END
 $$

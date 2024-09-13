@@ -1,0 +1,201 @@
+﻿@using Newtonsoft.Json;
+@model WorkflowAssign
+
+@{
+
+    ViewBag.Title = "Workflow Diagram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = "/Workflow/Assign";
+}
+@section HeadCss {
+    <style type="text/css">
+        /* Style for the diagram container */
+        ##wfDiagramDiv {
+            width: 100%;
+            height: 500px; /* Default initial height */
+            border: 1px solid lightgray;
+            overflow: hidden; /* Prevent scrolling if diagram is smaller */
+        }
+    </style>
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Workflow Diagram</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Workflow")">Workflow</a></li>
+                    <li class="breadcrumb-item active">Diagram</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="License Type">License Type</label>
+                                    <select class="form-control select2" name="LicenceTypeId" required onchange="location.href = '@Url.Action("Diagram", "Workflow", new { id = string.Empty })' + '/' + this.value">
+                                        <option value="" selected>-- Please Select--</option>
+                                        @foreach (LicenceType LT in Model.licenceTypes)
+                                        {
+                                            if (Model.licenceType != null)
+                                            {
+                                                if (Model.licenceType.Id == LT.Id)
+                                                {
+                                                    <option value="@LT.Id" selected>@LT.TypeName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@LT.Id">@LT.TypeName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@LT.Id">@LT.TypeName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.licenceType != null)
+            {
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
+                        <div class="card-header">
+                            <h5 class="card-title m-0">Workflow Diagram for @Model.licenceType.TypeName</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="wfDiagramDiv"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section BodyScript {
+    <!-- Include GoJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.3.13/go.js"></script>
+
+    <script type="text/javascript">
+        // -- Sample data
+        // var workflowData = {
+        //     "nodes": [
+        //         { "key": -1, "text": "Start", "color": "lightgreen", "shape": "Circle" },
+        //         { "key": 1, "text": "Admin 2", "color": "lightblue", "shape": "Diamond" },
+        //         { "key": 2, "text": "Admin 3", "color": "lightblue", "shape": "RoundedRectangle" },
+        //         { "key": 3, "text": "Admin 4", "color": "lightblue", "shape": "RoundedRectangle" },
+        //         { "key": 4, "text": "Admin 5", "color": "lightblue", "shape": "RoundedRectangle" },
+        //         { "key": 0, "text": "End", "color": "lightcoral", "shape": "Circle" }
+        //     ],
+        //     "links": [
+        //         { "from": -1, "to": 1, "text": "Starting", "color": "green" },
+        //         { "from": 1, "to": 2, "text": "Process 1 - [Approved]", "color": "green" },
+        //         { "from": 2, "to": 3, "text": "Process 2 - [Approved]", "color": "green" },
+        //         { "from": 2, "to": 1, "text": "Process 2 - [RevertBack]", "color": "blue" },
+        //         { "from": 3, "to": 4, "text": "Process 2 - [Rejected]", "color": "red" },
+        //         { "from": 4, "to": 1, "text": "Process 2 - [RevertBack]", "color": "blue" },
+        //         { "from": 3, "to": 0, "text": "Ending [Approved]", "color": "green" },
+        //         { "from": 1, "to": 0, "text": "Ending [Rejected]", "color": "red" }
+        //     ]
+        // };
+
+        var workflowData = @Html.Raw(JsonConvert.SerializeObject(Model.wfDiagram));
+
+        // Initialize the diagram
+        function init() {
+            var $ = go.GraphObject.make;
+
+            // Create the Diagram
+            var myDiagram = $(go.Diagram, "wfDiagramDiv",
+                {
+                    layout: $(go.LayeredDigraphLayout,
+                        { direction: 90, layerSpacing: 87, columnSpacing: 60 }),
+                    "undoManager.isEnabled": true,
+                    "linkReshapingTool.isEnabled": true,
+                    "linkingTool.isEnabled": true,
+                    "relinkingTool.isEnabled": true,
+                    "initialLayoutCompleted": function (e) {
+                        updateDivSize(e.diagram); // Call function to adjust the height dynamically after layout
+                    }
+                });
+
+            // Define the Node template
+            myDiagram.nodeTemplate =
+                $(go.Node, "Auto",
+                    $(go.Shape,
+                        { strokeWidth: 1 },
+                        new go.Binding("figure", "shape"),
+                        new go.Binding("fill", "color")),
+                    $(go.TextBlock,
+                        { margin: 10 },
+                        new go.Binding("text", "text")),
+                    {
+                        portId: "",
+                        fromSpot: go.Spot.AllSides,
+                        toSpot: go.Spot.AllSides,
+                        cursor: "pointer"
+                    }
+                );
+
+            // Define the Link template
+            myDiagram.linkTemplate =
+                $(go.Link,
+                    { routing: go.Link.AvoidsNodes, curve: go.Link.JumpOver, reshapable: true, resegmentable: true },
+                    new go.Binding("curviness", "", function (linkData, link) {
+                        var fromNode = link.fromNode;
+                        var toNode = link.toNode;
+                        if (fromNode && toNode) {
+                            // Adjust curviness to separate links between the same nodes
+                            var sameLinks = myDiagram.findLinksBetween(fromNode, toNode);
+                            if (sameLinks.count > 1) {
+                                var index = sameLinks.indexOf(link); // Get index of the current link
+                                return 40 + index * 20; // Increase curviness based on index
+                            }
+                        }
+                        return 0;
+                    }),
+                    $(go.Shape,  // Link path
+                        { strokeWidth: 2 },
+                        new go.Binding("stroke", "color")
+                    ),
+                    $(go.Shape,  // Arrowhead
+                        { toArrow: "Standard", strokeWidth: 3 },
+                        new go.Binding("stroke", "color")
+                    ),
+                    $(go.TextBlock,  // Text label
+                        { segmentOffset: new go.Point(0, -10) },  // Offset label to avoid overlap
+                        new go.Binding("text", "text"))
+                );
+
+            // Load the diagram model from JSON data
+            myDiagram.model = new go.GraphLinksModel(
+                workflowData.nodes,
+                workflowData.links
+            );
+        }
+        function updateDivSize(diagram) {
+            var bounds = diagram.documentBounds;  // Get the bounds of the diagram
+            var div = document.getElementById("wfDiagramDiv");
+            div.style.height = (bounds.height + 20) + "px";  // Set height based on diagram height (+20 for padding)
+        }
+        if ($('#wfDiagramDiv').length == 1) {
+            window.onload = init();
+        }
+    </script>
+}

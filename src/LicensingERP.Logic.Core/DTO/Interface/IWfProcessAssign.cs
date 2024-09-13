@@ -14,7 +14,8 @@ namespace LicensingERP.Logic.DTO.Interface
     {
         int WFProcessId { get; set; }
         int StateId { get; set; }
-        int FormUserTypeId { get; set; }
+        //int FormUserTypeId { get; set; }
+        int FromUserTypeId { get; set; }
         int ToUserTypeId { get; set; }
         //int UserTypeId { get; set; }
         DateTime ActivityStartDate { get; set; }

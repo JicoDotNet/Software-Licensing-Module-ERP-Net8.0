@@ -224,7 +224,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#example1').dataTable({
+            bindDataTable('#example1');
+        });
+        function bindDataTable(selector) {
+            $(selector).dataTable({
                 "bPaginate": true,
                 "bLengthChange": true,
                 "bFilter": true,
@@ -233,13 +236,10 @@
                 "searching": true,
                 "scrollX": true
             });
-        });
-        // initialize and show Bootstrap 4 toast
+        }
         $('.toast').toast('show');
-    </script>
-    <script type="text/javascript">
-        $(function () {
 
+        $(function () {
             //Datemask dd/mm/yyyy
             $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
             //Datemask2 mm/dd/yyyy
@@ -268,11 +268,8 @@
             })
             $('#datepicker,#datepicker2').datepicker('setDate', today);
 
-        })
+        });
 
-
-    </script>
-    <script>
         //Initialize Select2 Elements
         $('.select2bs4').select2({
             theme: 'bootstrap4'
@@ -303,8 +300,7 @@
                 }
             });
         });
-    </script>
-    <script type="text/javascript">
+
         function errorAlert(title, message, subtitle) {
             $(document).Toasts('create', {
                 class: 'bg-danger',
@@ -329,8 +325,7 @@
             });
             setDefaultButton();
         }
-    </script>
-    <script type="text/javascript">
+
     @{
         ReturnObject returnObject = TempData.Get<ReturnObject>("ReturnMessage");
     }
@@ -347,14 +342,12 @@
             }
         }
         });
-    </script>
-    <script type="text/javascript">
+
         function CheckerApproval() {
             $('#CheckerApprovalDiv').html('<div class="overlay text-center" style="margin:10px;"><i class="fas fa-sync-alt fa-spin fa-2x"></i></div>');
             $('#CheckerApprovalDiv').load('@Url.Action("Pending", "Checker", new { id = string.Empty })')
         }
-    </script>
-    <script type="text/javascript">
+
         var prevHtml = '';
 
         // need upgrade
@@ -385,8 +378,7 @@
             }
             return;
         });
-    </script>
-    <script>
+
         //alert of Licence Experitation
         $.ajax({
             type: "POST",
