@@ -22,17 +22,30 @@
 </section>
 
 <section class="content">
-    <div class="card">
-        <div class="card-header bg-cyan">
-            <h3 class="card-title">New Requisition</h3>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header bg-cyan">
+                <h3 class="card-title">New Requisition</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a class="btn btn-success"
+                           href="@Url.Action("Index","Requisition", new { id = string.Empty, id2 = string.Empty })">
+                            <i class="fas fa-plus-square"></i> Request a New Requisition
+                        </a>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div class="text-right">
+                            <a class="btn btn-outline-primary" href="@Url.Action("Diagram", "Workflow", new { id = string.Empty })">
+                                <i class="fas fa-project-diagram"></i> View Workflow Diagram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <a class="btn btn-success"
-               href="@Url.Action("Index","Requisition", new { id = string.Empty, id2 = string.Empty })">
-                <i class="fas fa-plus-square"></i> Request a New Requisition
-            </a>
-        </div>
-    </div>
         <div class="card">
             <div class="card-header bg-cyan">
                 <h3 class="card-title">Your Requested Requisition</h3>
@@ -77,11 +90,11 @@
                                 <td>
                                     @if (request.IsApproved == null)
                                     {
-                                    <span class="badge badge-warning">Not Yet Approved</span>
+                                        <span class="badge badge-warning">Not Yet Approved</span>
                                     }
                                     else if (!request.IsApproved.Value)
                                     {
-                                    <span class="badge badge-danger">Rejected</span>
+                                        <span class="badge badge-danger">Rejected</span>
                                         <br />
                                         <span>Rejection Date:<br /> @request.ApproveRejectDate.ToDisplayDateString()</span>
                                     }
@@ -102,13 +115,13 @@
                                                     <i class="fas fa-file-code"></i>  XML Download
                                                 </button>
                                                 <div class="dropdown-menu" role="menu">
-                                                        @for (int i = 0; i < Convert.ToInt32(request.LicenceNo); i++)
-                                                        {
-                                                            <a class="dropdown-item" href="@Url.Action("Download", "Requisition", new { id = request.Id, id2 = i })">Download for @(i + 1) Xml</a>
-                                                        }
-                                                    </div>
+                                                    @for (int i = 0; i < Convert.ToInt32(request.LicenceNo); i++)
+                                                    {
+                                                        <a class="dropdown-item" href="@Url.Action("Download", "Requisition", new { id = request.Id, id2 = i })">Download for @(i + 1) Xml</a>
+                                                    }
+                                                </div>
                                             </div>
-                                            
+
                                         }
                                     }
                                 </td>
@@ -118,4 +131,5 @@
                 </table>
             </div>
         </div>
+    </div>
 </section>
