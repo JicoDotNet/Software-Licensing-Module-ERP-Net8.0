@@ -36,10 +36,10 @@ TRUNCATE TABLE tbl_xml_download;
 -- Default DANGLING
 -- ----
 INSERT INTO tbl_dashboard (PartialViewName, Description, SortOrder, DivCssClass, IsActive, SessionId, TransactionDate) VALUES
-('GroupWiseUser', 'Group Wise User Graph using Bar Chart', 2, 'col-md-4', 1, 'DEVELOPER', NOW()),
-('Master', 'Master Data Count Value', 1, 'col-md-12', 1, 'DEVELOPER', NOW()),
-('LicenseRequest', 'License wise Request Graph', 3, 'col-md-4', 1, 'DEVELOPER', NOW()),
-('ClientWiseLicenseRequest', 'Client Wise Approved License Request Graph', 4, 'col-md-4', 1, 'DEVELOPER', NOW());
+('GroupWiseUser', 'Group Wise User Graph using Bar Chart', 2, 'col-md-4', 1, 'DEVELOPER', IST_NOW()),
+('Master', 'Master Data Count Value', 1, 'col-md-12', 1, 'DEVELOPER', IST_NOW()),
+('LicenseRequest', 'License wise Request Graph', 3, 'col-md-4', 1, 'DEVELOPER', IST_NOW()),
+('ClientWiseLicenseRequest', 'Client Wise Approved License Request Graph', 4, 'col-md-4', 1, 'DEVELOPER', IST_NOW());
 
 INSERT INTO tbl_menu_group(Icon, DisplayText) VALUES
 ('fa fa-user', 'User Management'),
@@ -75,21 +75,21 @@ INSERT INTO tbl_menu_list(MenuGroupId, Icon, DisplayText, Controller, ActionResu
 (6, 'far fa-circle', 'XML Download', 'MISLicense', 'XMLDownload', True, False, 'XML Download Report', False);
 
 INSERT INTO tbl_password (UserId, PasswordHash, IsActive, ActivationDate, PasswordSalt, SessionId, TransactionDate, PasswordText, IsChangeable)
-VALUES  (1, 'rKtOrO1VqO91aeiyo90Cu8rcOO63AFivR6BDSMv29pg=', 1, NOW(),  's2aVLJK1KNQkAvoNtBTqzzEFArU3ljwL1dIz0v1F+cDNcrG0fdImOuKh/SA/t8XGzqG2kdTUau+Hf3AWkQGv4w==', 'DEVELOPER', NOW(), null, False);
+VALUES  (1, 'rKtOrO1VqO91aeiyo90Cu8rcOO63AFivR6BDSMv29pg=', 1, IST_NOW(),  's2aVLJK1KNQkAvoNtBTqzzEFArU3ljwL1dIz0v1F+cDNcrG0fdImOuKh/SA/t8XGzqG2kdTUau+Hf3AWkQGv4w==', 'DEVELOPER', IST_NOW(), null, False);
 
 INSERT INTO tbl_s_state(Name, IsPositive, IsNegative, IsHold, SessionId, IsActive, TransactionDate) VALUES
-('Approved', True, False, False, 'DEVELOPER', True, NOW()),
-('Rejected', False, True, False, 'DEVELOPER', True, NOW()),
-('RevertBack', False, True, True, 'DEVELOPER', True, NOW()),
-('OnHold', False, False, True, 'DEVELOPER', False, NOW());
+('Approved', True, False, False, 'DEVELOPER', True, IST_NOW()),
+('Rejected', False, True, False, 'DEVELOPER', True, IST_NOW()),
+('RevertBack', False, True, True, 'DEVELOPER', True, IST_NOW()),
+('OnHold', False, False, True, 'DEVELOPER', False, IST_NOW());
 
 INSERT INTO tbl_user (UserTypeId, FullName, UserName, Email, Mobile, Address, Designation, IsActive, SessionId, TransactionDate) 
-VALUES  (1, 'Company Admin', 'admin', 'admin@admin.com',  '9999999999', 'Bangalore, India', null, 1, 'DEVELOPER', NOW());
+VALUES  (1, 'Company Admin', 'admin', 'admin@admin.com',  '9999999999', 'Bangalore, India', null, 1, 'DEVELOPER', IST_NOW());
 
 
 INSERT INTO tbl_usermenu (MenuId, UserId, UserTypeId, IsActive, SessionId, TransactionDate)
-VALUES  (1, 1, 1, 1, 'DEVELOPER', NOW());
+VALUES  (1, 1, 1, 1, 'DEVELOPER', IST_NOW());
 
 
 INSERT INTO tbl_usertype (UserTypeName, UserTypeDetails, IsActive, TransactionDate, SessionId) 
-VALUES ('Super Admin', 'Super Admin', 1, NOW(), 'DEVELOPER');
+VALUES ('Super Admin', 'Super Admin', 1, IST_NOW(), 'DEVELOPER');

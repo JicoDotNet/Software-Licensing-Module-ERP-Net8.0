@@ -98,7 +98,7 @@ namespace Microsoft.AspNetCore.Mvc
                         SessionId = SessionID,
                         UserId = SessionPerson?.UserId
                     };
-                    LogObj.Set();
+                    LogObj.Set().ConfigureAwait(false);
                 }
                 #endregion
 

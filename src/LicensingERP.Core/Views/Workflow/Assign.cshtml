@@ -22,7 +22,7 @@
 </section>
 <section class="content">
     <div class="container-fluid">
-        <div class="card card-danger">
+        <div class="card">
             @using (Html.BeginForm("Assign", "Workflow", FormMethod.Post, new { autocomplete = "off" }))
             {
                 <div class="card-body">
@@ -56,7 +56,7 @@
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <div class="text-right mt-3">
-                                <a href="@Url.Action("Diagram", "Workflow", new { id = string.Empty })" class="btn btn-outline-primary"><i class="fas fa-project-diagram"></i> Workflow Diagram</a>
+                                <a href="@Url.Action("Diagram", "Workflow", new { id = string.Empty })" class="btn btn-outline-primary"><i class="fas fa-project-diagram"></i> View Workflow Diagram</a>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-danger">
+                <div class="card">
                     <div class="card-header bg-cyan">
                         <h3 class="card-title">View Process</h3>
                     </div>
