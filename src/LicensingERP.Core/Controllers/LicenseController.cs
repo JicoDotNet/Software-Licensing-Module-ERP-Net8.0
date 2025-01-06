@@ -38,16 +38,16 @@ namespace LicensingERP.Core.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 #region Maker Checker
-                DataOnHold<LicenceType> dataOnHold = new DataOnHold<LicenceType>(BllCommonLogic)
+                MakerCheckerData<LicenceType> dataOnHold = new MakerCheckerData<LicenceType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
-                    eCaseType = eDataOnHoldCaseType.LicenseType,
-                    ePurpose = eDataOnHoldPurpose.Insert,
+                    eCaseType = eMakerCheckerCaseType.LicenseType,
+                    ePurpose = eMakerCheckerPurpose.Insert,
                     tEffectedData = licence
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold);
                 #endregion
 
 
@@ -59,17 +59,17 @@ namespace LicensingERP.Core.Controllers
             else
             {
                 #region Maker Checker
-                DataOnHold<LicenceType> dataOnHold = new DataOnHold<LicenceType>(BllCommonLogic)
+                MakerCheckerData<LicenceType> dataOnHold = new MakerCheckerData<LicenceType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.LicenseType,
-                    ePurpose = eDataOnHoldPurpose.Update,
+                    eCaseType = eMakerCheckerCaseType.LicenseType,
+                    ePurpose = eMakerCheckerPurpose.Update,
                     tEffectedData = licence
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold);
                 #endregion
 
                 #region
@@ -128,17 +128,17 @@ namespace LicensingERP.Core.Controllers
             {
 
                 #region Maker Checker
-                DataOnHold<LicenceType> dataOnHold = new DataOnHold<LicenceType>(BllCommonLogic)
+                MakerCheckerData<LicenceType> dataOnHold = new MakerCheckerData<LicenceType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.LicenseType,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Deactivate,
+                    eCaseType = Logic.Enumeration.eMakerCheckerCaseType.LicenseType,
+                    ePurpose = Logic.Enumeration.eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new LicenceTypeLogic(BllCommonLogic).GetLicenceType(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<LicenceType>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
 
                 #region
@@ -192,17 +192,17 @@ namespace LicensingERP.Core.Controllers
             int flag = -1; ;
             LicencetypeParameterLogic licencetypeParameterLogic = new LicencetypeParameterLogic(BllCommonLogic);
 
-            DataOnHold<List<ParameterOfLicence>> dataOnHold = new DataOnHold<List<ParameterOfLicence>>(BllCommonLogic)
+            MakerCheckerData<List<ParameterOfLicence>> dataOnHold = new MakerCheckerData<List<ParameterOfLicence>>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.LicenseParameterLink,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.LicenseParameterLink,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = parameterOfLicence
             };
             dataOnHold.ToString();
 
-            flag = new DataOnHoldLogic<List<ParameterOfLicence>>(BllCommonLogic).Insert(dataOnHold);
+            flag = new MakerCheckerLogic<List<ParameterOfLicence>>(BllCommonLogic).Insert(dataOnHold);
 
 
             if (flag > 0)

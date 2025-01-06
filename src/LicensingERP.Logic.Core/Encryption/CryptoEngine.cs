@@ -7,22 +7,24 @@ namespace LicensingERP.Logic.Encryption
 {
     public class CryptoEngine : ICryptoEngine
     {
-        private string encryptionKey;
-        public CryptoEngine(string _Key)
+        private string _encryptionKey;
+
+        /// <summary>
+        /// 256-bit encryption
+        /// </summary>
+        /// <param name="key">Ensure the key is 32 bytes</param>
+        /// <exception cref="Exception">If the key is not 32 bit chars</exception>
+        public CryptoEngine(string key)
         {
-            if (_Key.Length != 32)
-            {
+            if (key.Length != 32) 
                 throw new Exception("Key Should be 32 digit chars");
-            }
             else
-            {
-                this.encryptionKey = _Key;
-            }
+                this._encryptionKey = key;
         }
+
         public string Encrypt(string inputText)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
-            // Ensure the key is 32 bytes (256-bit encryption)
+            byte[] keyBytes = Encoding.UTF8.GetBytes(_encryptionKey);
             if (keyBytes.Length != 32)
             {
                 Array.Resize(ref keyBytes, 32);
@@ -56,8 +58,7 @@ namespace LicensingERP.Logic.Encryption
 
         public string Decrypt(string encryptedText)
         {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(encryptionKey);
-            // Ensure the key is 32 bytes (256-bit encryption)
+            byte[] keyBytes = Encoding.UTF8.GetBytes(_encryptionKey);
             if (keyBytes.Length != 32)
             {
                 Array.Resize(ref keyBytes, 32);

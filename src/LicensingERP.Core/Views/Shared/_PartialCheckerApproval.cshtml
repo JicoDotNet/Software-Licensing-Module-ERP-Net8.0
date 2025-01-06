@@ -1,11 +1,11 @@
-﻿@model List<DataOnHold<object>>
+﻿@model List<MakerCheckerData<object>>
 
 <span class="dropdown-header">@Model.Count Approvals Remain</span>
 <div class="dropdown-divider"></div>
 @{ 
-    List<DataOnHold<object>> modeldata = Model.Take(5).ToList();
+    List<MakerCheckerData<object>> modeldata = Model.Take(5).ToList();
 }
-@foreach (DataOnHold<object> dataOnHold in modeldata)
+@foreach (MakerCheckerData<object> dataOnHold in modeldata)
 {
     <a href="@Url.Action("Index", "Checker", new { area = string.Empty })" class="dropdown-item">
         @{
@@ -31,64 +31,64 @@
             //    val = (int)timeSpan.TotalDays;
             //    txt = "days";
             //}
-            if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+            if (dataOnHold.ePurpose == eMakerCheckerPurpose.Insert)
             {
                 color = "#3d9970";
                 text = "Added";
             }
-            else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+            else if (dataOnHold.ePurpose == eMakerCheckerPurpose.Update)
             {
                 color = "#ffc107";
                 text = "Updated";
             }
-            else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+            else if (dataOnHold.ePurpose == eMakerCheckerPurpose.Deactivate)
             {
                 color = "#dc3545";
                 text = "Deactivated";
             }
             switch (dataOnHold.eCaseType)
             {
-                case eDataOnHoldCaseType.UserGroup:
+                case eMakerCheckerCaseType.UserGroup:
                     {
                         icon = "fa-user-plus";
                     }
                     break;
-                case eDataOnHoldCaseType.User:
+                case eMakerCheckerCaseType.User:
                     {
                         icon = "fa-user";
                     }
                     break;
-                case eDataOnHoldCaseType.ClientCategory:
+                case eMakerCheckerCaseType.ClientCategory:
                     {
                         icon = "fa-user-tag";
                     }
                     break;
-                case eDataOnHoldCaseType.Client:
+                case eMakerCheckerCaseType.Client:
                     {
                         icon = "fa-user-tie";
                     }
                     break;
-                case eDataOnHoldCaseType.LicenseType:
+                case eMakerCheckerCaseType.LicenseType:
                     {
                         icon = "fa-id-card";
                     }
                     break;
-                case eDataOnHoldCaseType.Product:
+                case eMakerCheckerCaseType.Product:
                     {
                         icon = "fa-box";
                     }
                     break;
-                case eDataOnHoldCaseType.Parameter:
+                case eMakerCheckerCaseType.Parameter:
                     {
                         icon = "fa-hands-helping";
                     }
                     break;
-                case eDataOnHoldCaseType.WFProcess:
+                case eMakerCheckerCaseType.WFProcess:
                     {
                         icon = "fa-hourglass";
                     }
                     break;
-                case eDataOnHoldCaseType.ProductFeatures:
+                case eMakerCheckerCaseType.ProductFeatures:
                     {
                         icon = "fa-th-list";
                     }

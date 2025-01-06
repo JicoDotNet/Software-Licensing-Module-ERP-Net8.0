@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.Enumeration
 {
-    public enum eDataOnHoldPurpose
+    public enum eMakerCheckerPurpose
     {
         Insert = 1,
         Update = 2,

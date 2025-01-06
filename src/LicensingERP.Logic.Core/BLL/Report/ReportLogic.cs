@@ -280,32 +280,32 @@ namespace LicensingERP.Logic.BLL.Report
             return mySqlDBAccess.GetData(StoreProcedure.RpStatus, NameValuePairs).ToList<ReportOfStatus>();
         }
 
-        public List<ReportOfRequestOnHold> GetRequestOnHold(ReportOfRequestOnHold reportOfRequestOnHold)
+        public List<ReportOfRequestMakerChecker> GetRequestMakerChecker(ReportOfRequestMakerChecker reportOfRequestMakerChecker)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-            if (reportOfRequestOnHold.User != null)
+            if (reportOfRequestMakerChecker.User != null)
             {
                 str = str + " tr.UserId in (select Id " +
                     "from tbl_user " +
-                    "where FullName LIKE '%" + reportOfRequestOnHold.User + "%' " +
-                        "or Email LIKE '%" + reportOfRequestOnHold.User + "%' " +
-                        "or UserName like '%" + reportOfRequestOnHold.User + "%') AND ";
+                    "where FullName LIKE '%" + reportOfRequestMakerChecker.User + "%' " +
+                        "or Email LIKE '%" + reportOfRequestMakerChecker.User + "%' " +
+                        "or UserName like '%" + reportOfRequestMakerChecker.User + "%') AND ";
             }
-            if (reportOfRequestOnHold.UserTypeId != 0)
+            if (reportOfRequestMakerChecker.UserTypeId != 0)
             {
-                str = str + " tr.CreatedUserTypeId = '" + reportOfRequestOnHold.UserTypeId + "' AND ";
+                str = str + " tr.CreatedUserTypeId = '" + reportOfRequestMakerChecker.UserTypeId + "' AND ";
             }
-            if (reportOfRequestOnHold.LicenceTypeId != 0)
+            if (reportOfRequestMakerChecker.LicenceTypeId != 0)
             {
-                str = str + " tr.LicenceTypeId = '" + reportOfRequestOnHold.LicenceTypeId + "' AND ";
+                str = str + " tr.LicenceTypeId = '" + reportOfRequestMakerChecker.LicenceTypeId + "' AND ";
             }
-            if (reportOfRequestOnHold.FromDate != null || reportOfRequestOnHold.ToDate != null)
+            if (reportOfRequestMakerChecker.FromDate != null || reportOfRequestMakerChecker.ToDate != null)
             {
                 str = str + " ( tr.RequestDate between " +
-                    " STR_TO_DATE('" + reportOfRequestOnHold.FromDateFormat + "','" + reportOfRequestOnHold.DateFormat + "') " +
+                    " STR_TO_DATE('" + reportOfRequestMakerChecker.FromDateFormat + "','" + reportOfRequestMakerChecker.DateFormat + "') " +
                     " and " +
-                    " STR_TO_DATE('" + reportOfRequestOnHold.ToDateFormat + "','" + reportOfRequestOnHold.DateFormat + "')) AND ";
+                    " STR_TO_DATE('" + reportOfRequestMakerChecker.ToDateFormat + "','" + reportOfRequestMakerChecker.DateFormat + "')) AND ";
             }
             str = str.Remove(str.Length - 4, 3);
 
@@ -314,7 +314,7 @@ namespace LicensingERP.Logic.BLL.Report
                 new NameValuePair("p_WhereClouse",str)
             };
 
-            return mySqlDBAccess.GetData(StoreProcedure.RpRequestOnHold, NameValuePairs).ToList<ReportOfRequestOnHold>();
+            return mySqlDBAccess.GetData(StoreProcedure.RpRequestOnHold, NameValuePairs).ToList<ReportOfRequestMakerChecker>();
         }
 
         public List<ReportOfXmlDownload> GetXmlDownloadInfo(ReportOfXmlDownload reportOfXmlDownload)
