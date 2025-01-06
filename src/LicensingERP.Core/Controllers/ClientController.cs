@@ -39,16 +39,16 @@ namespace LicensingERP.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 #region Maker Checker
-                DataOnHold<Client> dataOnHold = new DataOnHold<Client>(BllCommonLogic)
+                MakerCheckerData<Client> dataOnHold = new MakerCheckerData<Client>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
-                    eCaseType = eDataOnHoldCaseType.Client,
-                    ePurpose = eDataOnHoldPurpose.Insert,
+                    eCaseType = eMakerCheckerCaseType.Client,
+                    ePurpose = eMakerCheckerPurpose.Insert,
                     tEffectedData = client
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<Client>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<Client>(BllCommonLogic).Insert(dataOnHold);
                 if(flag > 0)
                 {
                     ReturnMessage = new ReturnObject
@@ -83,17 +83,17 @@ namespace LicensingERP.Controllers
             {
                 client.Id = Convert.ToInt32(id);
                 #region Maker Checker
-                DataOnHold<Client> dataOnHold = new DataOnHold<Client>(BllCommonLogic)
+                MakerCheckerData<Client> dataOnHold = new MakerCheckerData<Client>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.Client,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Update,
+                    eCaseType = Logic.Enumeration.eMakerCheckerCaseType.Client,
+                    ePurpose = Logic.Enumeration.eMakerCheckerPurpose.Update,
                     tEffectedData = client
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<Client>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<Client>(BllCommonLogic).Insert(dataOnHold);
                 if(flag > 0)
                 {
                     ReturnMessage = new ReturnObject
@@ -139,17 +139,17 @@ namespace LicensingERP.Controllers
             if (loginCredentials != null)
             {
                 #region Maker Checker
-                DataOnHold<Client> dataOnHold = new DataOnHold<Client>(BllCommonLogic)
+                MakerCheckerData<Client> dataOnHold = new MakerCheckerData<Client>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.Client,
-                    ePurpose = eDataOnHoldPurpose.Deactivate,
+                    eCaseType = eMakerCheckerCaseType.Client,
+                    ePurpose = eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new ClientLogic(BllCommonLogic).GetClient(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<Client>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<Client>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
 
                 #region
@@ -186,16 +186,16 @@ namespace LicensingERP.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 #region Maker Checker
-                DataOnHold<ClientCategory> dataOnHold = new DataOnHold<ClientCategory>(BllCommonLogic)
+                MakerCheckerData<ClientCategory> dataOnHold = new MakerCheckerData<ClientCategory>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
-                    eCaseType = eDataOnHoldCaseType.ClientCategory,
-                    ePurpose = eDataOnHoldPurpose.Insert,
+                    eCaseType = eMakerCheckerCaseType.ClientCategory,
+                    ePurpose = eMakerCheckerPurpose.Insert,
                     tEffectedData = clientCategory
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold);
                 if(flag > 0)
                 {
                     ReturnMessage = new ReturnObject
@@ -232,17 +232,17 @@ namespace LicensingERP.Controllers
                 clientCategory.Id = Convert.ToInt32(id);
                 // clientCategoryLogic.Update(clientCategory);
                 #region
-                DataOnHold<ClientCategory> dataOnHold = new DataOnHold<ClientCategory>(BllCommonLogic)
+                MakerCheckerData<ClientCategory> dataOnHold = new MakerCheckerData<ClientCategory>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.ClientCategory,
-                    ePurpose = eDataOnHoldPurpose.Update,
+                    eCaseType = eMakerCheckerCaseType.ClientCategory,
+                    ePurpose = eMakerCheckerPurpose.Update,
                     tEffectedData = clientCategory
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold);
 
                 if(flag > 0)
                 {
@@ -288,17 +288,17 @@ namespace LicensingERP.Controllers
             if (loginCredentials != null)
             {
                 #region Maker Checker
-                DataOnHold<ClientCategory> dataOnHold = new DataOnHold<ClientCategory>(BllCommonLogic)
+                MakerCheckerData<ClientCategory> dataOnHold = new MakerCheckerData<ClientCategory>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.ClientCategory,
-                    ePurpose = eDataOnHoldPurpose.Deactivate,
+                    eCaseType = eMakerCheckerCaseType.ClientCategory,
+                    ePurpose = eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new ClientCategoryLogic(BllCommonLogic).GetClientCategory(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<ClientCategory>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
                 //return Json(new ClientCategoryLogic(BllCommonLogic).Deactivate(Convert.ToInt32(id)));
             }

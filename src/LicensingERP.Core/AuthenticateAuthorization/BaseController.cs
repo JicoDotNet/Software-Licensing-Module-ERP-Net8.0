@@ -4,12 +4,9 @@ using LicensingERP.Logic.Model.Class;
 using LicensingERP.StateManagement;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-//using System.Net.Http;
 using System.Net;
-using System.IO;
 using LicensingERP.Logic.DTO.SP;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Mvc
@@ -98,7 +95,7 @@ namespace Microsoft.AspNetCore.Mvc
                         SessionId = SessionID,
                         UserId = SessionPerson?.UserId
                     };
-                    LogObj.Set();
+                    LogObj.Set().ConfigureAwait(false);
                 }
                 #endregion
 

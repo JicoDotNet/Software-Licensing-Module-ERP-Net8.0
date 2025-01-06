@@ -1,4 +1,4 @@
-﻿@model List<DataOnHold<object>>
+﻿@model List<MakerCheckerData<object>>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (DataOnHold<object> dataOnHold in Model)
+                    @foreach (MakerCheckerData<object> dataOnHold in Model)
                     {
 
                         <tr>
@@ -63,85 +63,85 @@
                                 string icon = "";
                                 string color = "";
 
-                                if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
+                                if (dataOnHold.ePurpose == eMakerCheckerPurpose.Insert)
                                 {
                                     color = "#067334";
 
                                 }
-                                else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                                else if (dataOnHold.ePurpose == eMakerCheckerPurpose.Update)
                                 {
                                     color = "#ffd700";
 
                                 }
-                                else if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
+                                else if (dataOnHold.ePurpose == eMakerCheckerPurpose.Deactivate)
                                 {
                                     color = "#dc3545";
 
                                 }
                                 switch (dataOnHold.eCaseType)
                                 {
-                                    case eDataOnHoldCaseType.UserGroup:
+                                    case eMakerCheckerCaseType.UserGroup:
                                         {
                                             icon = "fa-user-plus";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.User:
+                                    case eMakerCheckerCaseType.User:
                                         {
                                             icon = "fa-user";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.ClientCategory:
+                                    case eMakerCheckerCaseType.ClientCategory:
                                         {
                                             icon = "fa-user-tag";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.UserMenuPermission:
+                                    case eMakerCheckerCaseType.UserMenuPermission:
                                         {
                                             icon = "fa-user";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.UserDashboardPermission:
+                                    case eMakerCheckerCaseType.UserDashboardPermission:
                                         {
                                             icon = "fa-user";
                                         }
                                         break;
 
-                                    case eDataOnHoldCaseType.Client:
+                                    case eMakerCheckerCaseType.Client:
                                         {
                                             icon = "fa-user-tie";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.LicenseType:
+                                    case eMakerCheckerCaseType.LicenseType:
                                         {
                                             icon = "fa-id-card";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.Product:
+                                    case eMakerCheckerCaseType.Product:
                                         {
                                             icon = "fa-box";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.LicenseParameterLink:
+                                    case eMakerCheckerCaseType.LicenseParameterLink:
                                         {
                                             icon = "fa-id-card";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.Parameter:
+                                    case eMakerCheckerCaseType.Parameter:
                                         {
                                             icon = "fa-hands-helping";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.WFProcess:
+                                    case eMakerCheckerCaseType.WFProcess:
                                         {
                                             icon = "fa-hourglass";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.WFAssign:
+                                    case eMakerCheckerCaseType.WFAssign:
                                         {
                                             icon = "fa-hourglass";
                                         }
                                         break;
-                                    case eDataOnHoldCaseType.ProductFeatures:
+                                    case eMakerCheckerCaseType.ProductFeatures:
                                         {
                                             icon = "fa-th-list";
                                         }
@@ -167,7 +167,7 @@
                                    data-bind="@dataOnHold.EffectedDataDisplay">
                                     <i class="fas fa-eye"></i>  View Data
                                 </a>
-                                @if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
+                                @if (dataOnHold.ePurpose == eMakerCheckerPurpose.Update)
                                 {
                                     <br />
                                     <a class="card-link text-sm text-danger" style="cursor:pointer;" onclick="ShowData(this);"
@@ -339,7 +339,26 @@
             
             for (x in myObj) {
                 i++;
-                if (x == 'TransactionDate' || x == 'WFProcessId' || x == 'StateId' || x == 'FromUserTypeId' || x == 'ToUserTypeId' || x == 'ActivityStartDate' || x == 'ActivityEndDate'  || x == 'CreatedBy' || x == 'SessionId' || x == 'ProductId' || x == 'IsActive' || x == 'Id' || x == 'Password' || x == 'UserTypeId' || x == 'CategoryId' || x == 'NumberOfLicence' || x == 'IsScalingEligible' || x == 'LicenceTypeId') { console.log('Not Showing!'); }
+                if (x == 'TransactionDate' 
+                    || x == 'WFProcessId' 
+                    || x == 'StateId' 
+                    || x == 'FromUserTypeId' 
+                    || x == 'ToUserTypeId' 
+                    || x == 'ActivityStartDate' 
+                    || x == 'ActivityEndDate'  
+                    || x == 'CreatedBy' 
+                    || x == 'SessionId' 
+                    || x == 'ProductId' 
+                    || x == 'IsActive' 
+                    || x == 'Id' 
+                    || x == 'Password' 
+                    || x == 'UserTypeId' 
+                    || x == 'CategoryId' 
+                    || x == 'NumberOfLicence' 
+                    || x == 'IsScalingEligible' 
+                    || x == 'LicenceTypeId'
+                    || x == 'UserId')
+                { console.log('Not Showing!'); }
                 else
                     if (x == 'Id' && myObj[x] == 0) { console.log('Not Showing!'); }
                     else

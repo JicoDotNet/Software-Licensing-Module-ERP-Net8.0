@@ -37,7 +37,7 @@
                                     <label for="CaseType">Case Type</label>
                                     <select class="form-control select2" name="CaseType" style="width:100%;">
                                         <option value="select">--Please Select--</option>
-                                        @foreach (string casetype in Enum.GetNames(typeof(eDataOnHoldCaseType)))
+                                        @foreach (string casetype in Enum.GetNames(typeof(eMakerCheckerCaseType)))
                                         {
                                             <option value="@casetype">@casetype</option>
                                         }
@@ -49,7 +49,7 @@
                                     <label for="Purpose">Purpose</label>
                                     <select class="form-control select2" name="Purpose" style="width:100%;">
                                         <option value="select">-- Please Select --</option>
-                                        @foreach (string purpose in Enum.GetNames(typeof(eDataOnHoldPurpose)))
+                                        @foreach (string purpose in Enum.GetNames(typeof(eMakerCheckerPurpose)))
                                         {
                                             <option value="@purpose">@purpose</option>
                                         }

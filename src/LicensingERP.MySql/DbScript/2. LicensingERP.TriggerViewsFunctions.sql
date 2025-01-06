@@ -1,3 +1,36 @@
+-- FUNCTION
+
+-- fn_Get_UserFullName
+DROP FUNCTION IF EXISTS fn_Get_UserFullName;
+CREATE FUNCTION fn_Get_UserFullName(p_UserId INT)
+  RETURNS varchar(255) CHARSET utf8
+BEGIN
+DECLARE v_FN varchar(255) DEFAULT '';
+SELECT tu.FullName INTO v_FN FROM tbl_user tu WHERE tu.Id = p_UserId;
+
+RETURN v_FN;
+END;
+
+-- fn_Get_UserTypeName
+DROP FUNCTION IF EXISTS fn_Get_UserTypeName;
+CREATE FUNCTION fn_Get_UserTypeName(p_UserTypeId INT)
+  RETURNS varchar(255) CHARSET utf8
+BEGIN
+  DECLARE v_FN varchar(255) DEFAULT '';
+SELECT tu.UserTypeName INTO v_FN FROM tbl_usertype tu WHERE tu.Id = p_UserTypeId;
+
+RETURN v_FN;
+END;
+
+-- IST_NOW
+DROP FUNCTION IF EXISTS IST_NOW;
+CREATE FUNCTION IST_NOW()
+  RETURNS DATETIME
+BEGIN
+  RETURN DATE_ADD(UTC_TIMESTAMP(), INTERVAL 330 MINUTE );
+END;
+
+
 
 -- TIGGER
 
@@ -11,7 +44,7 @@ BEGIN
 	INSERT INTO tbl_request_claim (RequestId, RequestNo,
 	NextUserTypeId, ClaimUserId, ClaimDate,
 	IsActive, AssignDate, TransactionDate, SessionId)
-	  VALUES (NEW.Id, NEW.RequestNo, (SELECT ToUserTypeId FROM tbl_wf_process_assign WHERE WfProcessId = (SELECT Id FROM tbl_wf_process WHERE LicenceTypeId = NEW.LicenceTypeId AND IsInitial = 1) AND FromUserTypeId = NEW.UserTypeId AND StateId = 1), NULL, NULL, 1, NOW(), NOW(), NEW.SessionId);
+	  VALUES (NEW.Id, NEW.RequestNo, (SELECT ToUserTypeId FROM tbl_wf_process_assign WHERE WfProcessId = (SELECT Id FROM tbl_wf_process WHERE LicenceTypeId = NEW.LicenceTypeId AND IsInitial = 1) AND FromUserTypeId = NEW.UserTypeId AND StateId = 1), NULL, NULL, 1, IST_NOW(), IST_NOW(), NEW.SessionId);
 END;
 
 
@@ -59,7 +92,7 @@ BEGIN
 	  AND FromUserTypeId = NEW.UserTypeId)) THEN
 	INSERT INTO tbl_request_status (RequestId, RequestNo, UserId, UserTypeId, IsApproved,
 	ApproveRejectDate, Remarks, IsActive, SessionId, TransactionDate)
-	  VALUES (NEW.RequestId, NEW.RequestNo, NEW.UserId, NEW.UserTypeId, 1, NOW(), NEW.Remarks, 1, NEW.SessionId, NOW());
+	  VALUES (NEW.RequestId, NEW.RequestNo, NEW.UserId, NEW.UserTypeId, 1, IST_NOW(), NEW.Remarks, 1, NEW.SessionId, IST_NOW());
 	END IF;
 	  
 
@@ -87,7 +120,7 @@ BEGIN
 	  AND FromUserTypeId = NEW.UserTypeId)) THEN
 	INSERT INTO tbl_request_status (RequestId, RequestNo, UserId, UserTypeId, IsApproved,
 	ApproveRejectDate, Remarks, IsActive, SessionId, TransactionDate)
-	  VALUES (NEW.RequestId, NEW.RequestNo, NEW.UserId, NEW.UserTypeId, 1, NOW(), NEW.Remarks, 1, NEW.SessionId, NOW());
+	  VALUES (NEW.RequestId, NEW.RequestNo, NEW.UserId, NEW.UserTypeId, 1, IST_NOW(), NEW.Remarks, 1, NEW.SessionId, IST_NOW());
 	END IF;
 
 
@@ -122,34 +155,8 @@ BEGIN
 	INSERT INTO tbl_request_claim (RequestId, RequestNo,
 	NextUserTypeId, ClaimUserId, ClaimDate,
 	IsActive, AssignDate, TransactionDate, SessionId)
-	  VALUES (NEW.RequestId, NEW.RequestNo, p_NextUserTypeId, NULL, NULL, 1, NOW(), NOW(), NEW.SessionId);
+	  VALUES (NEW.RequestId, NEW.RequestNo, p_NextUserTypeId, NULL, NULL, 1, IST_NOW(), IST_NOW(), NEW.SessionId);
 	END IF;
-END;
-
-
-
--- FUNCTION
-
--- fn_Get_UserFullName
-DROP FUNCTION IF EXISTS fn_Get_UserFullName;
-CREATE FUNCTION fn_Get_UserFullName(p_UserId INT)
-  RETURNS varchar(255) CHARSET utf8
-BEGIN
-DECLARE v_FN varchar(255) DEFAULT '';
-SELECT tu.FullName INTO v_FN FROM tbl_user tu WHERE tu.Id = p_UserId;
-
-RETURN v_FN;
-END;
-
--- fn_Get_UserTypeName
-DROP FUNCTION IF EXISTS fn_Get_UserTypeName;
-CREATE FUNCTION fn_Get_UserTypeName(p_UserTypeId INT)
-  RETURNS varchar(255) CHARSET utf8
-BEGIN
-  DECLARE v_FN varchar(255) DEFAULT '';
-SELECT tu.UserTypeName INTO v_FN FROM tbl_usertype tu WHERE tu.Id = p_UserTypeId;
-
-RETURN v_FN;
 END;
 
 
@@ -173,12 +180,3 @@ FROM (tbl_menu_list
   JOIN tbl_usermenu
     ON ((tbl_menu_list.Id = tbl_usermenu.MenuId)));
 	
-	
--- Procedure
-
-
-
-
-
-
-

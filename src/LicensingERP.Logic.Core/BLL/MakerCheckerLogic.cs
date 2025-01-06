@@ -11,16 +11,16 @@ using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
-    public class DataOnHoldLogic<T> : ConnectionString where T : class
+    public class MakerCheckerLogic<T> : ConnectionString where T : class
     {
-        T DataOnHoldDynamicObj;
+        private T MakerCheckerDynamicObj;
 
-        public DataOnHoldLogic(sCommonDto CommonObj) : base(CommonObj)
+        public MakerCheckerLogic(sCommonDto CommonObj) : base(CommonObj)
         {
-            DataOnHoldDynamicObj = default(T);
+            MakerCheckerDynamicObj = default(T);
         }
 
-        public int Insert(DataOnHold<T> dataOnHold)
+        public int Insert(MakerCheckerData<T> dataOnHold)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -46,7 +46,7 @@ namespace LicensingERP.Logic.BLL
             return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetMCDataOnHold, nvp, "Out_Param"));
         }
 
-        public int Approve(DataOnHold<T> dataOnHold)
+        public int Approve(MakerCheckerData<T> dataOnHold)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -72,7 +72,7 @@ namespace LicensingERP.Logic.BLL
             return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetMCDataOnHold, nvp, "Out_Param"));
         }
 
-        public int Decline(DataOnHold<T> dataOnHold)
+        public int Decline(MakerCheckerData<T> dataOnHold)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -98,7 +98,7 @@ namespace LicensingERP.Logic.BLL
             return Convert.ToInt32(mySqlDBAccess.InsertUpdateDeleteReturnObject(StoreProcedure.SetMCDataOnHold, nvp, "Out_Param"));
         }
 
-        public List<DataOnHold<T>> GetPendingDatas(int UserId, int UserTypeId)
+        public List<MakerCheckerData<T>> GetPendingDatas(int UserId, int UserTypeId)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -109,14 +109,14 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_UserTypeId", UserTypeId),
                 new NameValuePair("p_QueryType", "FORUSER")
             };
-            List<DataOnHold<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<DataOnHold<T>>();
-            foreach (DataOnHold<T> dataOnHold in dataOnHolds)
+            List<MakerCheckerData<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<MakerCheckerData<T>>();
+            foreach (MakerCheckerData<T> dataOnHold in dataOnHolds)
             {
                 dataOnHold.ToObject();
             }
             return dataOnHolds;
         }
-        public DataOnHold<T> GetPendingData(int UserId, int UserTypeId, int Id)
+        public MakerCheckerData<T> GetPendingData(int UserId, int UserTypeId, int Id)
         {
             mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
@@ -127,8 +127,8 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_UserTypeId", UserTypeId),
                 new NameValuePair("p_QueryType", "SINGLE")
             };
-            List<DataOnHold<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<DataOnHold<T>>();
-            foreach (DataOnHold<T> dataOnHold in dataOnHolds)
+            List<MakerCheckerData<T>> dataOnHolds = mySqlDBAccess.GetData(StoreProcedure.GetMCDataOnHold, NameValuePairs).ToList<MakerCheckerData<T>>();
+            foreach (MakerCheckerData<T> dataOnHold in dataOnHolds)
             {
 dataOnHold.ToObject();
             }

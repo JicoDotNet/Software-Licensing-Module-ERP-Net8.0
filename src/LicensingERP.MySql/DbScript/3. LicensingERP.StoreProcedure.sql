@@ -336,7 +336,7 @@ AND twp.StateId = p_StateId
 AND twp.FromUserTypeId = p_FromUserTypeId;
 
 INSERT INTO tbl_wf_process_assign (WFProcessId, StateId, FromUserTypeId, ToUserTypeId, IsActive, ActivityStartDate, ActivityEndDate, SessionId, TransactionDate)
-  VALUES (p_WFProcessId, p_StateId, p_FromUserTypeId, p_ToUserTypeId, 1, p_ActivityStartDate, NULL, p_SessionId, NOW());
+  VALUES (p_WFProcessId, p_StateId, p_FromUserTypeId, p_ToUserTypeId, 1, p_ActivityStartDate, NULL, p_SessionId, IST_NOW());
   
   SET Out_Param = LAST_INSERT_ID();
 END IF;
@@ -350,7 +350,7 @@ CREATE PROCEDURE sp_Set_wf_process(IN p_Id INT(11), IN p_LicenceTypeId INT(11), 
 BEGIN
 IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_wf_process (LicenceTypeId, ProcessName, ProcessCode, IsInitial, IsEnd, Description, SessionId, IsActive, TransactionDate)
-  VALUES (p_LicenceTypeId, p_ProcessName, p_ProcessCode, p_IsInitial, p_IsEnd, p_Description, p_SessionId, p_IsActive, NOW());
+  VALUES (p_LicenceTypeId, p_ProcessName, p_ProcessCode, p_IsInitial, p_IsEnd, p_Description, p_SessionId, p_IsActive, IST_NOW());
 
       SET Out_Param = Last_Insert_id();
     END IF;
@@ -364,7 +364,7 @@ CREATE PROCEDURE sp_Set_usertype(IN p_Id INT(11), IN p_UserTypeName VARCHAR(100)
 BEGIN
 IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_usertype (UserTypeName, UserTypeDetails, IsActive, SessionId, TransactionDate)
-  VALUES (p_UserTypeName, p_UserTypeDetails, p_IsActive, p_SessionId, NOW());
+  VALUES (p_UserTypeName, p_UserTypeDetails, p_IsActive, p_SessionId, IST_NOW());
       SET Out_Param = LAST_INSERT_ID();
 ELSEIF p_QueryType = 'UPDATE' THEN
 UPDATE tbl_usertype
@@ -398,7 +398,7 @@ BEGIN
   IF p_QueryType = 'ASSIGN' THEN
 
 INSERT INTO tbl_usermenu (MenuId, UserTypeId, IsActive, SessionId, TransactionDate)
-  VALUES (p_MenuId, p_UserTypeId, 1, p_SessionId, NOW());
+  VALUES (p_MenuId, p_UserTypeId, 1, p_SessionId, IST_NOW());
     SET Out_Param = LAST_INSERT_ID();
   ELSEIF p_QueryType = 'DEACTIVATE' THEN
 
@@ -421,7 +421,7 @@ BEGIN
   IF p_QueryType = 'ASSIGN' THEN
 
 INSERT INTO tbl_userdashboard (DashboardId, UserTypeId, IsActive, SessionId, TransactionDate)
-  VALUES (p_DashboardId, p_UserTypeId, 1, p_SessionId, NOW());
+  VALUES (p_DashboardId, p_UserTypeId, 1, p_SessionId, IST_NOW());
     SET Out_Param = LAST_INSERT_ID();
 
      ELSEIF p_QueryType = 'DEACTIVATE' THEN
@@ -451,11 +451,11 @@ BEGIN
 -- trans start here
 
 INSERT INTO tbl_user (UserTypeId, FullName, UserName, Email, Mobile, Address, Designation, IsActive, SessionId, TransactionDate)
-  VALUES (p_UserTypeId, p_FullName, p_UserName, p_Email, p_Mobile, p_Address, p_Designation, p_IsActive, p_SessionId, NOW());
+  VALUES (p_UserTypeId, p_FullName, p_UserName, p_Email, p_Mobile, p_Address, p_Designation, p_IsActive, p_SessionId, IST_NOW());
 
 			SET LIID=LAST_INSERT_ID();
 
-			-- CALL sp_Set_Password(LIID, NULL, NOW(), NULL, p_Password, 1, p_SessionId, 'INSERT', Out_Param);
+			-- CALL sp_Set_Password(LIID, NULL, IST_NOW(), NULL, p_Password, 1, p_SessionId, 'INSERT', Out_Param);
 			SET Out_Param = LIID;
 		-- end trans
 		ELSE 
@@ -494,7 +494,7 @@ CREATE PROCEDURE sp_Set_request_restrict(IN p_RequestId INT(11), IN p_RequestNo 
 BEGIN
   IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_request_restrict (RequestId, RequestNo, RestrictTo, RestrictVal, IsActive, SessionId, TransactionDate)
-  VALUES (p_RequestId, p_RequestNo, p_RestrictTo, p_RestrictVal, 1, p_SessionId, NOW());
+  VALUES (p_RequestId, p_RequestNo, p_RestrictTo, p_RestrictVal, 1, p_SessionId, IST_NOW());
        SET Out_Param = LAST_INSERT_ID();
       END IF;
 END
@@ -507,7 +507,7 @@ CREATE PROCEDURE sp_Set_request_parameter(IN p_RequestId INT(11), IN p_RequestNo
 BEGIN
  IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_request_parameter (RequestId, RequestNo, ParamId, ParamValue, IsActive, SessionId, TransactionDate)
-  VALUES (p_RequestId, p_RequestNo, p_ParamId, p_ParamValue, 1, p_SessionId, NOW());
+  VALUES (p_RequestId, p_RequestNo, p_ParamId, p_ParamValue, 1, p_SessionId, IST_NOW());
        SET Out_Param = LAST_INSERT_ID();
       END IF;
 END
@@ -520,7 +520,7 @@ CREATE PROCEDURE sp_Set_request_features(IN p_RequestId INT(11), IN p_RequestNo 
 BEGIN
  IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_request_features (RequestId, RequestNo, FeaturesId, ProductId, IsActive, SessionId, TransactionDate)
-  VALUES (p_RequestId, p_RequestNo, p_FeaturesId, p_ProductId, 1, p_SessionId, NOW());
+  VALUES (p_RequestId, p_RequestNo, p_FeaturesId, p_ProductId, 1, p_SessionId, IST_NOW());
        SET Out_Param = LAST_INSERT_ID();
       END IF;
 END
@@ -543,7 +543,7 @@ BEGIN
 
 UPDATE tbl_request_claim
 SET ClaimUserId = p_UserId,
-    ClaimDate = NOW()
+    ClaimDate = IST_NOW()
 WHERE RequestId = p_RequestId
 AND NextUserTypeId = p_UserTypeId
 AND IsActive = 1
@@ -568,7 +568,7 @@ declare p_Id int  default 0;
 IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_request_acknowledgement (RequestId, RequestNo, UserId, UserTypeId,
 Remarks, StateId, IsActive, SessionId, TransactionDate)
-  VALUES (p_RequestId, p_RequestNo, p_UserId, p_UserTypeId, p_Remarks, p_StateId, 1, p_SessionId, NOW());
+  VALUES (p_RequestId, p_RequestNo, p_UserId, p_UserTypeId, p_Remarks, p_StateId, 1, p_SessionId, IST_NOW());
     SET p_Id = LAST_INSERT_ID();
 
     -- INSERT INTO tbl_request_acknowledgement_docs (AcknowledgementId, RequestId, RequestNo, UserId, UserTypeId, 
@@ -576,7 +576,7 @@ Remarks, StateId, IsActive, SessionId, TransactionDate)
     --     IsActive, SessionId, TransactionDate)
     -- VALUES (p_Id, p_RequestId, p_RequestNo, p_UserId, p_UserTypeId, 
     --     p_FileName, p_MimeType, p_Description, p_FileData,     
-	-- 	    1, p_SessionId, NOW());
+	-- 	    1, p_SessionId, IST_NOW());
 
     SET Out_Param = p_Id;
 
@@ -597,7 +597,7 @@ BEGIN
 
 IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_request (RequestNo, RequestDate, UserTypeId, UserId, ClientId, LicenceTypeId, ProductId, LicenceNo, IsActive, SessionId, TransactionDate)
-  VALUES (p_RequestNo, p_RequestDate, p_UserTypeId, p_UserId, p_ClientId, p_LicenceTypeId, p_ProductId, p_LicenceNo, 1, p_SessionId, NOW());
+  VALUES (p_RequestNo, p_RequestDate, p_UserTypeId, p_UserId, p_ClientId, p_LicenceTypeId, p_ProductId, p_LicenceNo, 1, p_SessionId, IST_NOW());
 
      SET p_RequestId = LAST_INSERT_ID();
      SET Out_Param = p_RequestId;
@@ -616,7 +616,7 @@ CREATE PROCEDURE sp_Set_product_module(IN p_Id INT(11), IN p_ProductId INT(11), 
 BEGIN
   IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_product_module (ProductId, ModuleName, ModuleDetails, IsActive, SessionId, TransactionDate)
-  VALUES (p_ProductId, p_ModuleName, p_ModuleDetails, p_IsActive, p_SessionId, NOW());
+  VALUES (p_ProductId, p_ModuleName, p_ModuleDetails, p_IsActive, p_SessionId, IST_NOW());
     SET Out_Param = LAST_INSERT_ID();
   END IF;
 END
@@ -629,7 +629,7 @@ CREATE PROCEDURE sp_Set_product_features(IN p_Id INT(11), IN p_ProductId INT(11)
 BEGIN
     IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_product_features (ProductId, FeaturesName, FeaturesDetails, IsActive, SessionId, TransactionDate)
-  VALUES (p_ProductId, p_FeaturesName, p_FeaturesDetails, p_IsActive, p_SessionId, NOW());
+  VALUES (p_ProductId, p_FeaturesName, p_FeaturesDetails, p_IsActive, p_SessionId, IST_NOW());
       SET Out_Param = LAST_INSERT_ID();
     ELSEIF p_QueryType = 'UPDATE' THEN
 UPDATE tbl_product_features
@@ -654,7 +654,7 @@ CREATE PROCEDURE sp_Set_product(IN p_Id INT(11), IN p_ProductName VARCHAR(100), 
 BEGIN
   IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_product (ProductName, ProductDetails, IsActive, SessionId, TransactionDate)
-  VALUES (p_ProductName, p_ProductDetails, p_IsActive, p_SessionId, NOW());
+  VALUES (p_ProductName, p_ProductDetails, p_IsActive, p_SessionId, IST_NOW());
     SET Out_Param = LAST_INSERT_ID();
   ELSEIF p_QueryType = 'UPDATE' THEN
 UPDATE tbl_product
@@ -683,9 +683,9 @@ SET psq.IsActive = 0
 WHERE psq.UserId = p_UserId;
 
 INSERT INTO tbl_password_security_questions (UserId, QuestionEnumNo, Question, Answer, IsActive, TransactionDate, SessionId)
-  VALUES (p_UserId, p_QuestionEnumNo, p_Question, p_Answer, 1, NOW(), p_SessionId);
+  VALUES (p_UserId, p_QuestionEnumNo, p_Question, p_Answer, 1, IST_NOW(), p_SessionId);
 
-    -- CALL sp_Set_Password(p_UserId, NULL, NOW(), NULL, p_Password, 0, p_SessionId, 'INSERT', Out_Param);
+    -- CALL sp_Set_Password(p_UserId, NULL, IST_NOW(), NULL, p_Password, 0, p_SessionId, 'INSERT', Out_Param);
 
     SET Out_Param = LAST_INSERT_ID();
   END IF;
@@ -706,7 +706,7 @@ BEGIN
   AND prr.IsActive = 1) THEN
 
 INSERT INTO tbl_password_reset_request (UserName, UserId, IsCanceled, CanceledDate, IsActive, SessionId, TransactionDate)
-  VALUES (p_UserName, (SELECT Id FROM tbl_user AS tu WHERE tu.UserName = p_UserName), 0, NULL, 1, p_SessionId, NOW());
+  VALUES (p_UserName, (SELECT Id FROM tbl_user AS tu WHERE tu.UserName = p_UserName), 0, NULL, 1, p_SessionId, IST_NOW());
       SET Out_Param = LAST_INSERT_ID();
       
     ELSE
@@ -732,7 +732,7 @@ SET req.IsActive = 0
 WHERE req.UserId = p_UserId;
 
 INSERT INTO tbl_password (UserId, PasswordHash, IsActive, ActivationDate, PasswordSalt, SessionId, TransactionDate, PasswordText, IsChangeable)
-  VALUES (p_UserId, p_PasswordHash, 1, p_ActivationDate, p_PasswordSalt, p_SessionId, NOW(), NULL, p_IsChangeable);
+  VALUES (p_UserId, p_PasswordHash, 1, p_ActivationDate, p_PasswordSalt, p_SessionId, IST_NOW(), NULL, p_IsChangeable);
     
     SET Out_Param = LAST_INSERT_ID();
        
@@ -751,7 +751,7 @@ BEGIN
      SET p_ListData = NULL;
    END IF;
 INSERT INTO tbl_parameters (FieldName, DataType, IsRequired, Fieldlength, ListData, SessionId, TransactionDate, IsActive)
-  VALUES (p_FieldName, p_DataType, p_IsRequired, p_Fieldlength, p_ListData, p_SessionId, NOW(), 1);
+  VALUES (p_FieldName, p_DataType, p_IsRequired, p_Fieldlength, p_ListData, p_SessionId, IST_NOW(), 1);
     SET Out_Param = LAST_INSERT_ID();
   ELSEIF p_QueryType = 'UPDATE' THEN
 UPDATE tbl_parameters
@@ -825,7 +825,7 @@ BEGIN
 INSERT INTO tbl_mc_data_on_hold (CaseType, Purpose, EffectedData, EffectedRowId, CreatedUserId, CreatedUserTypeId,
 IsApproved, ApproveRejectUserId, ApproveRejectUserTypeId, ApproveRejectRemarks, ApproveRejectDate, IsActive, SessionId, TransactionDate)
 
-  VALUES (p_CaseType, p_Purpose, p_EffectedData, p_EffectedRowId, p_CreatedUserId, p_CreatedUserTypeId, NULL, NULL, NULL, NULL, NULL, 1, p_SessionId, NOW());
+  VALUES (p_CaseType, p_Purpose, p_EffectedData, p_EffectedRowId, p_CreatedUserId, p_CreatedUserTypeId, NULL, NULL, NULL, NULL, NULL, 1, p_SessionId, IST_NOW());
 
     SET Out_Param = Last_insert_id();
 
@@ -835,7 +835,7 @@ SET IsApproved = 1,
     ApproveRejectUserId = p_ApproveRejectUserId,
     ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
     ApproveRejectRemarks = p_ApproveRejectRemarks,
-    ApproveRejectDate = NOW(),
+    ApproveRejectDate = IST_NOW(),
     IsActive = 0
 WHERE Id = p_Id;
     SET Out_Param = p_Id;
@@ -847,7 +847,7 @@ SET IsApproved = 0,
     ApproveRejectUserId = p_ApproveRejectUserId,
     ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
     ApproveRejectRemarks = p_ApproveRejectRemarks,
-    ApproveRejectDate = NOW(),
+    ApproveRejectDate = IST_NOW(),
     IsActive = 0
 WHERE Id = p_Id;
     SET Out_Param = p_Id;
@@ -867,7 +867,7 @@ Begin
   FROM tbl_licence_type
   WHERE TypeName = p_TypeName) THEN
 INSERT INTO tbl_licence_type (TypeName, LicenceTypeDetails, NumberOfLicence, IsScalingEligible, IsActive, SessionId, TransactionDate)
-  VALUES (p_TypeName, p_LicenceTypeDetails, p_NumberOfLicence, p_IsScalingEligible, p_IsActive, p_SessionId, NOW());
+  VALUES (p_TypeName, p_LicenceTypeDetails, p_NumberOfLicence, p_IsScalingEligible, p_IsActive, p_SessionId, IST_NOW());
          SET Out_Param = LAST_INSERT_ID();
     else 
          SET Out_Param = '-1';
@@ -909,7 +909,7 @@ BEGIN
   IF p_QueryType = 'INSERT' THEN
 
 INSERT INTO tbl_license_parameter (ParameterId, LicenseTypeId, SessionId, TransactionDate, IsActive)
-  VALUES (p_ParameterId, p_LicenseTypeId, p_SessionId, NOW(), 1);
+  VALUES (p_ParameterId, p_LicenseTypeId, p_SessionId, IST_NOW(), 1);
 
     SET Out_Param = LAST_INSERT_ID();
 
@@ -931,7 +931,7 @@ CREATE PROCEDURE sp_Set_ClientCategory(IN p_Id INT(11), IN p_CategoryName VARCHA
 BEGIN
 	IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_client_category (CategoryName, CategoryDetails, IsActive, SessionId, TransactionDate)
-  VALUES (p_CategoryName, p_CategoryDetails, p_IsActive, p_SessionId, NOW());
+  VALUES (p_CategoryName, p_CategoryDetails, p_IsActive, p_SessionId, IST_NOW());
        SET Out_Param = LAST_INSERT_ID();
       
   ELSEIF p_QueryType = 'UPDATE' THEN
@@ -958,7 +958,7 @@ CREATE PROCEDURE sp_Set_Client(IN p_Id INT(11), IN p_CategoryId INT(11), IN p_Cl
 BEGIN
 	IF p_QueryType = 'INSERT' THEN
 INSERT INTO tbl_client (CategoryId, ClientName, ClientNumber, ClientEmail, CompanyName, CompanyAddress, CompanyNumber, CompanyEmail, GSTIN, PANNo, IsActive, SessionId, TransactionDate)
-  VALUES (p_CategoryId, p_ClientName, p_ClientNumber, p_ClientEmail, p_CompanyName, p_CompanyAddress, p_CompanyNumber, p_CompanyEmail, p_GSTIN, p_PANNo, p_IsActive, p_SessionId, NOW());
+  VALUES (p_CategoryId, p_ClientName, p_ClientNumber, p_ClientEmail, p_CompanyName, p_CompanyAddress, p_CompanyNumber, p_CompanyEmail, p_GSTIN, p_PANNo, p_IsActive, p_SessionId, IST_NOW());
        SET Out_Param = LAST_INSERT_ID();
   ELSEIF p_QueryType = 'UPDATE' THEN
 UPDATE tbl_client
@@ -1243,7 +1243,7 @@ WHERE UserName = p_UserName
 AND IsActive = 1;
 
 INSERT INTO tbl_log_login (UserName, Password, SessionId, TransactionDate)
-  VALUES (p_UserName, p_Password, p_SessionId, NOW());
+  VALUES (p_UserName, p_Password, p_SessionId, IST_NOW());
 
 END
 $$
@@ -1268,7 +1268,7 @@ HttpVerbs,
 UserId,
 SessionID,
 TransactionDate)
-  VALUES (p_MacAddress, p_BrowserType, p_Browser, p_BrowserVersion, p_DNS, p_IPAddress, p_Controller, p_Action, p_RouteId, p_AbsoluteUri, p_HttpVerbs, p_UserId, p_SessionID, NOW());
+  VALUES (p_MacAddress, p_BrowserType, p_Browser, p_BrowserVersion, p_DNS, p_IPAddress, p_Controller, p_Action, p_RouteId, p_AbsoluteUri, p_HttpVerbs, p_UserId, p_SessionID, IST_NOW());
 END
 $$
 
@@ -1279,7 +1279,7 @@ CREATE PROCEDURE sp_Get_Xml(IN p_RequestId INT(11), IN p_UserId INT, IN p_UserTy
 BEGIN
 	IF p_QueryType ='XML' THEN
 INSERT INTO tbl_xml_download (UserId, UserTypeId, RequestId, RequestNo, IsActive, SessionId, TransactionDate)
-  VALUES (p_UserId, p_UserTypeId, p_RequestId, (SELECT RequestNo FROM tbl_Request WHERE Id = p_RequestId), 1, p_SessionId, NOW());
+  VALUES (p_UserId, p_UserTypeId, p_RequestId, (SELECT RequestNo FROM tbl_Request WHERE Id = p_RequestId), 1, p_SessionId, IST_NOW());
 
 SELECT
   tbl_request.Id,

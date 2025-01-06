@@ -5,6 +5,7 @@ using LicensingERP.Logic.BLL.Report;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.ReportClass;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace LicensingERP.Core.Areas.Report.Controllers
 {
@@ -78,8 +79,9 @@ namespace LicensingERP.Core.Areas.Report.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult GetStatusReportInfo([FromBody]ReportOfStatus reportOfStatus)
+        public PartialViewResult GetStatusReportInfo([FromBody] object jsonRequest)
         {
+            ReportOfStatus reportOfStatus = JsonConvert.DeserializeObject<ReportOfStatus>(jsonRequest.ToString());
             reportOfStatus.ToDateObject();
             ReportLogic reportLogic = new ReportLogic(BllCommonLogic);
             List<ReportOfStatus> reportOfStatuses = new List<ReportOfStatus>();

@@ -62,6 +62,8 @@
 
 ### Screenshots
 ![image](https://github.com/user-attachments/assets/bf7a7166-7259-4070-a6b8-f4a361cede46)
+![image](https://github.com/user-attachments/assets/02d422ef-dd95-4d9b-985d-d27de57b6669)
+
 
 ## Demo
 A live demo of the application can be accessed 

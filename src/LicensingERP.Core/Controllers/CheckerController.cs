@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using LicensingERP.Logic.BLL;
 using LicensingERP.Logic.DTO.Class;
 using LicensingERP.Logic.DTO.Custom;
@@ -10,7 +8,6 @@ using LicensingERP.Logic.Enumeration;
 using LicensingERP.Logic.Model.Class;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace LicensingERP.Core.Controllers
 {
@@ -19,17 +16,17 @@ namespace LicensingERP.Core.Controllers
     {
         public IActionResult Index()
         {
-            DataOnHoldLogic<object> dataOnHoldLogic = new DataOnHoldLogic<object>(BllCommonLogic);
-            List<DataOnHold<object>> dataOnHolds = dataOnHoldLogic.GetPendingDatas(SessionPerson.UserId, SessionPerson.UserTypeId);
+            MakerCheckerLogic<object> makerCheckerLogic = new MakerCheckerLogic<object>(BllCommonLogic);
+            List<MakerCheckerData<object>> makerCheckerDatas = makerCheckerLogic.GetPendingDatas(SessionPerson.UserId, SessionPerson.UserTypeId);
 
-            return View(dataOnHolds);
+            return View(makerCheckerDatas);
         }
 
         public PartialViewResult Pending()
         {
-            DataOnHoldLogic<object> dataOnHoldLogic = new DataOnHoldLogic<object>(BllCommonLogic);
-            List<DataOnHold<object>> dataOnHolds = dataOnHoldLogic.GetPendingDatas(SessionPerson.UserId, SessionPerson.UserTypeId);
-            return PartialView("_PartialCheckerApproval", dataOnHolds);
+            MakerCheckerLogic<object> makerCheckerLogic = new MakerCheckerLogic<object>(BllCommonLogic);
+            List<MakerCheckerData<object>> makerCheckerDatas = makerCheckerLogic.GetPendingDatas(SessionPerson.UserId, SessionPerson.UserTypeId);
+            return PartialView("_PartialCheckerApproval", makerCheckerDatas);
         }
 
         [HttpPost]
@@ -44,19 +41,19 @@ namespace LicensingERP.Core.Controllers
             loginCredentials = loginManagment.Authenticate(loginCredentials);
             if (loginCredentials != null)
             {
-                DataOnHoldLogic<object> dataOnHoldLogic = new DataOnHoldLogic<object>(BllCommonLogic);
-                DataOnHold<object> dataOnHold = dataOnHoldLogic.GetPendingData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
-                if (dataOnHold != null)
+                MakerCheckerLogic<object> makerCheckerLogic = new MakerCheckerLogic<object>(BllCommonLogic);
+                MakerCheckerData<object> makerCheckerData = makerCheckerLogic.GetPendingData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
+                if (makerCheckerData != null)
                 {
-                    DataOnHold<object> dataOnHoldnw = new DataOnHold<object>(BllCommonLogic)
+                    MakerCheckerData<object> makerCheckerDatanw = new MakerCheckerData<object>(BllCommonLogic)
                     {
                         Id = Convert.ToInt32(id),
                         ApproveRejectUserId = SessionPerson.UserId,
                         ApproveRejectUserTypeId = SessionPerson.UserTypeId,
                         ApproveRejectRemarks = form["ApproveRejectRemarks"]
                     };
-                    if (dataOnHoldLogic.Approve(dataOnHoldnw) > 0)
-                        if (Update(dataOnHold) > 0)
+                    if (makerCheckerLogic.Approve(makerCheckerDatanw) > 0)
+                        if (Update(makerCheckerData) > 0)
                             ReturnMessage = new ReturnObject
                             {
                                 Status = true,
@@ -100,18 +97,18 @@ namespace LicensingERP.Core.Controllers
             loginCredentials = loginManagment.Authenticate(loginCredentials);
             if (loginCredentials != null)
             {
-                DataOnHoldLogic<object> dataOnHoldLogic = new DataOnHoldLogic<object>(BllCommonLogic);
-                DataOnHold<object> dataOnHold = dataOnHoldLogic.GetPendingData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
-                if (dataOnHold != null)
+                MakerCheckerLogic<object> makerCheckerLogic = new MakerCheckerLogic<object>(BllCommonLogic);
+                MakerCheckerData<object> makerCheckerData = makerCheckerLogic.GetPendingData(SessionPerson.UserId, SessionPerson.UserTypeId, Convert.ToInt32(id));
+                if (makerCheckerData != null)
                 {
-                    DataOnHold<object> dataOnHoldnw = new DataOnHold<object>(BllCommonLogic)
+                    MakerCheckerData<object> makerCheckernw = new MakerCheckerData<object>(BllCommonLogic)
                     {
                         Id = Convert.ToInt32(id),
                         ApproveRejectUserId = SessionPerson.UserId,
                         ApproveRejectUserTypeId = SessionPerson.UserTypeId,
                         ApproveRejectRemarks = form["ApproveRejectRemarks"]
                     };
-                    if (dataOnHoldLogic.Decline(dataOnHoldnw) > 0)
+                    if (makerCheckerLogic.Decline(makerCheckernw) > 0)
                         ReturnMessage = new ReturnObject
                         {
                             Status = true,
@@ -141,91 +138,91 @@ namespace LicensingERP.Core.Controllers
             return RedirectToAction("Index", new { id = string.Empty });
         }
 
-        private int Update(DataOnHold<object> dataOnHold)
+        private int Update(MakerCheckerData<object> makerCheckerData)
         {
-            switch (dataOnHold.eCaseType)
+            switch (makerCheckerData.eCaseType)
             {
-                case eDataOnHoldCaseType.UserGroup:
-                    if(dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new UserTypeLogic(BllCommonLogic).Insert((UserType)dataOnHold.GetT());
-                    if(dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new UserTypeLogic(BllCommonLogic).Update((UserType)dataOnHold.GetT());
-                    if(dataOnHold.ePurpose== eDataOnHoldPurpose.Deactivate)
-                        return new UserTypeLogic(BllCommonLogic).Deactivate(((UserType)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.UserGroup:
+                    if(makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new UserTypeLogic(BllCommonLogic).Insert((UserType)makerCheckerData.GetT());
+                    if(makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new UserTypeLogic(BllCommonLogic).Update((UserType)makerCheckerData.GetT());
+                    if(makerCheckerData.ePurpose== eMakerCheckerPurpose.Deactivate)
+                        return new UserTypeLogic(BllCommonLogic).Deactivate(((UserType)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.User:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new UserLogic(BllCommonLogic).Insert((UserPassword)dataOnHold.GetT(), new Password { PasswordText = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Decrypt(((UserPassword)dataOnHold.GetT()).Password) });
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new UserLogic(BllCommonLogic).Update((User)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                        return new UserLogic(BllCommonLogic).Deactivate(((User)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.User:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new UserLogic(BllCommonLogic).Insert((UserWithPassword)makerCheckerData.GetT(), new Password { PasswordText = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Decrypt(((UserWithPassword)makerCheckerData.GetT()).Password) });
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new UserLogic(BllCommonLogic).Update((User)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                        return new UserLogic(BllCommonLogic).Deactivate(((User)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.LicenseType:
-                        if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                            return new LicenceTypeLogic(BllCommonLogic).Insert((LicenceType)dataOnHold.GetT());
-                        if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                            return new LicenceTypeLogic(BllCommonLogic).Update((LicenceType)dataOnHold.GetT());
-                        if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                            return new LicenceTypeLogic(BllCommonLogic).Deactivate(((LicenceType)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.LicenseType:
+                        if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                            return new LicenceTypeLogic(BllCommonLogic).Insert((LicenceType)makerCheckerData.GetT());
+                        if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                            return new LicenceTypeLogic(BllCommonLogic).Update((LicenceType)makerCheckerData.GetT());
+                        if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                            return new LicenceTypeLogic(BllCommonLogic).Deactivate(((LicenceType)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.LicenseParameterLink:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new LicencetypeParameterLogic(BllCommonLogic).Insert((List<ParameterOfLicence>)dataOnHold.GetT());
+                case eMakerCheckerCaseType.LicenseParameterLink:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new LicencetypeParameterLogic(BllCommonLogic).Insert((List<ParameterOfLicence>)makerCheckerData.GetT());
                     break;
-                case eDataOnHoldCaseType.UserMenuPermission:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new MenuAccessLogic(BllCommonLogic).SetAccessPermission((List<UserMenu>)dataOnHold.GetT());
-                    break;
-
-                case eDataOnHoldCaseType.UserDashboardPermission:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new UserDashBoardLogic(BllCommonLogic).Insert((List<UserDashboard>)dataOnHold.GetT());
+                case eMakerCheckerCaseType.UserMenuPermission:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new MenuAccessLogic(BllCommonLogic).SetAccessPermission((List<UserMenu>)makerCheckerData.GetT());
                     break;
 
-                case eDataOnHoldCaseType.Client:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new ClientLogic(BllCommonLogic).Insert((Client)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new ClientLogic(BllCommonLogic).Update((Client)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                        return new ClientLogic(BllCommonLogic).Deactivate(((Client)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.UserDashboardPermission:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new UserDashBoardLogic(BllCommonLogic).Insert((List<UserDashboard>)makerCheckerData.GetT());
+                    break;
+
+                case eMakerCheckerCaseType.Client:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new ClientLogic(BllCommonLogic).Insert((Client)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new ClientLogic(BllCommonLogic).Update((Client)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                        return new ClientLogic(BllCommonLogic).Deactivate(((Client)makerCheckerData.GetT()).Id);
                         break;
-                case eDataOnHoldCaseType.ClientCategory:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new ClientCategoryLogic(BllCommonLogic).Insert((ClientCategory)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new ClientCategoryLogic(BllCommonLogic).Update((ClientCategory)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                        return new ClientCategoryLogic(BllCommonLogic).Deactivate(((ClientCategory)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.ClientCategory:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new ClientCategoryLogic(BllCommonLogic).Insert((ClientCategory)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new ClientCategoryLogic(BllCommonLogic).Update((ClientCategory)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                        return new ClientCategoryLogic(BllCommonLogic).Deactivate(((ClientCategory)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.Parameter:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new ParameterLogic(BllCommonLogic).Update((Parameter)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new ParameterLogic(BllCommonLogic).Insert((Parameter)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                        return new ParameterLogic(BllCommonLogic).Deactivate(((Parameter)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.Parameter:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new ParameterLogic(BllCommonLogic).Update((Parameter)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new ParameterLogic(BllCommonLogic).Insert((Parameter)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                        return new ParameterLogic(BllCommonLogic).Deactivate(((Parameter)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.Product:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new ProductLogic(BllCommonLogic).Insert((Product)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Update)
-                        return new ProductLogic(BllCommonLogic).Update((Product)dataOnHold.GetT());
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Deactivate)
-                        return new ProductLogic(BllCommonLogic).Deactivate(((Product)dataOnHold.GetT()).Id);
+                case eMakerCheckerCaseType.Product:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new ProductLogic(BllCommonLogic).Insert((Product)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Update)
+                        return new ProductLogic(BllCommonLogic).Update((Product)makerCheckerData.GetT());
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Deactivate)
+                        return new ProductLogic(BllCommonLogic).Deactivate(((Product)makerCheckerData.GetT()).Id);
                     break;
-                case eDataOnHoldCaseType.ProductFeatures:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new ProductFeaturesLogic(BllCommonLogic).Insert((ProductFeatures)dataOnHold.GetT());
+                case eMakerCheckerCaseType.ProductFeatures:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new ProductFeaturesLogic(BllCommonLogic).Insert((ProductFeatures)makerCheckerData.GetT());
                     break;
-                case eDataOnHoldCaseType.WFProcess:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new WfProcessLogic(BllCommonLogic).Insert((WfProcess)dataOnHold.GetT());
+                case eMakerCheckerCaseType.WFProcess:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new WfProcessLogic(BllCommonLogic).Insert((WfProcess)makerCheckerData.GetT());
                     break;
-                case eDataOnHoldCaseType.WFAssign:
-                    if (dataOnHold.ePurpose == eDataOnHoldPurpose.Insert)
-                        return new WfProcessAssignLogic(BllCommonLogic).Insert((WfProcessAssign)dataOnHold.GetT());
+                case eMakerCheckerCaseType.WFAssign:
+                    if (makerCheckerData.ePurpose == eMakerCheckerPurpose.Insert)
+                        return new WfProcessAssignLogic(BllCommonLogic).Insert((WfProcessAssign)makerCheckerData.GetT());
                     break;
             }
             return 0;
