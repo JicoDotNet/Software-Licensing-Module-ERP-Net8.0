@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LicensingERP.Logic.DTO.ReportClass
 {
-    public class ReportOfMakerChecker : IDataOnHold, IUser,IActivity, ISession, IStatus,IUserType
+    public class ReportOfMakerChecker : IMakerCheckerData, IUser,IActivity, ISession, IStatus,IUserType
     {
         public string UserName { get; set; }
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LicensingERP.Logic.Enumeration
+﻿namespace LicensingERP.Logic.Enumeration
 {
-    public enum eDataOnHoldCaseType
+    public enum eMakerCheckerCaseType
     {
         UserGroup = 11,
 

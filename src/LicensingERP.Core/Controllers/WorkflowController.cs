@@ -46,16 +46,16 @@ namespace LicensingERP.Controllers
         {
             int flag = 0;
             #region Maker Checker
-            DataOnHold<WfProcess> dataOnHold = new DataOnHold<WfProcess>(BllCommonLogic)
+            MakerCheckerData<WfProcess> dataOnHold = new MakerCheckerData<WfProcess>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.WFProcess,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.WFProcess,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = WFProcess
             };
             dataOnHold.ToString();
-            flag = new DataOnHoldLogic<WfProcess>(BllCommonLogic).Insert(dataOnHold);
+            flag = new MakerCheckerLogic<WfProcess>(BllCommonLogic).Insert(dataOnHold);
             if ( flag > 0)
             {
                 ReturnMessage = new ReturnObject
@@ -132,16 +132,16 @@ namespace LicensingERP.Controllers
         public ActionResult Assign(WfProcessAssign WFAsn)
         {
             int flag;
-            DataOnHold<WfProcessAssign> dataOnHold = new DataOnHold<WfProcessAssign>(BllCommonLogic)
+            MakerCheckerData<WfProcessAssign> dataOnHold = new MakerCheckerData<WfProcessAssign>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.WFAssign,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.WFAssign,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = WFAsn
             };
             dataOnHold.ToString();
-            flag = new DataOnHoldLogic<WfProcessAssign>(BllCommonLogic).Insert(dataOnHold);
+            flag = new MakerCheckerLogic<WfProcessAssign>(BllCommonLogic).Insert(dataOnHold);
             WfProcessAssignLogic WFProLogic = new WfProcessAssignLogic(BllCommonLogic);
             //WFProLogic.Insert(WFAsn);
             //ReturnMessage = new ReturnObject

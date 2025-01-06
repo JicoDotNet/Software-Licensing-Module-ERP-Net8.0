@@ -40,16 +40,16 @@ namespace LicensingERP.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 #region Maker Checker
-                DataOnHold<Product> dataOnHold = new DataOnHold<Product>(BllCommonLogic)
+                MakerCheckerData<Product> dataOnHold = new MakerCheckerData<Product>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
-                    eCaseType = eDataOnHoldCaseType.Product,
-                    ePurpose = eDataOnHoldPurpose.Insert,
+                    eCaseType = eMakerCheckerCaseType.Product,
+                    ePurpose = eMakerCheckerPurpose.Insert,
                     tEffectedData = product
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<Product>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<Product>(BllCommonLogic).Insert(dataOnHold);
                 if(flag > 0)
                 {
                     ReturnMessage = new ReturnObject
@@ -75,17 +75,17 @@ namespace LicensingERP.Controllers
                 // productLogic.Update(product);
 
                 #region Maker Checker
-                DataOnHold<Product> dataOnHold = new DataOnHold<Product>(BllCommonLogic)
+                MakerCheckerData<Product> dataOnHold = new MakerCheckerData<Product>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.Product,
-                    ePurpose = eDataOnHoldPurpose.Update,
+                    eCaseType = eMakerCheckerCaseType.Product,
+                    ePurpose = eMakerCheckerPurpose.Update,
                     tEffectedData = product
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<Product>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<Product>(BllCommonLogic).Insert(dataOnHold);
                 if (flag > 0)
                 {
                     ReturnMessage = new ReturnObject
@@ -153,16 +153,16 @@ namespace LicensingERP.Controllers
             productfeatures.ProductId = Convert.ToInt32(id);
            // ProductFeaturesLogic productfeatureslogic = new ProductFeaturesLogic(BllCommonLogic);
             #region Maker Checker
-            DataOnHold<ProductFeatures> dataOnHold = new DataOnHold<ProductFeatures>(BllCommonLogic)
+            MakerCheckerData<ProductFeatures> dataOnHold = new MakerCheckerData<ProductFeatures>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.ProductFeatures,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.ProductFeatures,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = productfeatures
             };
             dataOnHold.ToString();
-            int val = new DataOnHoldLogic<ProductFeatures>(BllCommonLogic).Insert(dataOnHold);
+            int val = new MakerCheckerLogic<ProductFeatures>(BllCommonLogic).Insert(dataOnHold);
             #endregion
 
             //  int val = productfeatureslogic.Insert(productfeatures);
@@ -198,17 +198,17 @@ namespace LicensingERP.Controllers
             if (loginCredentials != null)
             {
                 #region Maker Checker
-                DataOnHold<Product> dataOnHold = new DataOnHold<Product>(BllCommonLogic)
+                MakerCheckerData<Product> dataOnHold = new MakerCheckerData<Product>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = eDataOnHoldCaseType.Product,
-                    ePurpose = eDataOnHoldPurpose.Deactivate,
+                    eCaseType = eMakerCheckerCaseType.Product,
+                    ePurpose = eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new ProductLogic(BllCommonLogic).GetProductType(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<Product>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<Product>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
 
                 // return Json(new ProductLogic(BllCommonLogic).Deactivate(Convert.ToInt32(id)));

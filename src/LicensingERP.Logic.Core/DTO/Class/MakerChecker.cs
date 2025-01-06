@@ -10,19 +10,22 @@ using LicensingERP.Logic.DTO.SP;
 
 namespace LicensingERP.Logic.DTO.Class
 {
-    public class DataOnHold<T> : IDataOnHold, ISession, IActivity, IIdentity, IStatus where T : class
+    public class MakerCheckerData<T> : IMakerCheckerData, ISession, IActivity, IIdentity, IStatus where T : class
     {
         private sCommonDto _BllCommonLogic { get; }
 
-        public DataOnHold() { }
-        public DataOnHold(sCommonDto CommonObj) { _BllCommonLogic = CommonObj; }
-        
+        /// <summary>
+        /// This Constructor is required to initialize an object dynamically
+        /// </summary>
+        public MakerCheckerData() { }
 
+        public MakerCheckerData(sCommonDto CommonObj) { _BllCommonLogic = CommonObj; }
+        
         public string CaseType { get; set; }
-        public eDataOnHoldCaseType eCaseType { get; set; }
+        public eMakerCheckerCaseType eCaseType { get; set; }
 
         public string Purpose { get; set; }
-        public eDataOnHoldPurpose ePurpose { get; set; }
+        public eMakerCheckerPurpose ePurpose { get; set; }
 
         public string EffectedData { get; set; }
         public T tEffectedData { get; set; }
@@ -53,8 +56,8 @@ namespace LicensingERP.Logic.DTO.Class
 
         public void ToObject()
         {
-            this.ePurpose = (eDataOnHoldPurpose)Enum.Parse(typeof(eDataOnHoldPurpose), this.Purpose);
-            this.eCaseType = (eDataOnHoldCaseType)Enum.Parse(typeof(eDataOnHoldCaseType), this.CaseType);
+            this.ePurpose = (eMakerCheckerPurpose)Enum.Parse(typeof(eMakerCheckerPurpose), this.Purpose);
+            this.eCaseType = (eMakerCheckerCaseType)Enum.Parse(typeof(eMakerCheckerCaseType), this.CaseType);
             this.tEffectedData = JsonConvert.DeserializeObject<T>(this.EffectedData);
         }
 
@@ -63,8 +66,8 @@ namespace LicensingERP.Logic.DTO.Class
             this.Purpose = this.ePurpose.ToString();
             this.CaseType = this.eCaseType.ToString();
             this.EffectedData = JsonConvert.SerializeObject(this.tEffectedData);
-            this.EffectedDataDisplay = PrepareDataDisplay();
-            this.OldDataDisplay = OldDisplay();
+            this.EffectedDataDisplay = PrepareDataForDisplay();
+            this.OldDataDisplay = PrepareOldDataDisplay();
             return null;
         }
 
@@ -72,91 +75,75 @@ namespace LicensingERP.Logic.DTO.Class
         {
             switch (this.eCaseType)
             {
-                case eDataOnHoldCaseType.UserGroup:
+                case eMakerCheckerCaseType.UserGroup:
                     UserType userType = JsonConvert.DeserializeObject<UserType>(this.EffectedData);
                     userType.Id = this.EffectedRowId;
                     return userType;
-                    break;
-                case eDataOnHoldCaseType.User:
-                    UserPassword user = JsonConvert.DeserializeObject<UserPassword>(this.EffectedData);
+                case eMakerCheckerCaseType.User:
+                    UserWithPassword user = JsonConvert.DeserializeObject<UserWithPassword>(this.EffectedData);
                     user.Id = this.EffectedRowId;
                     return user;
-                    break;
-                case eDataOnHoldCaseType.LicenseType:
+                case eMakerCheckerCaseType.LicenseType:
                     LicenceType licenceType = JsonConvert.DeserializeObject<LicenceType>(this.EffectedData);
                     licenceType.Id = this.EffectedRowId;
                     return licenceType;
-                    break;
-                case eDataOnHoldCaseType.Client:
+                case eMakerCheckerCaseType.Client:
                     Client client = JsonConvert.DeserializeObject<Client>(this.EffectedData);
                     client.Id = this.EffectedRowId;
                     return client;
-                    break;
-                case eDataOnHoldCaseType.ClientCategory:
+                case eMakerCheckerCaseType.ClientCategory:
                     ClientCategory clientCategory = JsonConvert.DeserializeObject<ClientCategory>(this.EffectedData);
                     clientCategory.Id = this.EffectedRowId;
                     return clientCategory;
-                    break;
-                case eDataOnHoldCaseType.Parameter:
+                case eMakerCheckerCaseType.Parameter:
                     Parameter parameter = JsonConvert.DeserializeObject<Parameter>(this.EffectedData);
                     parameter.Id = this.EffectedRowId;
                     return parameter;
-                    break;
-                case eDataOnHoldCaseType.Product:
+                case eMakerCheckerCaseType.Product:
                     Product product = JsonConvert.DeserializeObject<Product>(this.EffectedData);
                     product.Id = this.EffectedRowId;
                     return product;
-                    break;
-                case eDataOnHoldCaseType.ProductFeatures:
+                case eMakerCheckerCaseType.ProductFeatures:
                     ProductFeatures productFeatures = JsonConvert.DeserializeObject<ProductFeatures>(this.EffectedData);
                     productFeatures.Id = this.EffectedRowId;
                     return productFeatures;
-                    break;
-                case eDataOnHoldCaseType.WFProcess:
+                case eMakerCheckerCaseType.WFProcess:
                     WfProcess wfProcess = JsonConvert.DeserializeObject<WfProcess>(this.EffectedData);
                     wfProcess.Id = this.EffectedRowId;
                     return wfProcess;
-                    break;
-                case eDataOnHoldCaseType.LicenseParameterLink:
+                case eMakerCheckerCaseType.LicenseParameterLink:
                     List<ParameterOfLicence> parameterOfLicences = JsonConvert.DeserializeObject<List<ParameterOfLicence>>(this.EffectedData);
                     return parameterOfLicences;
-                    break;
-                case eDataOnHoldCaseType.UserMenuPermission:
+                case eMakerCheckerCaseType.UserMenuPermission:
                     List<UserMenu> userMenus = JsonConvert.DeserializeObject<List<UserMenu>>(this.EffectedData);
                     return userMenus;
-                    break;
-                case eDataOnHoldCaseType.UserDashboardPermission:
+                case eMakerCheckerCaseType.UserDashboardPermission:
                     List<UserDashboard> userdashboard = JsonConvert.DeserializeObject<List<UserDashboard>>(this.EffectedData);
                     return userdashboard;
-                    break;
-                case eDataOnHoldCaseType.WFAssign:
+                case eMakerCheckerCaseType.WFAssign:
                     WfProcessAssign wfProcessAssign = JsonConvert.DeserializeObject<WfProcessAssign>(this.EffectedData);
                     return wfProcessAssign;
-                    break;
             }
 
             return default(T);
         }
 
-        private string PrepareDataDisplay()
+        private string PrepareDataForDisplay()
         {
-            //DataOnHold<T> dataOnHold = this;
             switch (this.eCaseType)
             {
-                case eDataOnHoldCaseType.UserGroup:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.UserGroup:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
-                        // Where Joining Found, Get data By joining FROM DB, or return
-                        // JsonConvert.SerializeObject(this.tEffectedData)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     }
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
-                case eDataOnHoldCaseType.User:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.User:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -165,7 +152,7 @@ namespace LicensingERP.Logic.DTO.Class
                         user.UserTypeName = usertype.UserTypeName;
                         return JsonConvert.SerializeObject(user);
                     }
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                         {
                             User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                             UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -174,7 +161,7 @@ namespace LicensingERP.Logic.DTO.Class
                             user.UserTypeName = usertype.UserTypeName;
                             return JsonConvert.SerializeObject(user);
                         }                        
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                     {
                         User user = JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic logic = new UserTypeLogic(_BllCommonLogic);
@@ -184,8 +171,8 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(user);
                     }
                     break;
-                case eDataOnHoldCaseType.LicenseParameterLink:
-                        if(this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.LicenseParameterLink:
+                        if(this.ePurpose == eMakerCheckerPurpose.Insert)
                         {
                           List<ParameterOfLicence> parameterOfLicences = JsonConvert.DeserializeObject<List<ParameterOfLicence>>(JsonConvert.SerializeObject(this.tEffectedData));
                           LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(_BllCommonLogic);
@@ -203,8 +190,8 @@ namespace LicensingERP.Logic.DTO.Class
                           return JsonConvert.SerializeObject(parameterOfLicences);
                         }
                     break;
-                case eDataOnHoldCaseType.UserMenuPermission:
-                    if(this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.UserMenuPermission:
+                    if(this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         List<UserMenu> userMenus = JsonConvert.DeserializeObject<List<UserMenu>>(JsonConvert.SerializeObject(this.tEffectedData));
                         UserTypeLogic userTypeLogic = new UserTypeLogic(_BllCommonLogic);
@@ -225,8 +212,8 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(userMenus);
                     }
                     break;
-                case eDataOnHoldCaseType.UserDashboardPermission:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.UserDashboardPermission:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         List<UserDashboard> userdashboard = JsonConvert.DeserializeObject<List<UserDashboard>>(JsonConvert.SerializeObject(this.tEffectedData));
                         DashboardAccessLogic dashboardAccessLogic = new DashboardAccessLogic(_BllCommonLogic);
@@ -244,16 +231,16 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(userdashboard);
                     }
                     break;
-                case eDataOnHoldCaseType.LicenseType:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.LicenseType:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
-                case eDataOnHoldCaseType.Client:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.Client:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         Client client = tEffectedData as Client;
                         ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
@@ -261,7 +248,7 @@ namespace LicensingERP.Logic.DTO.Class
                         client.CategoryName = clientCategory.CategoryName;
                         return JsonConvert.SerializeObject(client);
                     }
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                     {
                         Client client = tEffectedData as Client;
                         ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
@@ -270,7 +257,7 @@ namespace LicensingERP.Logic.DTO.Class
                         client.CategoryName = clientCategory.CategoryName;
                         return JsonConvert.SerializeObject(client);
                     }
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                     {
                         Client client = tEffectedData as Client;
                         ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
@@ -280,45 +267,45 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(client);
                     }
                     break;
-                case eDataOnHoldCaseType.ClientCategory:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.ClientCategory:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
-                case eDataOnHoldCaseType.Parameter:
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                case eMakerCheckerCaseType.Parameter:
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                         return JsonConvert.SerializeObject(parameter);
                     }                        
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                         return JsonConvert.SerializeObject(parameter);
                     }
                        
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                     {
                         Parameter parameter = JsonConvert.DeserializeObject<Parameter>(JsonConvert.SerializeObject(this.tEffectedData));
                         parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                         return JsonConvert.SerializeObject(parameter);
                     }
                     break;
-                case eDataOnHoldCaseType.Product:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.Product:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Update)
+                    if (this.ePurpose == eMakerCheckerPurpose.Update)
                         return JsonConvert.SerializeObject(this.tEffectedData);
-                    if (this.ePurpose == eDataOnHoldPurpose.Deactivate)
+                    if (this.ePurpose == eMakerCheckerPurpose.Deactivate)
                         return JsonConvert.SerializeObject(this.tEffectedData);
                     break;
-                case eDataOnHoldCaseType.ProductFeatures:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.ProductFeatures:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         ProductFeatures productfeatures = JsonConvert.DeserializeObject<ProductFeatures>(JsonConvert.SerializeObject(this.tEffectedData));
                         ProductLogic productLogic = new ProductLogic(_BllCommonLogic);
@@ -327,8 +314,8 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(productfeatures);
                     }
                     break;
-                case eDataOnHoldCaseType.WFProcess:
-                    if (this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.WFProcess:
+                    if (this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         WfProcess wfprocess = JsonConvert.DeserializeObject<WfProcess>(JsonConvert.SerializeObject(this.tEffectedData));
                         LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(_BllCommonLogic);
@@ -337,8 +324,8 @@ namespace LicensingERP.Logic.DTO.Class
                         return JsonConvert.SerializeObject(wfprocess);
                     }
                     break;
-                case eDataOnHoldCaseType.WFAssign:
-                    if(this.ePurpose == eDataOnHoldPurpose.Insert)
+                case eMakerCheckerCaseType.WFAssign:
+                    if(this.ePurpose == eMakerCheckerPurpose.Insert)
                     {
                         WfProcessAssign wfProcessAssign = JsonConvert.DeserializeObject<WfProcessAssign>(JsonConvert.SerializeObject(this.tEffectedData));
                         //WfProcessLogic wfProcessLogic = new WfProcessLogic(_BllCommonLogic);
@@ -374,13 +361,13 @@ namespace LicensingERP.Logic.DTO.Class
             return null;
         }
 
-        private string OldDisplay()
+        private string PrepareOldDataDisplay()
         {
-            if (this.ePurpose != eDataOnHoldPurpose.Update)
+            if (this.ePurpose != eMakerCheckerPurpose.Update)
                 return null;
             switch (this.eCaseType)
             {
-                case eDataOnHoldCaseType.UserGroup:
+                case eMakerCheckerCaseType.UserGroup:
 
                     UserTypeLogic userTypelogic = new UserTypeLogic(_BllCommonLogic);
                     // Get a single Object (First or Default) From DB Of User Grp 
@@ -388,7 +375,7 @@ namespace LicensingERP.Logic.DTO.Class
                     // Use UserTypeLogic(***).()
                     return  JsonConvert.SerializeObject(userTypelogic.GetUserType(this.EffectedRowId));
                     break;
-                case eDataOnHoldCaseType.User:
+                case eMakerCheckerCaseType.User:
                     UserLogic userLogic = new UserLogic(_BllCommonLogic);
                     User user = new User();
                     user = userLogic.GetUser(this.EffectedRowId);
@@ -398,11 +385,11 @@ namespace LicensingERP.Logic.DTO.Class
                     user.UserTypeName = usertype.UserTypeName;
                     return JsonConvert.SerializeObject(user);
                     break;
-                case eDataOnHoldCaseType.LicenseType:
+                case eMakerCheckerCaseType.LicenseType:
                     LicenceTypeLogic licenceTypeLogic = new LicenceTypeLogic(_BllCommonLogic);
                     return JsonConvert.SerializeObject(licenceTypeLogic.GetLicenceType(this.EffectedRowId));
                     break;
-                case eDataOnHoldCaseType.Client:
+                case eMakerCheckerCaseType.Client:
                     ClientLogic clientLogic = new ClientLogic(_BllCommonLogic);
                     ClientCategoryLogic clientCategoryLogic = new ClientCategoryLogic(_BllCommonLogic);
                     Client client = new Client();
@@ -412,17 +399,17 @@ namespace LicensingERP.Logic.DTO.Class
                     client.CategoryName = clientCategory.CategoryName;
                     return JsonConvert.SerializeObject(client);
                     break;
-                case eDataOnHoldCaseType.ClientCategory:
+                case eMakerCheckerCaseType.ClientCategory:
                     ClientCategoryLogic clientcategorylogic = new ClientCategoryLogic(_BllCommonLogic);
                     return JsonConvert.SerializeObject(clientcategorylogic.GetClientCategory(this.EffectedRowId));
                     break;
-                case eDataOnHoldCaseType.Parameter:
+                case eMakerCheckerCaseType.Parameter:
                     ParameterLogic parameterLogic = new ParameterLogic(_BllCommonLogic); 
                     Parameter parameter = parameterLogic.GetParameter(this.EffectedRowId);
                     parameter.DataType = BLL.Helper.EnumHelper<eDataType>.GetDisplayValue((eDataType)Convert.ToInt32(parameter.DataType));
                     return JsonConvert.SerializeObject(parameter);
                     break;
-                case eDataOnHoldCaseType.Product:
+                case eMakerCheckerCaseType.Product:
                     ProductLogic productLogic = new ProductLogic(_BllCommonLogic);
                     return JsonConvert.SerializeObject(productLogic.GetProductType(this.EffectedRowId));
                     break;

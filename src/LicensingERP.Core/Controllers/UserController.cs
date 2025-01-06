@@ -36,66 +36,52 @@ namespace LicensingERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(UserPassword user)
+        public ActionResult Index(UserWithPassword user)
         {
             int UserId;
             user.Address = user?.Address?.Trim();
-            #region  Change Requriment 03/12/2019
             user.Email = user.Email + user.UserName;
             user.UserName = user.Email;
-            #endregion
             UserLogic userLogic = new UserLogic(BllCommonLogic);
             if (string.IsNullOrEmpty(id))
             {
-                #region username replace
                 if (userLogic.GetUser(user.UserName) == null)
                 {
-                #endregion
-                #region Maker Checker
-                /* -- Password Encrypt -- */
-                user.Password = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Encrypt(user.Password);
+                    #region Maker Checker
+                    /* -- Password Encrypt -- */
+                    user.Password = new CryptoEngine(BllCommonLogic.DefaultEncryptionKey).Encrypt(user.Password);
                     /* -- End -- */
-                    DataOnHold<UserPassword> dataOnHold = new DataOnHold<UserPassword>(BllCommonLogic)
+                    MakerCheckerData<UserWithPassword> makerChecker = new MakerCheckerData<UserWithPassword>(BllCommonLogic)
                     {
                         CreatedUserId = SessionPerson.UserId,
                         CreatedUserTypeId = SessionPerson.UserTypeId,
-                        eCaseType = eDataOnHoldCaseType.User,
-                        ePurpose = eDataOnHoldPurpose.Insert,
+                        eCaseType = eMakerCheckerCaseType.User,
+                        ePurpose = eMakerCheckerPurpose.Insert,
                         tEffectedData = user
                     };
-                    dataOnHold.ToString();
-                    UserId = new DataOnHoldLogic<UserPassword>(BllCommonLogic).Insert(dataOnHold);
-                #endregion
-
-                #region Normal Flow - deprecated
-                //UserId = userLogic.Insert(user, new Password() { PasswordText = Password });
-                #endregion
-                #region
+                    makerChecker.ToString();
+                    UserId = new MakerCheckerLogic<UserWithPassword>(BllCommonLogic).Insert(makerChecker);
+                    #endregion
                 }
                 else
                     UserId = -1;
-                #endregion
             }
             else
             {
                 user.Id = Convert.ToInt32(id);
 
                 #region Maker Checker
-                DataOnHold<User> dataOnHold = new DataOnHold<User>(BllCommonLogic)
+                MakerCheckerData<User> dataOnHold = new MakerCheckerData<User>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.User,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Update,
+                    eCaseType = eMakerCheckerCaseType.User,
+                    ePurpose = eMakerCheckerPurpose.Update,
                     tEffectedData = user
                 };
                 dataOnHold.ToString();
-                UserId = new DataOnHoldLogic<User>(BllCommonLogic).Insert(dataOnHold);
-                #endregion
-
-                #region Normal Flow - deprecated
-                //UserId = userLogic.Update(user);
+                UserId = new MakerCheckerLogic<User>(BllCommonLogic).Insert(dataOnHold);
                 #endregion
             }
             if (UserId > 0)
@@ -156,27 +142,27 @@ namespace LicensingERP.Controllers
         /// <summary>
         /// insert and update in one action method using id.and flag contain the output of the result
         /// </summary>
-        /// <param name="Utype"></param>
+        /// <param name="userType"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Type(UserType Utype)
+        public ActionResult Type(UserType userType)
         {
-            Utype.UserTypeDetails = Utype.UserTypeDetails.Trim();
-            UserTypeLogic UTypeLogic = new UserTypeLogic(BllCommonLogic);
+            userType.UserTypeDetails = userType.UserTypeDetails?.Trim();
+            UserTypeLogic userTypeLogic = new UserTypeLogic(BllCommonLogic);
             int flag = 0;
             if (string.IsNullOrEmpty(id))
             {
                 #region Maker Checker
-                DataOnHold<UserType> dataOnHold = new DataOnHold<UserType>(BllCommonLogic)
+                MakerCheckerData<UserType> dataOnHold = new MakerCheckerData<UserType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
-                    eCaseType = eDataOnHoldCaseType.UserGroup,
-                    ePurpose = eDataOnHoldPurpose.Insert,
-                    tEffectedData = Utype
+                    eCaseType = eMakerCheckerCaseType.UserGroup,
+                    ePurpose = eMakerCheckerPurpose.Insert,
+                    tEffectedData = userType
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<UserType>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<UserType>(BllCommonLogic).Insert(dataOnHold);
                 #endregion
 
                 #region Normal Flow - deprecated
@@ -210,20 +196,20 @@ namespace LicensingERP.Controllers
             }
             else
             {
-                Utype.Id = Convert.ToInt32(id);
+                userType.Id = Convert.ToInt32(id);
 
                 #region Maker Checker
-                DataOnHold<UserType> dataOnHold = new DataOnHold<UserType>(BllCommonLogic)
+                MakerCheckerData<UserType> dataOnHold = new MakerCheckerData<UserType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.UserGroup,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Update,
-                    tEffectedData = Utype
+                    eCaseType = Logic.Enumeration.eMakerCheckerCaseType.UserGroup,
+                    ePurpose = Logic.Enumeration.eMakerCheckerPurpose.Update,
+                    tEffectedData = userType
                 };
                 dataOnHold.ToString();
-                flag = new DataOnHoldLogic<UserType>(BllCommonLogic).Insert(dataOnHold);
+                flag = new MakerCheckerLogic<UserType>(BllCommonLogic).Insert(dataOnHold);
                 #endregion
 
                 #region Normal Flow - deprecated
@@ -268,16 +254,16 @@ namespace LicensingERP.Controllers
         {
             int flag = 0;
 
-            DataOnHold<List<UserMenu>> dataOnHold = new DataOnHold<List<UserMenu>>(BllCommonLogic)
+            MakerCheckerData<List<UserMenu>> dataOnHold = new MakerCheckerData<List<UserMenu>>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.UserMenuPermission,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.UserMenuPermission,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = userMenus
             };
             dataOnHold.ToString();
-            flag = new DataOnHoldLogic<List<UserMenu>>(BllCommonLogic).Insert(dataOnHold);
+            flag = new MakerCheckerLogic<List<UserMenu>>(BllCommonLogic).Insert(dataOnHold);
             //MenuAccessLogic menuAccessLogic = new MenuAccessLogic(BllCommonLogic);
             //menuAccessLogic.SetAccessPermission(userMenus, Convert.ToInt32(id));
             return Json(flag);
@@ -368,17 +354,17 @@ namespace LicensingERP.Controllers
             if (loginCredentials != null)
             {
                 #region Maker Checker
-                DataOnHold<User> dataOnHold = new DataOnHold<User>(BllCommonLogic)
+                MakerCheckerData<User> dataOnHold = new MakerCheckerData<User>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.User,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Deactivate,
+                    eCaseType = Logic.Enumeration.eMakerCheckerCaseType.User,
+                    ePurpose = Logic.Enumeration.eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new UserLogic(BllCommonLogic).GetUser(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<User>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<User>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
 
                 #region Normal Flow - deprecated
@@ -449,17 +435,17 @@ namespace LicensingERP.Controllers
             if (loginCredentials != null)
             {
                 #region Maker Checker
-                DataOnHold<UserType> dataOnHold = new DataOnHold<UserType>(BllCommonLogic)
+                MakerCheckerData<UserType> dataOnHold = new MakerCheckerData<UserType>(BllCommonLogic)
                 {
                     CreatedUserId = SessionPerson.UserId,
                     CreatedUserTypeId = SessionPerson.UserTypeId,
                     EffectedRowId = Convert.ToInt32(id),
-                    eCaseType = Logic.Enumeration.eDataOnHoldCaseType.UserGroup,
-                    ePurpose = Logic.Enumeration.eDataOnHoldPurpose.Deactivate,
+                    eCaseType = Logic.Enumeration.eMakerCheckerCaseType.UserGroup,
+                    ePurpose = Logic.Enumeration.eMakerCheckerPurpose.Deactivate,
                     tEffectedData = new UserTypeLogic(BllCommonLogic).GetUserType(Convert.ToInt32(id))
                 };
                 dataOnHold.ToString();
-                return Json(new DataOnHoldLogic<UserType>(BllCommonLogic).Insert(dataOnHold));
+                return Json(new MakerCheckerLogic<UserType>(BllCommonLogic).Insert(dataOnHold));
                 #endregion
 
                 #region Normal Flow - deprecated
@@ -476,16 +462,16 @@ namespace LicensingERP.Controllers
         {
             int flag = 0;
 
-            DataOnHold<List<UserDashboard>> dataOnHold = new DataOnHold<List<UserDashboard>>(BllCommonLogic)
+            MakerCheckerData<List<UserDashboard>> dataOnHold = new MakerCheckerData<List<UserDashboard>>(BllCommonLogic)
             {
                 CreatedUserId = SessionPerson.UserId,
                 CreatedUserTypeId = SessionPerson.UserTypeId,
-                eCaseType = eDataOnHoldCaseType.UserDashboardPermission,
-                ePurpose = eDataOnHoldPurpose.Insert,
+                eCaseType = eMakerCheckerCaseType.UserDashboardPermission,
+                ePurpose = eMakerCheckerPurpose.Insert,
                 tEffectedData = userDashboards
             };
             dataOnHold.ToString();
-            flag = new DataOnHoldLogic<List<UserDashboard>>(BllCommonLogic).Insert(dataOnHold);
+            flag = new MakerCheckerLogic<List<UserDashboard>>(BllCommonLogic).Insert(dataOnHold);
             return Json(flag);
             //new UserDashBoardLogic(BllCommonLogic).Insert(userDashboards,Convert.ToInt32(id));
             //return Json(true);

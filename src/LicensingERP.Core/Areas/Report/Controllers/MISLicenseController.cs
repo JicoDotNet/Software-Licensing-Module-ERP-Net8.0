@@ -79,7 +79,7 @@ namespace LicensingERP.Core.Controllers
             return PartialView("_PartialTATView", global);
         }
 
-        public ActionResult RequestOnHold()
+        public ActionResult RequestMakerChecker()
         {
             LicenceTypeUserType licenceTypeUserType = new LicenceTypeUserType
             {
@@ -91,14 +91,14 @@ namespace LicensingERP.Core.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult GetRequestOnHoldInfo([FromBody]ReportOfRequestOnHold reportOfRequestOnHold)
+        public PartialViewResult GetRequestMakerCheckerInfo([FromBody]ReportOfRequestMakerChecker reportOfRequestMakerChecker)
         {
-            reportOfRequestOnHold.ToDateObject();
+            reportOfRequestMakerChecker.ToDateObject();
             ReportLogic reportLogic = new ReportLogic(BllCommonLogic);
-            List<ReportOfRequestOnHold> reportOfRequestOnHolds = new List<ReportOfRequestOnHold>();
-            reportOfRequestOnHolds = reportLogic.GetRequestOnHold(reportOfRequestOnHold);
+            List<ReportOfRequestMakerChecker> reportOfRequestMakerCheckers = new List<ReportOfRequestMakerChecker>();
+            reportOfRequestMakerCheckers = reportLogic.GetRequestMakerChecker(reportOfRequestMakerChecker);
 
-            return PartialView("_PartialRequestOnHoldView", reportOfRequestOnHolds);
+            return PartialView("_PartialRequestMakerCheckerView", reportOfRequestMakerCheckers);
         }
 
         public ActionResult XMLDownload()
