@@ -6,6 +6,17 @@
 - [Version 2.4.0](#version_2_4_0)
 - [Version 2.5.0](#version_2_5_0)
 - [Version 2.5.1](#version_2_5_1)
+- [Version 2.6.0](#version_2_6_0)
+
+## Version 2.6.0
+### New Features
+- N/A
+### Changed/Breaking/Removed Features
+- N/A
+### Fixed Bug
+- N/A
+### Maintenance
+- N/A
 
 ## Version 2.5.1
 ### New Features
