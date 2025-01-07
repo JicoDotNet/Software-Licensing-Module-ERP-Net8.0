@@ -111,6 +111,8 @@ CREATE TABLE tbl_mc_data_on_hold (
   Purpose VARCHAR(25) DEFAULT NULL,
   EffectedData VARCHAR(8000) DEFAULT NULL,
   EffectedRowId INT(11) DEFAULT NULL,
+  EffectedDataDisplay TEXT DEFAULT NULL,
+  OldDataDisplay TEXT DEFAULT NULL,
   CreatedUserId INT(11) DEFAULT NULL,
   CreatedUserTypeId INT(11) DEFAULT NULL,
   IsApproved BIT(1) DEFAULT NULL,

@@ -819,40 +819,90 @@ $$
 --
 -- Create procedure `sp_Set_mc_DataOnHold`
 --
-CREATE PROCEDURE sp_Set_mc_DataOnHold(IN p_Id INT(11), IN p_CaseType VARCHAR(25), IN p_Purpose VARCHAR(25), IN p_EffectedData VARCHAR(8000), IN p_EffectedRowId INT(11), IN p_CreatedUserId INT(11), IN p_CreatedUserTypeId INT(11), IN p_ApproveRejectUserId INT(11), IN p_ApproveRejectUserTypeId INT(11), IN p_ApproveRejectRemarks VARCHAR(255), IN p_ApproveRejectDate DATETIME, IN p_SessionId VARCHAR(100), IN p_QueryType VARCHAR(20), OUT Out_Param VARCHAR(1000))
+CREATE PROCEDURE sp_Set_mc_DataOnHold(IN p_Id INT, 
+                              IN p_CaseType VARCHAR(25), 
+                              IN p_Purpose VARCHAR(25), 
+                              IN p_EffectedData VARCHAR(8000), 
+                              IN p_EffectedRowId INT, 
+
+                              IN p_EffectedDataDisplay TEXT, 
+                              IN p_OldDataDisplay TEXT, 
+
+                              IN p_CreatedUserId INT, 
+                              IN p_CreatedUserTypeId INT, 
+                              IN p_ApproveRejectUserId INT, 
+                              IN p_ApproveRejectUserTypeId INT, 
+                              IN p_ApproveRejectRemarks VARCHAR(255), 
+                              IN p_ApproveRejectDate DATETIME, 
+                              IN p_SessionId VARCHAR(100), 
+                              IN p_QueryType VARCHAR(20), 
+                          OUT Out_Param VARCHAR(1000))
 BEGIN
   IF p_QueryType = 'INSERT' THEN
-INSERT INTO tbl_mc_data_on_hold (CaseType, Purpose, EffectedData, EffectedRowId, CreatedUserId, CreatedUserTypeId,
-IsApproved, ApproveRejectUserId, ApproveRejectUserTypeId, ApproveRejectRemarks, ApproveRejectDate, IsActive, SessionId, TransactionDate)
-
-  VALUES (p_CaseType, p_Purpose, p_EffectedData, p_EffectedRowId, p_CreatedUserId, p_CreatedUserTypeId, NULL, NULL, NULL, NULL, NULL, 1, p_SessionId, IST_NOW());
+    INSERT INTO tbl_mc_data_on_hold
+      (CaseType,
+      Purpose,
+      EffectedData,
+      EffectedRowId,
+      EffectedDataDisplay,
+      OldDataDisplay,
+      CreatedUserId,
+      CreatedUserTypeId,
+      IsApproved,
+      ApproveRejectUserId,
+      ApproveRejectUserTypeId,
+      ApproveRejectRemarks,
+      ApproveRejectDate,
+      IsActive,
+      SessionId,
+      TransactionDate)
+    VALUES
+      (p_CaseType,
+       p_Purpose,
+       p_EffectedData,
+       p_EffectedRowId,
+       p_EffectedDataDisplay,
+       p_OldDataDisplay,
+       p_CreatedUserId,
+       p_CreatedUserTypeId,
+       NULL,
+       NULL,
+       NULL,
+       NULL,
+       NULL,
+       1,
+       p_SessionId,
+       IST_NOW());
 
     SET Out_Param = Last_insert_id();
 
   ELSEIF p_QueryType = 'APPROVE' THEN
-UPDATE tbl_mc_data_on_hold
-SET IsApproved = 1,
-    ApproveRejectUserId = p_ApproveRejectUserId,
-    ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
-    ApproveRejectRemarks = p_ApproveRejectRemarks,
-    ApproveRejectDate = IST_NOW(),
-    IsActive = 0
-WHERE Id = p_Id;
+    UPDATE tbl_mc_data_on_hold
+    SET IsApproved = 1,
+        ApproveRejectUserId = p_ApproveRejectUserId,
+        ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
+        ApproveRejectRemarks = p_ApproveRejectRemarks,
+        ApproveRejectDate = IST_NOW(),
+        IsActive = 0
+    WHERE Id = p_Id;
+    
     SET Out_Param = p_Id;
 
-    -- SELECT * FROM tbl_mc_data_on_hold WHERE Id = p_Id AND  IsApproved = 1 AND IsActive = 0;
   ELSEIF p_QueryType = 'DECLINE' THEN
-UPDATE tbl_mc_data_on_hold
-SET IsApproved = 0,
-    ApproveRejectUserId = p_ApproveRejectUserId,
-    ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
-    ApproveRejectRemarks = p_ApproveRejectRemarks,
-    ApproveRejectDate = IST_NOW(),
-    IsActive = 0
-WHERE Id = p_Id;
+    UPDATE tbl_mc_data_on_hold
+    SET IsApproved = 0,
+        ApproveRejectUserId = p_ApproveRejectUserId,
+        ApproveRejectUserTypeId = p_ApproveRejectUserTypeId,
+        ApproveRejectRemarks = p_ApproveRejectRemarks,
+        ApproveRejectDate = IST_NOW(),
+        IsActive = 0
+    WHERE Id = p_Id;
+    
     SET Out_Param = p_Id;
+
   END IF;
 END
+
 $$
 
 --
