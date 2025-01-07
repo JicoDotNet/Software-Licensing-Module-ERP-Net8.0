@@ -11,12 +11,14 @@ on:
       - develop                     # Specific branch (develop)
       - 'feature/*'                 # Any branch that starts with 'feature/'
       - 'release/*'                 # Any branch that starts with 'release/'
+      - 'bugfix/*'                 # Any branch that starts with 'bugfix/'
   pull_request:
     branches:
       - master                      # Trigger on pull requests to the master branch
       - develop                     # Trigger on pull requests to the develop branch
       - 'feature/*'                 # PRs to feature branches
       - 'release/*'                 # PRs to release branches
+      - 'bugfix/*'                  # PRs to bugfix branches
 
 jobs:
   build:

@@ -1,12 +1,12 @@
 # Software Licensing Module ERP
 
 ## Table of Contents of Change Log
-- [Version 1.0.0](#version_1_0_0)
-- [Version 2.3.0](#version_2_3_0)
-- [Version 2.4.0](#version_2_4_0)
-- [Version 2.5.0](#version_2_5_0)
-- [Version 2.5.1](#version_2_5_1)
-- [Version 2.6.0](#version_2_6_0)
+- [Version 1.0.0](#version-100)
+- [Version 2.3.0](#version-230)
+- [Version 2.4.0](#version-240)
+- [Version 2.5.0](#version-250)
+- [Version 2.5.1](#version-251)
+- [Version 2.6.0](#version-260)
 
 ## Version 2.6.0
 ### New Features
