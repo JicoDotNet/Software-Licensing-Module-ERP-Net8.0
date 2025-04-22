@@ -14,7 +14,7 @@
 ### Changed/Breaking/Removed Features
 - N/A
 ### Fixed Bug
-- Added a validation for Dadabase is not running or stopped.
+- Added a validation for Database is not running or stopped.
 ### Maintenance
 - N/A
 
