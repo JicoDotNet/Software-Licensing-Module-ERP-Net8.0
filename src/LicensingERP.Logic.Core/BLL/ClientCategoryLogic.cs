@@ -11,7 +11,7 @@ using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
-    public class ClientCategoryLogic:ConnectionString
+    public class ClientCategoryLogic : ConnectionString
     {
         public ClientCategoryLogic(sCommonDto CommonObj) : base(CommonObj) { }
 
@@ -27,7 +27,7 @@ namespace LicensingERP.Logic.BLL
             nvp.Add(new NameValuePair("p_SessionId", CommonObj.SessionId));
             nvp.Add(new NameValuePair("p_QueryType", "INSERT"));
 
-         return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));
+            return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));
         }
 
         public List<ClientCategory> GetClientCategory()
@@ -88,7 +88,5 @@ namespace LicensingERP.Logic.BLL
 
             return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClientCategory, nvp, "Out_Param"));
         }
-
-
     }
 }
