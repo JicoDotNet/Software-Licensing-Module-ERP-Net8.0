@@ -4,9 +4,29 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccess.MySql
 {
-    public abstract class MySqlManager : IDisposable
+    public abstract class MySqlManager : IDisposable, IMySqlManager
     {
         protected MySqlConnection MySqlConnectionObject { get; private set; }
+
+        public bool IsRunningStatus
+        {
+            get
+            {
+                try
+                {
+                    OpenConnection();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+                finally
+                {
+                    CloseConnection();
+                }
+            }
+        }
 
         protected MySqlManager(string connectionString)
         {

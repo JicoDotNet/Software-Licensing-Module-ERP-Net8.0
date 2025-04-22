@@ -25,22 +25,26 @@ namespace LicensingERP.Logic.BLL.Audit
                 {
                     MySqlDbAccess mySqlDBAccess = new MySqlDbAccess(CommonObj.ConnectionString);
 
-                    NameValuePairs nvp = new NameValuePairs();
-                    nvp.Add(new NameValuePair("p_AbsoluteUri", this.AbsoluteUri));
-                    nvp.Add(new NameValuePair("p_MacAddress", this.MacAddress));
-                    nvp.Add(new NameValuePair("p_Action", this.Action));
-                    nvp.Add(new NameValuePair("p_Browser", this.Browser));
-                    nvp.Add(new NameValuePair("p_BrowserType", this.BrowserType));
-                    nvp.Add(new NameValuePair("p_BrowserVersion", this.BrowserVersion));
-                    nvp.Add(new NameValuePair("p_Controller", this.Controller));
-                    nvp.Add(new NameValuePair("p_DNS", this.DNS));
-                    nvp.Add(new NameValuePair("p_HttpVerbs", this.HttpVerbs));
-                    nvp.Add(new NameValuePair("p_IPAddress", this.IPAddress));
-                    nvp.Add(new NameValuePair("p_RouteId", this.RouteId));
-                    nvp.Add(new NameValuePair("p_SessionId", this.SessionId));
-                    nvp.Add(new NameValuePair("p_UserId", this.UserId));
-
-                    mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_Log", nvp);
+                    NameValuePairs nvp =
+                    [
+                        new NameValuePair("p_AbsoluteUri", this.AbsoluteUri),
+                        new NameValuePair("p_MacAddress", this.MacAddress),
+                        new NameValuePair("p_Action", this.Action),
+                        new NameValuePair("p_Browser", this.Browser),
+                        new NameValuePair("p_BrowserType", this.BrowserType),
+                        new NameValuePair("p_BrowserVersion", this.BrowserVersion),
+                        new NameValuePair("p_Controller", this.Controller),
+                        new NameValuePair("p_DNS", this.DNS),
+                        new NameValuePair("p_HttpVerbs", this.HttpVerbs),
+                        new NameValuePair("p_IPAddress", this.IPAddress),
+                        new NameValuePair("p_RouteId", this.RouteId),
+                        new NameValuePair("p_SessionId", this.SessionId),
+                        new NameValuePair("p_UserId", this.UserId),
+                    ];
+                    if (mySqlDBAccess.IsRunningStatus)
+                    {
+                        mySqlDBAccess.InsertUpdateDeleteReturnInt("sp_Log", nvp);
+                    }                    
                 });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 

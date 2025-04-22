@@ -14,7 +14,8 @@ namespace LicensingERP.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            MySqlDatabaseLogic databaseLogic = new MySqlDatabaseLogic(BllCommonLogic);
+            return View(databaseLogic.AbleToConnect);
         }
 
         [HttpPost]
