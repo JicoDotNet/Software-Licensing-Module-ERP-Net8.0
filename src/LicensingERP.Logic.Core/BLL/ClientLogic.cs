@@ -5,13 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccess.MySql;
 
 namespace LicensingERP.Logic.BLL
 {
-    public class ClientLogic: ConnectionString
+    public class ClientLogic : ConnectionString
     {
         public ClientLogic(sCommonDto CommonObj) : base(CommonObj) { }
 
@@ -130,7 +128,7 @@ namespace LicensingERP.Logic.BLL
                 new NameValuePair("p_QueryType", "UPDATE")
             };
 
-           return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClient, nvp, "Out_Param"));
+            return Convert.ToInt32(DAobj.InsertUpdateDeleteReturnObject(StoreProcedure.SetClient, nvp, "Out_Param"));
         }
     }
 }

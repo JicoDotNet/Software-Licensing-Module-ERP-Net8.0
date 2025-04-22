@@ -17,7 +17,6 @@ namespace DataAccess.MySql
             CommandType = CommandType.StoredProcedure;
         }
 
-
         public DataRow GetFirstOrDefaultData(string command, INameValuePairs NameValuePairObject)
         {
             try
